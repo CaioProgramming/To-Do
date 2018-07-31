@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/grad"
+    android:id="@+id/login"
+    android:fitsSystemWindows="true"
+    tools:context=".Login">
+
+     <TextView
+         android:id="@+id/title"
+         android:drawableEnd="@mipmap/pencil"
+         android:layout_alignParentTop="true"
+          android:layout_centerHorizontal="true"
+         android:gravity="center"
+         android:layout_marginTop="155dp"
+          android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textColor="@color/white"
+         android:text="@string/app_name"
+         android:textStyle="bold"
+         android:textSize="25dp"
+         />
+    <LinearLayout
+        android:layout_below="@id/title"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+         android:id="@+id/form"
+        android:layout_margin="55dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:textAlignment="center"
+            android:id="@+id/user"
+            android:layout_centerInParent="true"
+            android:hint="Usuário"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:backgroundTint="@color/transparent"
+            android:textSize="22dp"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <EditText
+            android:textAlignment="center"
+            android:id="@+id/pass"
+            android:hint="Senha"
+            android:textColor="@color/white"
+             android:backgroundTint="@color/transparent"
+
+            android:foregroundTint="@color/white"
+            android:textColorHint="@color/grey_50"
+            android:inputType="textPassword"
+            android:textSize="22dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="15dp"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/form"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:onClick="login"
+             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pass"
+            android:textColor="@color/blue_200"
+            android:background="@drawable/button1"
+            android:text="Login" />
+
+        <Button
+            android:onClick="register"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pass"
+            android:background="@drawable/button1"
+            android:text="Cadastrar"
+            android:textColor="@color/blue_500" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
