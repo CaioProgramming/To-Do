@@ -1,6 +1,7 @@
 package com.myself.todo;
 
 import android.app.Activity;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -21,38 +22,46 @@ public class Mylist extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            BottomNavigationView navigation2 = findViewById(R.id.navigation);
+
             Activity activity = new Mylist();
 
             switch (item.getItemId()) {
-                case R.id.navigation_home:
+                case R.id.navigation_newev:
+                    //navigation2.setBackground(getDrawable(R.drawable.gradnewevent));
+
                     Semevento();
                     getSupportFragmentManager()
                                 .beginTransaction()
-                                .add(R.id.fragment,new NewEvent())
+
+                            .replace(R.id.fragment, new NewEvent())
                                 .commit();
                      return true;
-                case R.id.navigation_dashboard:
+                case R.id.navigation_home:
+                    //navigation2.setBackground(getDrawable(R.drawable.gradhome));
                     Semevento();
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .add(R.id.fragment,new BlankFragment())
+                            .replace(R.id.fragment, new BlankFragment())
                             .commit();
 
                     return true;
-                case R.id.navigation_notifications:
+                case R.id.navigation_favorites:
+                    //navigation2.setBackground(getDrawable(R.drawable.gradfavorites));
                     Semevento();
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .add(R.id.fragment,new NextEvents())
+                            .replace(R.id.fragment, new NextEvents())
                             .commit();
 
                     return true;
 
                 case R.id.navigation_succes:
+                    //navigation2.setBackground(getDrawable(R.drawable.gradnewconcl));
                     Semevento();
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .add(R.id.fragment,new SuccesEvents())
+                            .replace(R.id.fragment, new SuccesEvents())
                             .commit();
 
                     return true;
@@ -76,8 +85,8 @@ public class Mylist extends AppCompatActivity {
         }
 
 
-        mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        mTextMessage = findViewById(R.id.message);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         Semevento();
 
 
@@ -86,7 +95,7 @@ public class Mylist extends AppCompatActivity {
     }
 
     private BottomNavigationView Semevento() {
-        BottomNavigationView navigation2 = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation2 = findViewById(R.id.navigation);
         ListRepository listRepository = new ListRepository(this);
         listRepository.abrir();
         Cursor evento = listRepository.obterEventosconcluidos();
@@ -94,11 +103,13 @@ public class Mylist extends AppCompatActivity {
         Cursor evento2 = listRepository.obterFavoritos();
 
         if (evento.getCount() == 0 || evento1.getCount() == 0|| evento2.getCount() == 0){
-            navigation2.setBackgroundColor(Color.RED);
+            navigation2.setItemTextColor(ColorStateList.valueOf(Color.RED));
+            navigation2.setItemIconTintList(ColorStateList.valueOf(Color.RED));
+
         }else{
 
-            navigation2.setBackground(getDrawable(R.color.transparent));
-
+            navigation2.setItemTextColor(ColorStateList.valueOf(Color.BLACK));
+            navigation2.setItemIconTintList(ColorStateList.valueOf(Color.BLACK));
         }
 
         return navigation2;

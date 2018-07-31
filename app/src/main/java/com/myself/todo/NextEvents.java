@@ -34,8 +34,8 @@ public class NextEvents extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.nextevents,container,false);
-        FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.favoriteevents);
+        View view = inflater.inflate(R.layout.favoritevents, container, false);
+        FrameLayout frameLayout = view.findViewById(R.id.favoriteevents);
         lstevents = new ArrayList<>();
 
         RecyclerView recycler = view.findViewById(R.id.recyclerviewfav);
