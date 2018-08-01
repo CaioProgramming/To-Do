@@ -32,8 +32,8 @@ public class NewEvent extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.newevent,container,false);
-        FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.neweventframe);
-
+        FrameLayout frameLayout = view.findViewById(R.id.neweventframe);
+        Button btn = view.findViewById(R.id.newbtn);
         final EditText text = view.findViewById(R.id.neweventtext);
         final EditText description =view.findViewById(R.id.neweventdescription);
         Button addbtn =  view.findViewById(R.id.newbtn);
@@ -49,7 +49,6 @@ public class NewEvent extends Fragment {
                             .show();
                     return;
                 }else {
-                 ;
                     Events events = new Events();
                     events.setEvento(String.valueOf(text.getText()));
                     events.setDescricao(String.valueOf(description.getText()));
