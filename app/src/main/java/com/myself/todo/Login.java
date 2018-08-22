@@ -6,6 +6,9 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -19,8 +22,10 @@ public class Login extends AppCompatActivity {
 
     private SQLiteDatabase conexao;
     private DadosOpenHelper dadosOpenHelper;
-    private UserRepository usuarioRepositorio,usuarioRepositoriy;
+    Button entrar;
     EditText user,pass;
+    User usuarioB;
+    private UserRepository usuarioRepositorio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +35,13 @@ public class Login extends AppCompatActivity {
 
         user = (findViewById(R.id.user));
         TextView title = (findViewById(R.id.title));
+        entrar = (findViewById(R.id.loginconfirm));
+        entrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                start();
+            }
+        });
         title.setTypeface(Atelas);
         pass = (findViewById(R.id.pass));
         //setStatusBarColor();
@@ -48,9 +60,8 @@ public class Login extends AppCompatActivity {
 
         Snacky.builder()
                 .setActivity(this)
-                .setText("Conexão criada com sucesso")
                 .setDuration(Snacky.LENGTH_SHORT)
-                .info()
+                .success()
                 .show();
         usuarioRepositorio = new UserRepository(conexao);
 
@@ -92,7 +103,9 @@ public class Login extends AppCompatActivity {
 
     public void start(){
         Intent i = new Intent(this,Mylist.class);
-        i.putExtra("usuario",user.getText());
+        i.putExtra("usuario", usuarioB.getCodigo());
+        i.putExtra("codigo", usuarioB.getCodigo());
+
         startActivity(i);
 
     }
@@ -110,19 +123,26 @@ public class Login extends AppCompatActivity {
     public void validarLogin() {
         String usuario = user.getText().toString();
         String senha = pass.getText().toString();
-
+        final Animation myanim2 = AnimationUtils.loadAnimation(this, R.anim.popin);
 
         try {
             boolean isValid = usuarioRepositorio.validaLogin(usuario, senha);
             if (isValid) {
+
+                usuarioRepositorio.findByLogin(usuario, senha);
+                usuarioB = usuarioRepositorio.findByLogin(usuario, senha);
+
                 Snacky.builder()
                         .setActivity(this)
-                        .setText("Bem-vindo " + usuario)
+                        .setText("Bem-vindo " + usuarioB.getUser())
                         .setDuration(Snacky.LENGTH_SHORT)
                         .success()
                         .show();
 
-                start();
+                entrar.setVisibility(View.VISIBLE);
+                entrar.setAnimation(myanim2);
+
+
                 //Toast.makeText(this,"Usuario e senha validados com sucesso!",Toast.LENGTH_SHORT).show();
 
 
@@ -138,7 +158,6 @@ public class Login extends AppCompatActivity {
         validarLogin();
 
     }
-
 
 
 }

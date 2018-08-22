@@ -34,6 +34,7 @@ public class NewEvent extends Fragment {
         View view = inflater.inflate(R.layout.newevent,container,false);
         FrameLayout frameLayout = view.findViewById(R.id.neweventframe);
         Button btn = view.findViewById(R.id.newbtn);
+
         final EditText text = view.findViewById(R.id.neweventtext);
         final EditText description =view.findViewById(R.id.neweventdescription);
         Button addbtn =  view.findViewById(R.id.newbtn);

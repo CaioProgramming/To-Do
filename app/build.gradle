@@ -23,7 +23,10 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:cardview-v7:26.1.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
-
+    implementation 'com.nihaskalam.android:progress-button:1.0.1'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+        implementation 'com.github.takusemba:cropme:1.0.0'
+    implementation "com.android.support:support-dynamic-animation:26.1.0"
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'com.github.Binary-Finery:FabToast:1.0'
     implementation 'com.github.matecode:Snacky:1.0.3'

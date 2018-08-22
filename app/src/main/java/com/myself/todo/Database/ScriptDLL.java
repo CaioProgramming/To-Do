@@ -8,7 +8,7 @@ public class ScriptDLL {
         sql.append("CREATE TABLE IF NOT EXISTS USUARIO( ");
         sql.append(     "CODIGO INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,");
         sql.append(     "NOME VARCHAR(200) NOT NULL DEFAULT '', ");
-        sql.append(     "SENHA VARCHAR(200) NOT NULL DEFAULT '') ");
+        sql.append("SENHA VARCHAR(200) NOT NULL DEFAULT '',PROFILEPIC VARCHAR(200) DEFAULT '') ");
 
 
         return  sql.toString();

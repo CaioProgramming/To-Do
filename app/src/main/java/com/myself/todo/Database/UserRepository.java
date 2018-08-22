@@ -19,6 +19,8 @@ public class UserRepository {
         ContentValues contentValues = new ContentValues();
         contentValues.put("NOME", usuario.getUser());
         contentValues.put("SENHA", usuario.getPassword());
+        contentValues.put("PROFILEPIC", usuario.getProfilepic());
+
 
 
         conexao.insertOrThrow("USUARIO", null, contentValues);
@@ -32,21 +34,24 @@ public class UserRepository {
         conexao.delete("USUARIO", "CODIGO = ?", parametros);
     }
 
-    public void update(User usuario) throws Exception {
+    public void update(User usuario) {
 
 
         ContentValues contentValues = new ContentValues();
         contentValues.put("NOME", usuario.getUser());
         contentValues.put("SENHA", usuario.getPassword());
+        contentValues.put("PROFILEPIC", usuario.getProfilepic());
+
 
 
         String[] parametros = new String[1];
 
         parametros[0] = String.valueOf(usuario.getCodigo());
 
-        conexao.update("CLIENTE", contentValues, "CODIGO = ?", parametros);
+        conexao.update("USUARIO", contentValues, "CODIGO = ?", parametros);
 
     }
+
 
     public User montaUsuario(Cursor resultado) {
 
@@ -58,10 +63,13 @@ public class UserRepository {
         Integer id = resultado.getInt(resultado.getColumnIndex("CODIGO"));
         String nome = resultado.getString(resultado.getColumnIndex("NOME"));
         String senha = resultado.getString(resultado.getColumnIndex("SENHA"));
+        String foto = resultado.getString(resultado.getColumnIndex("PROFILEPIC"));
+
 
         usuario.setCodigo(id);
         usuario.setUser(nome);
         usuario.setPassword(senha);
+        usuario.setProfilepic(foto);
 
         return usuario;
     }
@@ -80,7 +88,7 @@ public class UserRepository {
 
     }
 
-    public boolean validaLogin(String usuario, String senha) throws Exception {
+    public boolean validaLogin(String usuario, String senha) {
 
         User user = findByLogin(usuario, senha);
 
@@ -92,10 +100,7 @@ public class UserRepository {
 
         String esperado = user.getUser() + user.getPassword();
 
-        if (informado.equals(esperado)) {
-            return true;
-        }
-        return false;
+        return informado.equals(esperado);
     }
 
     public User findByPassword(String telefone, String email) {

@@ -6,6 +6,16 @@ public class User {
     private String user;
     private String password;
 
+    private String profilepic;
+
+    public String getProfilepic() {
+        return profilepic;
+    }
+
+    public void setProfilepic(String profilepic) {
+        this.profilepic = profilepic;
+    }
+
 
     /*public User(Integer id, String usuario, String senha,String email, String telefone) {
         codigo = id;

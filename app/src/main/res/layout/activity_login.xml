@@ -8,6 +8,41 @@
     android:fitsSystemWindows="true"
     tools:context=".Login">
 
+    <RelativeLayout
+        android:id="@+id/profilepic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/photobtnlogin"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="65dp"
+            android:background="@drawable/circle"
+            android:backgroundTint="@color/black"
+            android:drawableStart="@drawable/ic_camera_alt_black_24dp"
+            android:drawableTint="@color/white"
+            android:padding="3dp" />
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_pic"
+
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:maxHeight="100dp"
+            android:maxWidth="100dp"
+            android:minHeight="50dp"
+            android:minWidth="50dp"
+            android:src="@drawable/nothinghere"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="1dp" />
+
+    </RelativeLayout>
      <TextView
          android:id="@+id/title"
          android:drawableEnd="@mipmap/pencil"
@@ -37,8 +72,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:backgroundTint="@color/blue_300"
-                android:textAlignment="center"
+                android:backgroundTint="@color/white"
                 android:id="@+id/user"
                 android:layout_centerInParent="true"
                 android:hint="Usuário"
@@ -55,8 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <EditText
-            android:backgroundTint="@color/blue_A700"
-            android:textAlignment="center"
+            android:backgroundTint="@color/white"
             android:id="@+id/pass"
             android:foregroundTint="@color/black"
             android:hint="Senha"
@@ -68,6 +101,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/loginconfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/button1"
+            android:backgroundTint="@color/blue_600"
+            android:text="Entrar"
+            android:textColor="@color/white"
+            android:visibility="invisible" />
+
     </LinearLayout>
 
 
