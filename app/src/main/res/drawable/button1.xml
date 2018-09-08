@@ -3,10 +3,8 @@
     <item android:state_pressed="false">
         <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle" >
             <corners
-                android:radius="5dp"
                 />
-            <solid
-                android:color="@color/white"
+            <solid android:color="@color/black"
                 />
             <padding
                 android:left="0dp"
@@ -24,11 +22,8 @@
 
     <item android:state_pressed="true">
         <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle" >
-            <corners
-                android:radius="5dp"
-                />
-            <solid
-                android:color="@color/black"
+
+            <solid android:color="@color/lwhite"
                 />
             <padding
                 android:left="0dp"

@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape>
-            <gradient android:startColor="#00cdac" android:endColor="#c2e9fb" android:angle="45" android:gradientRadius="900dp" android:type="linear" />
+            <gradient android:angle="45" android:endColor="#eea849" android:gradientRadius="900dp" android:startColor="#f46b45" android:type="linear" />
 
 
 

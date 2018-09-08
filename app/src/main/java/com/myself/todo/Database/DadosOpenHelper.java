@@ -16,6 +16,8 @@ public class DadosOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL( ScriptDLL.getCreateTableCliente() );
         sqLiteDatabase.execSQL( ScriptDLL.getCreateTableAgenda() );
+        sqLiteDatabase.execSQL(ScriptDLL.getCreateTableFotos());
+        sqLiteDatabase.execSQL(ScriptDLL.getCreateTableMusicas());
 
     }
 

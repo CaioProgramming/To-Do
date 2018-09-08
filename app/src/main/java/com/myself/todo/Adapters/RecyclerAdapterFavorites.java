@@ -1,4 +1,4 @@
-package com.myself.todo;
+package com.myself.todo.Adapters;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -12,7 +12,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.myself.todo.Beans.Events;
-import com.myself.todo.Database.ListRepository;
+import com.myself.todo.Database.ObjRepository;
+import com.myself.todo.R;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class RecyclerAdapterFavorites extends RecyclerView.Adapter<RecyclerAdapt
 
     private Context mContext;
     private Dialog myDialog;
-    private ListRepository lst;
+    private ObjRepository lst;
 
     private List<Events> mData;
 
@@ -66,7 +67,7 @@ public class RecyclerAdapterFavorites extends RecyclerView.Adapter<RecyclerAdapt
                 scsbtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        lst = new ListRepository(mContext);
+                        lst = new ObjRepository(mContext);
                         lst.abrir();
                         lst.concluir(mData.get(position).getId());
                         lst.fecha();
@@ -76,7 +77,7 @@ public class RecyclerAdapterFavorites extends RecyclerView.Adapter<RecyclerAdapt
                 favbtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        lst = new ListRepository(mContext);
+                        lst = new ObjRepository(mContext);
                         lst.abrir();
                         lst.unfavoritar(mData.get(position).getId());
                         lst.fecha();
@@ -87,7 +88,7 @@ public class RecyclerAdapterFavorites extends RecyclerView.Adapter<RecyclerAdapt
                     @Override
                     public void onClick(View view) {
                         favbtn.setDrawingCacheBackgroundColor(Color.YELLOW);
-                        lst = new ListRepository(mContext);
+                        lst = new ObjRepository(mContext);
                         lst.abrir();
                         lst.apagar(mData.get(position).getId());
                         lst.fecha();
@@ -121,9 +122,9 @@ public class RecyclerAdapterFavorites extends RecyclerView.Adapter<RecyclerAdapt
         CardView cardf;
         public MyViewHolder(View view) {
             super(view);
-            titlef = (TextView)itemView.findViewById(R.id.titulofavorites);
-            descricaof = (TextView)itemView.findViewById(R.id.descricaofavorites);
-            dataf = (TextView)itemView.findViewById(R.id.datafavorites);
+            titlef = itemView.findViewById(R.id.titulofavorites);
+            descricaof = itemView.findViewById(R.id.descricaofavorites);
+            dataf = itemView.findViewById(R.id.datafavorites);
 
             cardf = itemView.findViewById(R.id.favoritecard);
 

@@ -1,6 +1,7 @@
-package com.myself.todo;
+package com.myself.todo.Fragments;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,8 +13,10 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.myself.todo.Adapters.RecyclerAdapter;
 import com.myself.todo.Beans.Events;
-import com.myself.todo.Database.ListRepository;
+import com.myself.todo.Database.ObjRepository;
+import com.myself.todo.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +27,7 @@ import java.util.List;
 public class BlankFragment extends Fragment {
 
     List<Events> lstevents;
-    ListRepository listRepository;
+    ObjRepository objRepository;
 
     public BlankFragment() {
         // Required empty public constructor
@@ -35,15 +38,18 @@ public class BlankFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
 
-        View view = inflater.inflate(R.layout.home,container,false);
-        FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.home);
+        View view = inflater.inflate(R.layout.events, container, false);
+        FrameLayout frameLayout = view.findViewById(R.id.events);
         lstevents = new ArrayList<>();
 
-        RecyclerView recycler = view.findViewById(R.id.recyclervievents);
-        LinearLayout empty = view.findViewById(R.id.empty);
-        listRepository = new ListRepository(getActivity());
-        listRepository.abrir();
-        Cursor evento = listRepository.obterEventos();
+        RecyclerView recycler = view.findViewById(R.id.recyclerviewevents);
+        LinearLayout empty = view.findViewById(R.id.noevents);
+        objRepository = new ObjRepository(getActivity());
+        objRepository.abrir();
+        Intent intent = getActivity().getIntent();
+
+        String usuario = intent.getExtras().getString("usuario");
+        Cursor evento = objRepository.obterEventos(usuario);
         System.out.println(evento.getCount());
         evento.moveToFirst();
 
@@ -57,14 +63,14 @@ public class BlankFragment extends Fragment {
         }
         for (int i = 0 ;i < evento.getCount();i++){
 
-            lstevents.add(listRepository.criaevento(evento));
+            lstevents.add(objRepository.criaevento(evento));
             evento.moveToNext();
 
         }
         GridLayoutManager llm = new GridLayoutManager(getActivity(), 1, GridLayoutManager.VERTICAL, false);
         recycler.setHasFixedSize(true);
         System.out.println(lstevents.size());
-        listRepository.fecha();
+        objRepository.fecha();
 
         RecyclerAdapter myadapter = new RecyclerAdapter(getActivity(),lstevents);
         recycler.setAdapter(myadapter);

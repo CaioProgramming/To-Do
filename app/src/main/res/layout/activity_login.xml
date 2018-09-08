@@ -16,28 +16,12 @@
         android:layout_centerInParent="true"
         android:gravity="center">
 
-        <Button
-            android:id="@+id/photobtnlogin"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="65dp"
-            android:background="@drawable/circle"
-            android:backgroundTint="@color/black"
-            android:drawableStart="@drawable/ic_camera_alt_black_24dp"
-            android:drawableTint="@color/white"
-            android:padding="3dp" />
-
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/profile_pic"
-
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:visibility="invisible"
             android:layout_gravity="center"
-            android:maxHeight="100dp"
-            android:maxWidth="100dp"
-            android:minHeight="50dp"
-            android:minWidth="50dp"
             android:src="@drawable/nothinghere"
             app:civ_border_color="@color/white"
             app:civ_border_width="1dp" />
@@ -68,27 +52,29 @@
         android:layout_height="wrap_content">
 
         <android.support.design.widget.TextInputLayout
+            android:textColorHint="@color/blue_A700"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
-                android:backgroundTint="@color/white"
+                android:textAlignment="center"
                 android:id="@+id/user"
-                android:layout_centerInParent="true"
                 android:hint="Usuário"
-                android:padding="5dp"
-                android:textColorHint="@color/white"
                 android:textColor="@color/black"
                 android:textSize="22dp"
-                android:inputType="text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/red_400"
+            android:foregroundTint="@color/red_700"
+            android:textColorHint="@color/red_700"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <EditText
+            android:textAlignment="center"
             android:backgroundTint="@color/white"
             android:id="@+id/pass"
             android:foregroundTint="@color/black"
@@ -103,14 +89,16 @@
         </android.support.design.widget.TextInputLayout>
 
         <Button
+            android:backgroundTint="@color/black"
+
+            android:clickable="true"
             android:id="@+id/loginconfirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@drawable/button1"
-            android:backgroundTint="@color/blue_600"
-            android:text="Entrar"
             android:textColor="@color/white"
+            android:text="Entrar"
             android:visibility="invisible" />
 
     </LinearLayout>
@@ -125,22 +113,27 @@
         android:layout_height="wrap_content">
 
         <Button
+
+            android:background="@drawable/button1"
             android:onClick="login"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/pass"
-            android:background="@color/black"
+            android:clickable="true"
             android:textColor="@color/white"
             android:text="Login" />
 
         <Button
+            android:background="@drawable/button1"
             android:onClick="register"
             android:layout_width="200dp"
-            android:background="@color/white"
+            android:backgroundTint="@color/red_500"
+            android:clickable="true"
             android:layout_height="wrap_content"
             android:layout_below="@id/pass"
             android:text="Cadastrar"
-            android:textColor="@color/black" />
+            android:textColor="@color/white" />
+
 
     </LinearLayout>
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_album"
+        android:icon="@drawable/ic_collections_black_24dp"
+        android:title="Álbum" />
+
+    <item
+        android:id="@+id/navigation_objectives"
+        android:icon="@mipmap/objetivos"
+        android:title="Objetivos" />
+
+    <item
+        android:id="@+id/navigation_musics"
+        android:icon="@mipmap/musics"
+        android:title="Músicas" />
+
+    <item
+        android:id="@+id/navigation_you"
+        android:icon="@drawable/ic_face_black_24dp"
+        android:title="You" />
+
+
+</menu>

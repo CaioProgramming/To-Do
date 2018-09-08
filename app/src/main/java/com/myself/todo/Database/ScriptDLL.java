@@ -26,4 +26,28 @@ public class ScriptDLL {
 
         return sql.toString();
     }
+
+    public static String getCreateTableFotos() {
+        StringBuilder sql = new StringBuilder();
+
+        sql.append("CREATE TABLE IF NOT EXISTS Album( ");
+        sql.append("_id INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,");
+        sql.append("FOTO VARCHAR(200) NOT NULL,DESCRICAO VARCHAR(50), STATUS CHAR(1) NOT NULL DEFAULT 'N'," +
+                "DIA DATE default CURRENT_DATE, USUARIO VARCHAR(40)) ");
+
+        return sql.toString();
+    }
+
+    public static String getCreateTableMusicas() {
+        StringBuilder sql = new StringBuilder();
+
+        sql.append("CREATE TABLE IF NOT EXISTS Musicas( ");
+        sql.append("_id INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,");
+        sql.append("Musica  VARCHAR(200) NOT NULL,DESCRICAO VARCHAR(50),  STATUS VARCHAR(1)," +
+                "DIA DATE default CURRENT_DATE, USUARIO VARCHAR(40)) ");
+
+        return sql.toString();
+    }
+
+
 }

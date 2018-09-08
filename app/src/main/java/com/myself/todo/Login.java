@@ -3,6 +3,7 @@ package com.myself.todo;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.myself.todo.Beans.User;
 import com.myself.todo.Database.DadosOpenHelper;
 import com.myself.todo.Database.UserRepository;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import de.mateware.snacky.Snacky;
 
 public class Login extends AppCompatActivity {
@@ -25,6 +27,7 @@ public class Login extends AppCompatActivity {
     Button entrar;
     EditText user,pass;
     User usuarioB;
+    CircleImageView profilepic;
     private UserRepository usuarioRepositorio;
 
     @Override
@@ -32,9 +35,10 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Typeface Atelas = Typeface.createFromAsset(getAssets(),"fonts/SF-Pro-Display-Black.ttf");
-
+        usuarioB = new User();
         user = (findViewById(R.id.user));
         TextView title = (findViewById(R.id.title));
+        profilepic = (findViewById(R.id.profile_pic));
         entrar = (findViewById(R.id.loginconfirm));
         entrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,10 +107,12 @@ public class Login extends AppCompatActivity {
 
     public void start(){
         Intent i = new Intent(this,Mylist.class);
-        i.putExtra("usuario", usuarioB.getCodigo());
+        i.putExtra("usuario", usuarioB.getUser());
         i.putExtra("codigo", usuarioB.getCodigo());
+        i.putExtra("senha", usuarioB.getPassword());
 
         startActivity(i);
+        this.finish();
 
     }
 
@@ -120,6 +126,7 @@ public class Login extends AppCompatActivity {
                 .show();
     }
 
+
     public void validarLogin() {
         String usuario = user.getText().toString();
         String senha = pass.getText().toString();
@@ -131,16 +138,35 @@ public class Login extends AppCompatActivity {
 
                 usuarioRepositorio.findByLogin(usuario, senha);
                 usuarioB = usuarioRepositorio.findByLogin(usuario, senha);
+                System.out.println(usuarioB.getProfilepic());
+                if (usuarioB.getProfilepic() == null) {
 
-                Snacky.builder()
-                        .setActivity(this)
-                        .setText("Bem-vindo " + usuarioB.getUser())
-                        .setDuration(Snacky.LENGTH_SHORT)
-                        .success()
-                        .show();
+                    Snacky.builder()
+                            .setActivity(this)
+                            .setText("Bem-vindo " + usuarioB.getUser())
+                            .setDuration(Snacky.LENGTH_SHORT)
+                            .success()
+                            .show();
 
-                entrar.setVisibility(View.VISIBLE);
-                entrar.setAnimation(myanim2);
+                    entrar.setVisibility(View.VISIBLE);
+                    entrar.setAnimation(myanim2);
+
+
+                } else {
+                    Snacky.builder()
+                            .setActivity(this)
+                            .setText("Bem-vindo " + usuarioB.getUser())
+                            .setDuration(Snacky.LENGTH_SHORT)
+                            .success()
+                            .show();
+
+                    entrar.setVisibility(View.VISIBLE);
+                    entrar.setAnimation(myanim2);
+
+                    profilepic.setVisibility(View.VISIBLE);
+                    profilepic.setAnimation(myanim2);
+                    profilepic.setImageURI(Uri.parse(usuarioB.getProfilepic().toString()));
+                }
 
 
                 //Toast.makeText(this,"Usuario e senha validados com sucesso!",Toast.LENGTH_SHORT).show();

@@ -1,5 +1,6 @@
-package com.myself.todo;
+package com.myself.todo.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,7 +11,8 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import com.myself.todo.Beans.Events;
-import com.myself.todo.Database.ListRepository;
+import com.myself.todo.Database.ObjRepository;
+import com.myself.todo.R;
 
 import de.mateware.snacky.Snacky;
 
@@ -44,18 +46,21 @@ public class NewEvent extends Fragment {
                 if (text.getText().equals("") || description.getText().equals("")){
                     Snacky.builder()
                             .setActivity(getActivity())
-                            .setText("Escreva nos campos! ")
+                            .setText("Escreva nos campos!")
                             .setDuration(Snacky.LENGTH_SHORT)
                             .error()
                             .show();
                     return;
                 }else {
+                    Intent intent = getActivity().getIntent();
+
+                    String usuario = intent.getExtras().getString("usuario");
                     Events events = new Events();
                     events.setEvento(String.valueOf(text.getText()));
                     events.setDescricao(String.valueOf(description.getText()));
-                    ListRepository eventos = new ListRepository(getActivity());
+                    ObjRepository eventos = new ObjRepository(getActivity());
                     eventos.abrir();
-                    eventos.inserir(events.getEvento(),events.getDescricao());
+                    eventos.inserir(events, usuario);
                     Snacky.builder()
                             .setActivity(getActivity())
                             .setText("Evento adcionado")

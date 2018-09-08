@@ -9,16 +9,15 @@
     tools:context=".Mylist">
 
     <RelativeLayout
+        android:layout_height="wrap_content"
         android:id="@+id/topnavigation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true">
+        android:background="@drawable/gradalbum">
 
         <RelativeLayout
             android:id="@+id/profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/navigation"
             android:background="@color/transparent"
             android:gravity="center">
 
@@ -51,6 +50,7 @@
         </RelativeLayout>
 
         <TextView
+
             android:id="@+id/usertxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,20 +58,22 @@
             android:layout_centerInParent="true"
             android:text="usuário"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:fontFamily="@string/title_notifications"
             android:textSize="22dp"
-            android:textStyle="bold" />
+            android:textColor="@color/white" />
 
         <android.support.design.widget.BottomNavigationView
+            android:layout_below="@id/usertxt"
             android:id="@+id/navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="0dp"
             android:layout_marginStart="0dp"
+            android:foregroundTint="@color/black"
+            app:itemIconTint="@color/white"
+            app:itemTextColor="@color/white"
             android:background="@color/transparent"
-            app:itemIconTint="@color/black"
-            app:itemTextColor="@color/black"
-            app:menu="@menu/navigation" />
+            app:menu="@menu/navigation2" />
     </RelativeLayout>
 
     <FrameLayout

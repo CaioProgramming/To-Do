@@ -6,15 +6,16 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.myself.todo.Beans.Events;
+import com.myself.todo.Beans.Album;
 
-public class ListRepository {
+public class AlbumRepository {
 
     private static final String nome_banco = "agenda.db";
     private SQLiteDatabase banco;
     private DadosOpenHelper bancoListaOpenHelper;
-    private String tblname = "Agenda";
-    public ListRepository(Context context) {
+    private String tblname = "Album";
+
+    public AlbumRepository(Context context) {
         bancoListaOpenHelper = new DadosOpenHelper(context);
     }
 
@@ -26,17 +27,17 @@ public class ListRepository {
         if (banco != null) banco.close();
     }
 
-    public void inserir(String nome,String descricao){
+    public void inserir(Album album, String usuario) {
         String status = "N";
-        ContentValues novoEvento = new ContentValues();
-        if(nome.equals("")|| descricao.equals("") ){
+        ContentValues novaFoto = new ContentValues();
+        if (album.getFotouri().equals("") || album.getDescription().equals("")) {
             return;
         }
-        novoEvento.put("item",nome);
-        novoEvento.put("descricao", descricao);
-        novoEvento.put("status",status);
+        novaFoto.put("FOTO", album.getFotouri());
+        novaFoto.put("DESCRICAO", album.getDescription());
+        novaFoto.put("STATUS ", status);
         abrir();
-        banco.insert(tblname,null,novoEvento);
+        banco.insert(tblname, null, novaFoto);
         fecha();
     }
     public void alteraEvento(long id,String nome){
@@ -46,7 +47,6 @@ public class ListRepository {
         banco.update(tblname,produtoAlterado,"_id = "+ id,null);
         fecha();
     }
-
     public void apagar(long id){
         abrir();
         banco.delete(tblname, "_id = " +id, null);
@@ -89,16 +89,13 @@ public class ListRepository {
     }
 
 
-    public Cursor obterEventos(){
-        return banco.query(tblname,null,"STATUS = 'N'",null,null,null,"ITEM");
+    public Cursor obterFotos(String usuario) {
+        return banco.query(tblname, null, "STATUS = 'N'  ", null, null, null, "FOTO");
     }
 
-    public Cursor obterEventosconcluidos(){
-        return banco.query(tblname,null,"STATUS = 'C'",null,null,null,"ITEM");
-    }
 
-    public Cursor obterFavoritos(){
-        return banco.query(tblname,null,"STATUS = 'F'",null,null,null,"ITEM");
+    public Cursor obterFavoritos(String usuario) {
+        return banco.query(tblname, null, "STATUS = 'F' ", null, null, null, "FOTO");
     }
 
     public Cursor obterUmEvento(long id){
@@ -115,26 +112,26 @@ public class ListRepository {
          return count;
     }
 
-    public Events criaevento(Cursor resultado){
+    public Album criafoto(Cursor resultado) {
 
-        Events events = new Events();
+        Album album = new Album();
         if(resultado.getCount() == 0){
 
 
             return null;
         }
 
-        String evento = resultado.getString(resultado.getColumnIndexOrThrow("ITEM"));
+        String uri = resultado.getString(resultado.getColumnIndexOrThrow("FOTO"));
         String descricao = resultado.getString(resultado.getColumnIndexOrThrow("DESCRICAO"));
         String dia = resultado.getString(resultado.getColumnIndexOrThrow("DIA"));
         int id = resultado.getInt(resultado.getColumnIndexOrThrow("_id"));
 
-        events.setId(id);
-        events.setData(dia);
-        events.setEvento(evento);
-        events.setDescricao(descricao);
+        album.setId(id);
+        album.setDia(dia);
+        album.setFotouri(uri);
+        album.setDescription(descricao);
 
-        return events;
+        return album;
 
 
 
