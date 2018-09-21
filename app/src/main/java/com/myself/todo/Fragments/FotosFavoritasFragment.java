@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -77,6 +79,8 @@ public class FotosFavoritasFragment extends Fragment {
         RecyclerFotoFavoritaAdapter myadapter = new RecyclerFotoFavoritaAdapter(getContext(), getActivity(), lstalbum);
         recycler.setAdapter(myadapter);
         recycler.setLayoutManager(llm);
+        final Animation myanim2 = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_bottom);
+        recycler.startAnimation(myanim2);
         return view;
 
 

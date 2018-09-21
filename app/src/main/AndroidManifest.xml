@@ -23,11 +23,8 @@
         <activity
             android:name=".Mylist"
             android:label="@string/title_activity_mylist" />
-        <activity
-            android:name=".Home"
-            android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".NewPicActivity"></activity>
+        <activity android:name=".NewPicActivity" />
+        <activity android:name=".NewMusicActivity"></activity>
     </application>
 
 </manifest>

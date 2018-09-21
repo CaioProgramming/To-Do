@@ -17,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.myself.todo.Beans.Album;
 import com.myself.todo.Database.AlbumRepository;
 import com.myself.todo.R;
@@ -54,15 +55,43 @@ public class RecyclerFotoFavoritaAdapter extends RecyclerView.Adapter<RecyclerFo
     }
 
     @Override
-    public void onBindViewHolder(RecyclerFotoFavoritaAdapter.MyViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerFotoFavoritaAdapter.MyViewHolder holder, final int position) {
 
-        try {
-            holder.pic.setImageBitmap(Utilities.handleSamplingAndRotationBitmap(mContext, Uri.parse(mData.get(position).getFotouri())));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Glide.with(mContext).load(mData.get(position).getFotouri()).into(holder.pic);
+
         final Animation myanim2 = AnimationUtils.loadAnimation(mContext, R.anim.slide_in_bottom);
+        holder.fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CheckBox check = holder.fav;
+                if (check.isChecked()) {
+                    AlbumRepository albumRepository = new AlbumRepository(mContext);
+                    albumRepository.favoritar(mData.get(position).getId());
+                    Snacky.builder()
+                            .setText("Foto adcionada aos favoritos")
+                            .setTextColor(Color.BLACK)
+                            .setIcon(R.drawable.ic_favorite2_black_24dp)
+                            .setBackgroundColor(Color.WHITE)
+                            .setActivity(mActivity)
+                            .setDuration(Snacky.LENGTH_SHORT)
+                            .build()
+                            .show();
 
+                } else {
+                    AlbumRepository albumRepository = new AlbumRepository(mContext);
+                    albumRepository.unfavoritar(mData.get(position).getId());
+                    Snacky.builder()
+                            .setText("Foto removida dos favoritos")
+                            .setTextColor(Color.BLACK)
+                            .setIcon(R.drawable.ic_favorite_black_24dp)
+                            .setBackgroundColor(Color.WHITE)
+                            .setActivity(mActivity)
+                            .setDuration(Snacky.LENGTH_SHORT)
+                            .build()
+                            .show();
+                }
+            }
+        });
         holder.card.startAnimation(myanim2);
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +104,7 @@ public class RecyclerFotoFavoritaAdapter extends RecyclerView.Adapter<RecyclerFo
                     albumRepository.favoritar(mData.get(position).getId());
                     Snacky.builder()
                             .setText("Foto adcionada aos favoritos")
+                            .setTextColor(Color.BLACK)
                             .setIcon(R.drawable.ic_favorite2_black_24dp)
                             .setBackgroundColor(Color.WHITE)
                             .setActivity(mActivity)
@@ -114,7 +144,11 @@ public class RecyclerFotoFavoritaAdapter extends RecyclerView.Adapter<RecyclerFo
 
                 event.setText(mData.get(position).getDescription());
                 desc.setText(mData.get(position).getDia());
-                pic.setImageURI(Uri.parse(mData.get(position).getFotouri()));
+                try {
+                    pic.setImageBitmap(Utilities.handleSamplingAndRotationBitmap(mContext, Uri.parse(mData.get(position).getFotouri())));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
 
                 favbtn.setOnClickListener(new View.OnClickListener() {
@@ -165,7 +199,7 @@ public class RecyclerFotoFavoritaAdapter extends RecyclerView.Adapter<RecyclerFo
         public MyViewHolder(View view) {
             super(view);
 
-
+            fav = itemView.findViewById(R.id.favcheck);
             pic = itemView.findViewById(R.id.pic);
             card = itemView.findViewById(R.id.fotocard);
 

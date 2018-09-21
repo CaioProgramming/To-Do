@@ -12,6 +12,7 @@ import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,15 +22,18 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.myself.todo.Beans.User;
+import com.myself.todo.Database.AlbumRepository;
 import com.myself.todo.Database.DadosOpenHelper;
 import com.myself.todo.Database.ObjRepository;
 import com.myself.todo.Database.UserRepository;
@@ -38,16 +42,13 @@ import com.myself.todo.Fragments.NewEvent;
 import com.myself.todo.Fragments.NextEvents;
 import com.myself.todo.Fragments.ObjFragment;
 import com.myself.todo.Fragments.SuccesEvents;
-import com.myself.todo.Utils.Utilities;
-
-import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import de.mateware.snacky.Snacky;
 
 public class Mylist extends AppCompatActivity {
 
-    private TextView mTextMessage;
+    private TextView mTextMessage, albumcount, musicount, objectivecount;
     int cod_usuario;
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
     String usuario, senha;
@@ -55,20 +56,25 @@ public class Mylist extends AppCompatActivity {
     private SQLiteDatabase conexao;
     private DadosOpenHelper dadosOpenHelper;
     private UserRepository usuarioRepositorio;
+    private ObjRepository objRepository;
+    private AlbumRepository albumRepository;
     private User usuarioB;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             BottomNavigationView navigation2 = findViewById(R.id.navigation);
-            RelativeLayout top = findViewById(R.id.topnavigation);
             switch (item.getItemId()) {
+
                 case R.id.navigation_album:
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        top.setBackground(getDrawable(R.drawable.gradalbum));
+                        //tb.setBackground(getDrawable(R.drawable.gradalbum));
+                        //navigation2.setBackground(getDrawable(R.color.orange_A100));
+
                     }
 
-                    //Semevento();
+                    //CountFotos();
+                    //CountObjectives();
                     getSupportFragmentManager()
                                 .beginTransaction()
                             .replace(R.id.fragment, new AlbFragment())
@@ -76,10 +82,14 @@ public class Mylist extends AppCompatActivity {
                      return true;
                 case R.id.navigation_objectives:
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        top.setBackground(getDrawable(R.drawable.gradobjectives));
+                        //tb.setBackground(getDrawable(R.drawable.gradobjectives));
+                        //navigation2.setBackground(getDrawable(R.drawable.gradobjectives));
+
+
                     }
 
-                    Semevento();
+                    //CountFotos();
+                    //CountObjectives();
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment, new ObjFragment())
@@ -88,7 +98,9 @@ public class Mylist extends AppCompatActivity {
                     return true;
                 case R.id.navigation_musics:
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        top.setBackground(getDrawable(R.drawable.gradmusic));
+                        //tb.setBackground(getDrawable(R.drawable.gradmusic));
+                        //navigation2.setBackground(getDrawable(R.drawable.gradmusic));
+
                     }
 
                     // Semevento();
@@ -101,10 +113,11 @@ public class Mylist extends AppCompatActivity {
 
                 case R.id.navigation_you:
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        top.setBackground(getDrawable(R.drawable.gradyou));
+                        //tb.setBackground(getDrawable(R.drawable.gradyou));
                     }
 
-                    //Semevento();
+                    //CountFotos();
+                    //CountObjectives();
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment, new SuccesEvents())
@@ -112,6 +125,8 @@ public class Mylist extends AppCompatActivity {
 
                     return true;
             }
+            //CountFotos();
+            //CountObjectives();
             return false;
         }
     };
@@ -122,38 +137,15 @@ public class Mylist extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mylist);
-        RelativeLayout top = findViewById(R.id.topnavigation);
         TextView user = findViewById(R.id.usertxt);
-        Button pic = findViewById(R.id.photobtn);
-
         profilepic = findViewById(R.id.userpic);
-        Intent intent = getIntent();
-
-        usuario = intent.getExtras().getString("usuario");
-        cod_usuario = intent.getExtras().getInt("codigo");
-        senha = intent.getExtras().getString("senha");
-
+        //albumcount = findViewById(R.id.albumcount);
+        //objectivecount = findViewById(R.id.objectivecount);
+        //musicount = findViewById(R.id.musicount);
+        ///ImageView genr = findViewById(R.id.genre);
+        Typeface Atelas = Typeface.createFromAsset(getAssets(), "fonts/Atelas_PersonalUseOnly.ttf");
+        user.setTypeface(Atelas);
         criarConexao();
-        usuarioRepositorio = new UserRepository(conexao);
-        usuarioB = usuarioRepositorio.findByLogin(usuario, senha);
-        System.out.println(usuarioB.getProfilepic());
-        System.out.println(usuarioB.getUser());
-
-        if (usuarioB.getProfilepic() == null) {
-
-        } else {
-
-            try {
-                profilepic.setImageBitmap(Utilities.handleSamplingAndRotationBitmap(this, Uri.parse(usuarioB.getProfilepic())));
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        System.out.println(usuario);
-        user.setText(usuario);
 
 
         if (savedInstanceState == null){
@@ -165,17 +157,72 @@ public class Mylist extends AppCompatActivity {
 
         }
 
-
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar();
         mTextMessage = findViewById(R.id.message);
         BottomNavigationView navigation = findViewById(R.id.navigation);
-        Semevento();
-
+        //Semevento();
 
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_objectives);
 
+        //CountObjectives();
+
+        //CountFotos();
+
+
+        SetProfilePic(user, profilepic);
+
     }
+
+    private void SetProfilePic(TextView user, ImageView pic) {
+        Intent intent = getIntent();
+
+
+        usuario = intent.getExtras().getString("usuario");
+        cod_usuario = intent.getExtras().getInt("codigo");
+        senha = intent.getExtras().getString("senha");
+
+        usuarioRepositorio = new UserRepository(conexao);
+        usuarioB = usuarioRepositorio.findByLogin(usuario, senha);
+        System.out.println(usuarioB.getProfilepic());
+        System.out.println(usuarioB.getUser());
+        System.out.println(usuarioB.getSexo());
+
+        System.out.println(usuario);
+        user.setText(usuario);
+        if (usuarioB.getProfilepic() == null) {
+
+        } else {
+            Glide.with(this).load(usuarioB.getProfilepic().toString()).into(pic);
+        }
+    }
+
+    /*private void CountFotos() {
+        albumRepository = new AlbumRepository(this);
+        albumRepository.abrir();
+        Cursor fotos = albumRepository.obterFotos(null);
+        albumcount.setText(String.valueOf(fotos.getCount()));
+        if (fotos.getCount() == 0 ){
+            albumcount.setTextColor(Color.RED);
+        }
+        albumRepository.fecha();
+    }
+
+    private void CountObjectives() {
+        objRepository = new ObjRepository(this);
+        objRepository.abrir();
+        Cursor objetivos = objRepository.obterEventos(null);
+        objectivecount.setText(String.valueOf(objetivos.getCount()));
+        if (objetivos.getCount() == 0 ){
+            objectivecount.setTextColor(Color.RED);
+        }
+        objRepository.fecha();
+    }
+*/
+
 
     private BottomNavigationView Semevento() {
         BottomNavigationView navigation2 = findViewById(R.id.navigation);
@@ -201,8 +248,8 @@ public class Mylist extends AppCompatActivity {
 
         Dialog myDialog = new Dialog(this);
         myDialog.setContentView(R.layout.alertoptions);
-        TextView selfiebtn = myDialog.findViewById(R.id.selfie);
-        TextView gallerybtn = myDialog.findViewById(R.id.galeria);
+        Button selfiebtn = myDialog.findViewById(R.id.selfie);
+        Button gallerybtn = myDialog.findViewById(R.id.galeria);
 
         selfiebtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -225,6 +272,13 @@ public class Mylist extends AppCompatActivity {
 
 
     }
+
+    public void newfoto(View view) {
+        Intent i = new Intent(this, NewPicActivity.class);
+        startActivity(i);
+
+    }
+
 
     private void succes(User usuarioB) {
         Snacky.builder()

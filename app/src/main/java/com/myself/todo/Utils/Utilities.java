@@ -14,6 +14,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Utilities {
     public static void saveImage(Bitmap bitmap, String username) {
@@ -131,6 +136,42 @@ public class Utilities {
         Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
         img.recycle();
         return rotatedImg;
+    }
+
+    public static String convertDate(String dia) {
+
+
+        //2. Test - Convert Date to Calendar
+        //3. Test - Convert Calendar to Date
+
+        DateFormat df = new SimpleDateFormat("yyy-MM-dd");
+        try {
+            Date result = df.parse(dia);
+            SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy EE");
+            dia = format.format(result);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(dia);
+
+
+        return dia;
+
+    }
+
+    //Convert Date to Calendar
+    private Calendar dateToCalendar(Date date) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar;
+
+    }
+
+    //Convert Calendar to Date
+    private Date calendarToDate(Calendar calendar) {
+        return calendar.getTime();
     }
 
 }

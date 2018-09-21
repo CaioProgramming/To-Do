@@ -1,28 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.AlertDialogLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="500dp">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:text="Adcione uma foto"
+            android:textColor="@color/black"
+            android:textSize="25dp" />
         <ImageView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:clickable="true"
             android:id="@+id/slctpic"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:longClickable="true"
+            android:src="@drawable/ic_add_black_24dp"
             android:adjustViewBounds="true"
             android:cropToPadding="true"
-            android:src="@drawable/selfie" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/lblack" />
+            android:tint="@color/grey_300" />
 
 
         <EditText
-            android:id="@+id/description"
+            android:textAlignment="center"
+            android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -36,6 +44,7 @@
 
 
         <Button
+            android:enabled="false"
             android:id="@+id/savebtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,4 +57,4 @@
     </RelativeLayout>
 
 
-</android.support.v7.widget.AlertDialogLayout>
+</FrameLayout>

@@ -1,5 +1,7 @@
 package com.myself.todo.Beans;
 
+import com.myself.todo.Utils.Utilities;
+
 public class Album {
     private String fotouri;
     private String description;
@@ -27,7 +29,7 @@ public class Album {
     }
 
     public void setDia(String dia) {
-        this.dia = dia;
+        this.dia = Utilities.convertDate(dia);
     }
 
     public int getId() {

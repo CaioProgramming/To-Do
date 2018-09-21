@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.AlertDialogLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="400dp"
+    android:background="@color/white"
+    android:padding="15dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:drawableEnd="@mipmap/ic_launcher"
+        android:drawablePadding="15dp"
+        android:text="@string/app_name"
+        android:textColor="@color/black"
+        android:textSize="24sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Cadastre-se para usar o aplicativo"
+        android:textAlignment="center"
+        android:textColor="@color/grey_700" />
+
+    <LinearLayout
+        android:id="@+id/form"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_below="@id/title"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center|center_vertical"
+        android:layout_marginStart="15dp"
+        android:orientation="vertical">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:backgroundTint="@color/transparent"
+            android:textColorHint="@color/grey_500">
+
+            <EditText
+                android:id="@+id/user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/roundout"
+                android:backgroundTint="@color/black"
+                android:drawableStart="@drawable/user"
+                android:hint="Usuário"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:textSize="22dp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/black">
+
+            <EditText
+                android:id="@+id/pass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/roundout"
+                android:backgroundTint="@color/black"
+                android:drawableStart="@drawable/pass"
+                android:foregroundTint="@color/black"
+                android:hint="Senha"
+                android:inputType="textPassword"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:textSize="22dp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/retangle"
+            android:backgroundTint="@color/blue_500"
+            android:clickable="true"
+            android:text="Cadastrar"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
+
+
+</android.support.v7.widget.AlertDialogLayout>

@@ -1,5 +1,7 @@
 package com.myself.todo.Beans;
 
+import com.myself.todo.Utils.Utilities;
+
 public class Events {
 
     private String evento;
@@ -39,7 +41,10 @@ public class Events {
     }
 
     public void setData(String data) {
-        this.data = data;
+
+
+        this.data = Utilities.convertDate(data);
+
     }
 
     public String getDescricao() {

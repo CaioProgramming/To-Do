@@ -3,22 +3,22 @@
 
     <item
         android:id="@+id/navigation_album"
-        android:icon="@drawable/ic_collections_black_24dp"
+        android:icon="@drawable/album"
         android:title="Álbum" />
 
     <item
         android:id="@+id/navigation_objectives"
-        android:icon="@mipmap/objetivos"
+        android:icon="@drawable/objective"
         android:title="Objetivos" />
 
     <item
         android:id="@+id/navigation_musics"
-        android:icon="@mipmap/musics"
+        android:icon="@drawable/music"
         android:title="Músicas" />
 
     <item
         android:id="@+id/navigation_you"
-        android:icon="@drawable/ic_face_black_24dp"
+        android:icon="@drawable/user"
         android:title="You" />
 
 

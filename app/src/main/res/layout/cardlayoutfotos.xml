@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fotocard"
     android:layout_width="wrap_content"
-    android:layout_height="150dp"
+    android:layout_height="wrap_content"
     android:layout_margin="5dp"
     app:cardCornerRadius="20dp">
 
@@ -14,9 +14,18 @@
         android:adjustViewBounds="true"
         android:maxHeight="200dp"
         android:maxWidth="150dp"
-        android:minHeight="150dp"
+        android:minHeight="200dp"
         android:minWidth="150dp"
         android:src="@drawable/nothinghere" />
+
+    <CheckBox
+        android:id="@+id/favcheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_margin="5dp"
+        android:button="@drawable/favoritecheck"
+        android:tint="@color/red_700" />
 
 
 </android.support.v7.widget.CardView>

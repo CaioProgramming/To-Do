@@ -84,10 +84,9 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="cropped" value="true" />
                                       <entry key="iconShape" value="NONE" />
-                                      <entry key="imageAsset" value="C:\Users\cacai\Downloads\selfie.png" />
-                                      <entry key="outputName" value="selfie" />
+                                      <entry key="imageAsset" value="C:\Users\cacai\Downloads\icons8-pilha-de-fotos-filled-50.png" />
+                                      <entry key="outputName" value="album" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -123,7 +122,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_favorite_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/social/ic_sentiment_dissatisfied_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -133,10 +132,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="autoMirrored" value="true" />
-                            <entry key="color" value="2b2b2b" />
-                            <entry key="outputName" value="ic_favorite_black_24dp" />
-                            <entry key="sourceFile" value="C:\Users\cacai\Downloads\event.psd" />
+                            <entry key="outputName" value="ic_photo_cameraout" />
+                            <entry key="sourceFile" value="C:\Users\cacai\Downloads\photo-camera.psd" />
                           </map>
                         </option>
                       </PersistentState>

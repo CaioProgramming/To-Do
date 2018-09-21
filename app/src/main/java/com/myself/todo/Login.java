@@ -1,21 +1,28 @@
 package com.myself.todo;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.myself.todo.Beans.User;
 import com.myself.todo.Database.DadosOpenHelper;
 import com.myself.todo.Database.UserRepository;
+import com.myself.todo.Utils.Utilities;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import de.mateware.snacky.Snacky;
@@ -34,9 +41,9 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Typeface Atelas = Typeface.createFromAsset(getAssets(),"fonts/SF-Pro-Display-Black.ttf");
         usuarioB = new User();
         user = (findViewById(R.id.user));
+        pass = (findViewById(R.id.pass));
         TextView title = (findViewById(R.id.title));
         profilepic = (findViewById(R.id.profile_pic));
         entrar = (findViewById(R.id.loginconfirm));
@@ -46,9 +53,34 @@ public class Login extends AppCompatActivity {
                 start();
             }
         });
+        Typeface Atelas = Typeface.createFromAsset(getAssets(), "fonts/SF-Pro-Text-Regular.ttf");
+
         title.setTypeface(Atelas);
-        pass = (findViewById(R.id.pass));
+
         //setStatusBarColor();
+        pass.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH ||
+                        i == EditorInfo.IME_ACTION_DONE ||
+                        keyEvent.getAction() == KeyEvent.ACTION_DOWN &&
+                                keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+
+                    if (!keyEvent.isShiftPressed()) {
+                        Log.v("AndroidEnterKeyActivity", "Enter Key Pressed!");
+                        switch (view.getId()) {
+                            case 1:
+                                validarLogin();
+                                break;
+                        }
+                        return true;
+                    }
+
+                }
+                return false; // pass on to other listeners.
+
+            }
+        });
         criarConexao();
 
 
@@ -83,26 +115,49 @@ public class Login extends AppCompatActivity {
                 .show();
     }
 
-    public void registrar(){
-        criarConexao();
-        String nome = user.getText().toString();
-        String senha = pass.getText().toString();
-         User usuario = new User();
-        usuario.setUser(nome);
-        usuario.setPassword(senha);
-        UserRepository usuarioRepository = new UserRepository(conexao);
-        usuarioRepository.inserir(usuario);
-        MessageRegister();
+
+    public void register(View view) {
+        final User usuario = new User();
+        final Dialog myDialog = new Dialog(this);
+        myDialog.setContentView(R.layout.modalregistro);
+        final EditText usarioR, senha;
+        final RadioButton masc, fem;
+        final RadioGroup genres;
+        Button register;
+        //genres = myDialog.findViewById(R.id.generos);
+        usarioR = myDialog.findViewById(R.id.user);
+        senha = myDialog.findViewById(R.id.pass);
+        // masc = myDialog.findViewById(R.id.masc);
+        //fem = myDialog.findViewById(R.id.fem);
+        register = myDialog.findViewById(R.id.confirm);
+
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (usarioR.getText().toString().equals("") || senha.getText().toString().equals("")) {
+                    MessageError("Sério? você quer cadastrar o nada?");
+
+
+                } else {
+
+                    criarConexao();
+                    usuario.setUser(user.getText().toString());
+                    usuario.setPassword(senha.getText().toString());
+                    UserRepository usuarioRepository = new UserRepository(conexao);
+                    usuarioRepository.inserir(usuario);
+                    MessageRegister();
+                    myDialog.dismiss();
+                    user.setText(usuario.getUser());
+                    pass.setText(usuario.getPassword());
+                }
+
+            }
+        });
+
+        myDialog.show();
 
 
 
-    }
-
-    public void register(View view){
-        if(user.getText().toString().equals("")){
-
-            MessageError();
-        } else{registrar();}
     }
 
     public void start(){
@@ -117,10 +172,10 @@ public class Login extends AppCompatActivity {
     }
 
 
-    public void MessageError(){
+    public void MessageError(String mensagem) {
         Snacky.builder()
                 .setActivity(this)
-                .setText("Deu erro")
+                .setText(mensagem)
                 .setDuration(Snacky.LENGTH_SHORT)
                 .error()
                 .show();
@@ -165,7 +220,7 @@ public class Login extends AppCompatActivity {
 
                     profilepic.setVisibility(View.VISIBLE);
                     profilepic.setAnimation(myanim2);
-                    profilepic.setImageURI(Uri.parse(usuarioB.getProfilepic().toString()));
+                    profilepic.setImageBitmap(Utilities.handleSamplingAndRotationBitmap(this, Uri.parse(usuarioB.getProfilepic())));
                 }
 
 
@@ -173,10 +228,10 @@ public class Login extends AppCompatActivity {
 
 
             } else {
-                MessageError();
+                MessageError("Usuário e/ou senha incorretos");
             }
         } catch (Exception e) {
-                MessageError();
+            MessageError("Erro ao fazer login " + e);
                 e.printStackTrace();
         }
     }

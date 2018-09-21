@@ -94,6 +94,10 @@ public class ObjRepository {
         return banco.query(tblname, null, "STATUS = 'N'  ", null, null, null, "ITEM");
     }
 
+    public Cursor obterall(String usuario) {
+        return banco.query(tblname, null, null, null, null, null, "ITEM");
+    }
+
     public Cursor obterEventosconcluidos(String usuario) {
         return banco.query(tblname, null, "STATUS = 'C'  ", null, null, null, "ITEM");
     }
@@ -106,15 +110,6 @@ public class ObjRepository {
         return banco.query(tblname, null, "_id = " + id, null, null, null, "ITEM");
     }
 
-    public int countEventos() {
-        abrir();
-        Cursor mCount = banco.rawQuery("select count(*) from Lista", null);
-        mCount.moveToFirst();
-        int count = mCount.getInt(0);
-        mCount.close();
-        fecha();
-        return count;
-    }
 
     public Events criaevento(Cursor resultado) {
 

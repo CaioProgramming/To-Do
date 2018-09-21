@@ -93,6 +93,9 @@ public class AlbumRepository {
         return banco.query(tblname, null, "STATUS = 'N'  ", null, null, null, "FOTO");
     }
 
+    public Cursor obterall(String usuario) {
+        return banco.query(tblname, null, null, null, null, null, "FOTO");
+    }
 
     public Cursor obterFavoritos(String usuario) {
         return banco.query(tblname, null, "STATUS = 'F' ", null, null, null, "FOTO");

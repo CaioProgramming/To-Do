@@ -5,6 +5,15 @@ public class User {
     private int codigo;
     private String user;
     private String password;
+    private String sexo;
+
+    public String getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
+    }
 
     private String profilepic;
 

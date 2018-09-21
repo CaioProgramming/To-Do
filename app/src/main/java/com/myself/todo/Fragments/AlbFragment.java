@@ -79,14 +79,14 @@ public class AlbFragment extends Fragment {
                     case 0:
                         getChildFragmentManager()
                                 .beginTransaction()
-                                .replace(R.id.objectiveframe, new FotosFragment())
+                                .replace(R.id.albumframe, new FotosFragment())
                                 .commit();
 
                         break;
                     case 1:
                         getChildFragmentManager()
                                 .beginTransaction()
-                                .replace(R.id.objectiveframe, new FotosFavoritasFragment())
+                                .replace(R.id.albumframe, new FotosFavoritasFragment())
                                 .commit();
 
                         break;
