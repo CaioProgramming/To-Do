@@ -25,23 +25,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.github.mmin18.widget.RealtimeBlurView;
 import com.myself.todo.Beans.User;
 import com.myself.todo.Database.AlbumRepository;
 import com.myself.todo.Database.DadosOpenHelper;
 import com.myself.todo.Database.ObjRepository;
 import com.myself.todo.Database.UserRepository;
-import com.myself.todo.Fragments.AlbFragment;
+import com.myself.todo.Fragments.FotosFragment;
+import com.myself.todo.Fragments.MusicFragment;
 import com.myself.todo.Fragments.NewEvent;
-import com.myself.todo.Fragments.NextEvents;
 import com.myself.todo.Fragments.ObjFragment;
-import com.myself.todo.Fragments.SuccesEvents;
+import com.myself.todo.Fragments.ProfileFragment;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import de.mateware.snacky.Snacky;
@@ -59,6 +60,9 @@ public class Mylist extends AppCompatActivity {
     private ObjRepository objRepository;
     private AlbumRepository albumRepository;
     private User usuarioB;
+    Toolbar myToolbar;
+
+    RealtimeBlurView blur;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
@@ -72,12 +76,14 @@ public class Mylist extends AppCompatActivity {
                         //navigation2.setBackground(getDrawable(R.color.orange_A100));
 
                     }
-
+                    getSupportActionBar().show();
                     //CountFotos();
                     //CountObjectives();
+                    FotosFragment fotosFragment = new FotosFragment();
+                    fotosFragment.setBlur(blur);
                     getSupportFragmentManager()
                                 .beginTransaction()
-                            .replace(R.id.fragment, new AlbFragment())
+                            .replace(R.id.fragment, fotosFragment)
                                 .commit();
                      return true;
                 case R.id.navigation_objectives:
@@ -87,7 +93,7 @@ public class Mylist extends AppCompatActivity {
 
 
                     }
-
+                    getSupportActionBar().show();
                     //CountFotos();
                     //CountObjectives();
                     getSupportFragmentManager()
@@ -102,25 +108,26 @@ public class Mylist extends AppCompatActivity {
                         //navigation2.setBackground(getDrawable(R.drawable.gradmusic));
 
                     }
-
+                    getSupportActionBar().show();
                     // Semevento();
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.fragment, new NextEvents())
+                            .replace(R.id.fragment, new MusicFragment())
                             .commit();
 
                     return true;
 
                 case R.id.navigation_you:
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        //tb.setBackground(getDrawable(R.drawable.gradyou));
-                    }
+
 
                     //CountFotos();
                     //CountObjectives();
+                    getSupportActionBar().hide();
+                    myToolbar.hideOverflowMenu();
+                    myToolbar.collapseActionView();
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.fragment, new SuccesEvents())
+                            .replace(R.id.fragment, new ProfileFragment())
                             .commit();
 
                     return true;
@@ -133,12 +140,13 @@ public class Mylist extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mylist);
         TextView user = findViewById(R.id.usertxt);
         profilepic = findViewById(R.id.userpic);
+        blur = findViewById(R.id.rootblur);
         //albumcount = findViewById(R.id.albumcount);
         //objectivecount = findViewById(R.id.objectivecount);
         //musicount = findViewById(R.id.musicount);
@@ -146,7 +154,7 @@ public class Mylist extends AppCompatActivity {
         Typeface Atelas = Typeface.createFromAsset(getAssets(), "fonts/Atelas_PersonalUseOnly.ttf");
         user.setTypeface(Atelas);
         criarConexao();
-
+        checkPermissionREAD_EXTERNAL_STORAGE(this);
 
         if (savedInstanceState == null){
             getSupportFragmentManager()
@@ -157,9 +165,13 @@ public class Mylist extends AppCompatActivity {
 
         }
 
-        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        myToolbar = findViewById(R.id.my_toolbar);
+
         setSupportActionBar(myToolbar);
         getSupportActionBar();
+        Animation myanim2 = AnimationUtils.loadAnimation(this, R.anim.slide_in_top);
+
+        myToolbar.startAnimation(myanim2);
         mTextMessage = findViewById(R.id.message);
         BottomNavigationView navigation = findViewById(R.id.navigation);
         //Semevento();
@@ -176,6 +188,7 @@ public class Mylist extends AppCompatActivity {
         SetProfilePic(user, profilepic);
 
     }
+
 
     private void SetProfilePic(TextView user, ImageView pic) {
         Intent intent = getIntent();
@@ -275,6 +288,7 @@ public class Mylist extends AppCompatActivity {
 
     public void newfoto(View view) {
         Intent i = new Intent(this, NewPicActivity.class);
+        i.putExtra("usuario", usuario);
         startActivity(i);
 
     }

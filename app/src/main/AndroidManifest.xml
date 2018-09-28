@@ -24,7 +24,6 @@
             android:name=".Mylist"
             android:label="@string/title_activity_mylist" />
         <activity android:name=".NewPicActivity" />
-        <activity android:name=".NewMusicActivity"></activity>
     </application>
 
 </manifest>

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fotos"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
     <LinearLayout
-
+        android:visibility="invisible"
         android:id="@+id/nofotos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -30,11 +31,44 @@
             />
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/red_500"
+        android:visibility="invisible" />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerviewfotos"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="20dp"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:gravity="end">
+
+        <Switch
+            android:id="@+id/favoriteswitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:buttonTint="@color/red_500"
+            android:foregroundTint="@color/black"
+            android:text="Favoritos"
+            android:thumb="@drawable/ic_favorite2_black_24dp"
+            android:thumbTint="@color/red_500"
+            android:trackTint="@color/black" />
+    </LinearLayout>
+
+    <com.github.mmin18.widget.RealtimeBlurView
+        android:id="@+id/blur"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="15dp"
-        android:visibility="invisible" />
+        app:realtimeBlurRadius="0dp"
+        app:realtimeOverlayColor="@color/transparent" />
 
 </FrameLayout>

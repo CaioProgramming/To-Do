@@ -30,12 +30,15 @@ public class ObjRepository {
     public void inserir(Events events, String usuario) {
         String status = "N";
         ContentValues novoEvento = new ContentValues();
-        if (events.getEvento().equals("") || events.getDescricao().equals("")) {
+        if (events.getEvento().equals("") || events.getDescricao().equals("") || usuario.equals(null) || usuario.equals("")) {
+            System.out.println("usuario nao informado");
+
             return;
         }
         novoEvento.put("item", events.getEvento());
         novoEvento.put("descricao", events.getDescricao());
         novoEvento.put("status", status);
+        novoEvento.put("usuario", usuario);
         abrir();
         banco.insert(tblname, null, novoEvento);
         fecha();
@@ -91,25 +94,28 @@ public class ObjRepository {
 
 
     public Cursor obterEventos(String usuario) {
-        return banco.query(tblname, null, "STATUS = 'N'  ", null, null, null, "ITEM");
+        return banco.query(tblname, null, "STATUS = 'N' and USUARIO = ? ", new String[]{usuario}, null, null, "DIA");
     }
 
-    public Cursor obterall(String usuario) {
-        return banco.query(tblname, null, null, null, null, null, "ITEM");
-    }
 
     public Cursor obterEventosconcluidos(String usuario) {
-        return banco.query(tblname, null, "STATUS = 'C'  ", null, null, null, "ITEM");
+        return banco.query(tblname, null, "STATUS = 'C' and USUARIO = ?  ", new String[]{usuario}, null, null, "DIA");
     }
 
     public Cursor obterFavoritos(String usuario) {
-        return banco.query(tblname, null, "STATUS = 'F' ", null, null, null, "ITEM");
+        return banco.query(tblname, null, "STATUS = 'F' and USUARIO = ? ", new String[]{usuario}, null, null, "DIA");
     }
 
-    public Cursor obterUmEvento(long id) {
-        return banco.query(tblname, null, "_id = " + id, null, null, null, "ITEM");
-    }
 
+    public int contar(String usuario) {
+        abrir();
+        Cursor mCount = banco.query(tblname, null, "USUARIO = ? ", new String[]{usuario}, null, null, null);
+        mCount.moveToFirst();
+        int count = mCount.getCount();
+        mCount.close();
+        fecha();
+        return count;
+    }
 
     public Events criaevento(Cursor resultado) {
 

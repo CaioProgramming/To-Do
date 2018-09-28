@@ -1,25 +1,20 @@
 package com.myself.todo;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import static com.myself.todo.Mylist.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE;
 
@@ -111,23 +106,6 @@ public class Splash extends AppCompatActivity {
         alert.show();
     }
 
-    @SuppressLint("ResourceType")
-    public  void setStatusBarColor (){
-        RelativeLayout layout = (findViewById(R.id.layout));
-        Window window = this.getWindow();
-        Color color = null;
-
-
-// clear FLAG_TRANSLUCENT_STATUS flag:
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-// finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(this, layout.getSolidColor()));
-
-    }
 
 
 }

@@ -37,11 +37,13 @@ public class NewPicActivity extends AppCompatActivity {
     EditText desc;
     Album album;
     AlbumRepository albRepository;
+    String usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_pic);
+        usuario = getIntent().getStringExtra("usuario");
         album = new Album();
         fotopic = findViewById(R.id.pic);
         desc = findViewById(R.id.picdesc);
@@ -243,7 +245,8 @@ public class NewPicActivity extends AppCompatActivity {
         album.setDescription(String.valueOf(desc.getText()));
         albRepository = new AlbumRepository(this);
         albRepository.abrir();
-        albRepository.inserir(album, null);
+        System.out.println(usuario);
+        albRepository.inserir(album, usuario);
         succes();
     }
 }

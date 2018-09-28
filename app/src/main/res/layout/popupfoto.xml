@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.AlertDialogLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp"
-    android:layout_height="440dp">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent"
+    android:padding="-10dp">
+
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
+        android:background="@drawable/dialog"
+        android:padding="-5dp"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
         <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
             android:id="@+id/albpic"
-            android:layout_width="315dp"
-            android:layout_height="315dp"
-            android:maxHeight="315dp"
-            android:maxWidth="315dp"
-            android:minHeight="310dp"
-            android:minWidth="310dp"
-            android:layout_gravity="center|top|center_vertical"
+            android:adjustViewBounds="true"
+            android:contentDescription="Your saved Image"
+            android:scaleType="centerCrop"
             android:src="@drawable/nothinghere" />
-
         <TextView
             android:id="@+id/descricaopic"
             android:layout_width="match_parent"
@@ -49,20 +50,21 @@
             android:gravity="center"
             android:padding="5dp">
 
-            <Button
+            <CheckBox
                 android:id="@+id/dlgfavpic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@color/transparent"
-                android:drawableTop="@drawable/favoritecheck"
+                android:button="@drawable/favoritecheck"
 
                 />
 
             <Button
+                android:layout_width="35dp"
                 android:id="@+id/dlgexcluir"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
+                android:layout_margin="3dp"
                 android:layout_gravity="center"
                 android:background="@color/transparent"
                 android:drawableTop="@drawable/delete"

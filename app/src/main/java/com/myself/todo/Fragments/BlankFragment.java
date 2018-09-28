@@ -1,7 +1,6 @@
 package com.myself.todo.Fragments;
 
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -48,9 +47,9 @@ public class BlankFragment extends Fragment {
         LinearLayout empty = view.findViewById(R.id.noevents);
         objRepository = new ObjRepository(getActivity());
         objRepository.abrir();
-        Intent intent = getActivity().getIntent();
 
-        String usuario = intent.getExtras().getString("usuario");
+
+        String usuario = getActivity().getIntent().getExtras().getString("usuario");
         Cursor evento = objRepository.obterEventos(usuario);
         System.out.println(evento.getCount());
         evento.moveToFirst();

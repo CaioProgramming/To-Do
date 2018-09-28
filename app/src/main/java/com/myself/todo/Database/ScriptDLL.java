@@ -43,7 +43,7 @@ public class ScriptDLL {
 
         sql.append("CREATE TABLE IF NOT EXISTS Musicas( ");
         sql.append("_id INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,");
-        sql.append("Musica  VARCHAR(200) NOT NULL,DESCRICAO VARCHAR(50),  STATUS VARCHAR(1)," +
+        sql.append("Musica  VARCHAR(500) NOT NULL,DESCRICAO VARCHAR(50),STATUS CHAR(1) DEFAULT 'N'," +
                 "DIA DATE default CURRENT_DATE, USUARIO VARCHAR(40)) ");
 
         return sql.toString();

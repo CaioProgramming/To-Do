@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaMetadataRetriever;
 
 import com.myself.todo.Beans.Music;
 
@@ -19,6 +20,19 @@ public class MusicRepository {
         bancoListaOpenHelper = new DadosOpenHelper(context);
     }
 
+    public boolean findMusic(String uri) {
+
+        String sql = "SELECT * FROM Musicas WHERE Musica = ?";
+
+        String[] selectionArgs = new String[]{uri};
+        abrir();
+        Cursor resultado = banco.rawQuery(sql, selectionArgs);
+        return resultado != null;
+
+
+    }
+
+
     public void abrir() throws SQLException {
         banco = bancoListaOpenHelper.getWritableDatabase();
     }
@@ -28,17 +42,18 @@ public class MusicRepository {
     }
 
     public void inserir(Music music) {
-        String status = "N";
-        ContentValues novaFoto = new ContentValues();
-        if (music.getMusic().equals(null) || music.getDescription().equals("")) {
-            return;
-        }
-        novaFoto.put("Musica", music.getMusicuri());
-        novaFoto.put("DESCRICAO", music.getDescription());
-        novaFoto.put("STATUS ", status);
+        String status = "F";
+        ContentValues novaMusica = new ContentValues();
+        novaMusica.put("Musica", music.getMusicuri());
+        novaMusica.put("STATUS", status);
         abrir();
-        banco.insert(tblname, null, novaFoto);
-        fecha();
+        banco.insert(tblname, null, novaMusica);
+
+    }
+
+    public Cursor Verificar(Music music) {
+        return banco.query(tblname, null, "Musica = '" + music.getMusicuri() + "'", null, null, null, null);
+
     }
 
     public void alteraEvento(long id, String nome) {
@@ -58,12 +73,12 @@ public class MusicRepository {
     }
 
 
-    public void favoritar(long id) {
+    public void favoritar(String uri) {
         String favorito = "F";
-        ContentValues produtoAlterado = new ContentValues();
-        produtoAlterado.put("status", favorito);
+        ContentValues MusicaAlterada = new ContentValues();
+        MusicaAlterada.put("STATUS", favorito);
         abrir();
-        banco.update(tblname, produtoAlterado, "_id = " + id, null);
+        banco.update(tblname, MusicaAlterada, "Musica = '" + uri + "'", null);
         fecha();
 
     }
@@ -79,28 +94,28 @@ public class MusicRepository {
     }
 
 
-    public void unfavoritar(long id) {
+    public void unfavoritar(String uri) {
         String favorito = "N";
-        ContentValues produtoAlterado = new ContentValues();
-        produtoAlterado.put("status", favorito);
+        ContentValues MusicaAlterada = new ContentValues();
+        MusicaAlterada.put("STATUS", favorito);
         abrir();
-        banco.update(tblname, produtoAlterado, "_id = " + id, null);
+        banco.update(tblname, MusicaAlterada, "Musica = '" + uri + "'", null);
         fecha();
 
     }
 
 
-    public Cursor obterFotos(String usuario) {
-        return banco.query(tblname, null, "STATUS = 'N'  ", null, null, null, "FOTO");
+    public Cursor obterMusicas(String usuario) {
+        return banco.query(tblname, null, null, null, null, null, null);
     }
 
 
     public Cursor obterFavoritos(String usuario) {
-        return banco.query(tblname, null, "STATUS = 'F' ", null, null, null, "FOTO");
+        return banco.query(tblname, null, "STATUS = 'F' ", null, null, null, "DIA");
     }
 
     public Cursor obterUmEvento(long id) {
-        return banco.query(tblname, null, "_id = " + id, null, null, null, "ITEM");
+        return banco.query(tblname, null, "_id = " + id, null, null, null, "DIA");
     }
 
     public int countEventos() {
@@ -122,17 +137,29 @@ public class MusicRepository {
             return null;
         }
 
-        String uri = resultado.getString(resultado.getColumnIndexOrThrow("FOTO"));
+        String uri = resultado.getString(resultado.getColumnIndexOrThrow("Musica"));
         String descricao = resultado.getString(resultado.getColumnIndexOrThrow("DESCRICAO"));
         String dia = resultado.getString(resultado.getColumnIndexOrThrow("DIA"));
         int id = resultado.getInt(resultado.getColumnIndexOrThrow("_id"));
+        String status = resultado.getString(resultado.getColumnIndexOrThrow("STATUS"));
+        MediaMetadataRetriever myRetriever = new MediaMetadataRetriever();
 
-        music.setMusic(uri);
+        music.setMusicuri(uri);
+
+        System.out.println(music.getMusicuri());
+        music.setId(id);
+        music.setStatus(status);
         music.setDia(dia);
         music.setDescription(descricao);
+        music.setMusic(myRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
+        music.setAlbum(myRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM));
+
+
+
 
         return music;
 
 
     }
+
 }

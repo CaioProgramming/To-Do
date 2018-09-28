@@ -1,6 +1,9 @@
 package com.myself.todo.Beans;
 
 public class Music {
+    private int id;
+
+
 
     private String music;
     private String artist;
@@ -8,6 +11,27 @@ public class Music {
     private String description;
     private String dia;
     private String musicuri;
+    private String status;
+
+    public Music(String music, String artist, String album, String description, String dia, String musicuri) {
+        this.music = music;
+        this.artist = artist;
+        this.album = album;
+        this.description = description;
+        this.dia = dia;
+        this.musicuri = musicuri;
+    }
+
+    public Music() {
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getMusicuri() {
         return musicuri;
@@ -56,5 +80,13 @@ public class Music {
 
     public void setDia(String dia) {
         this.dia = dia;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

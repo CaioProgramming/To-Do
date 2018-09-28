@@ -30,12 +30,15 @@ public class AlbumRepository {
     public void inserir(Album album, String usuario) {
         String status = "N";
         ContentValues novaFoto = new ContentValues();
-        if (album.getFotouri().equals("") || album.getDescription().equals("")) {
+        if (album.getFotouri().equals("") || album.getDescription().equals("") || usuario == null || usuario.equals("")) {
+            System.out.println("usuario nao informado");
+
             return;
         }
         novaFoto.put("FOTO", album.getFotouri());
         novaFoto.put("DESCRICAO", album.getDescription());
         novaFoto.put("STATUS ", status);
+        novaFoto.put("USUARIO", usuario);
         abrir();
         banco.insert(tblname, null, novaFoto);
         fecha();
@@ -47,9 +50,10 @@ public class AlbumRepository {
         banco.update(tblname,produtoAlterado,"_id = "+ id,null);
         fecha();
     }
-    public void apagar(long id){
+
+    public void apagar(long id, String usuario) {
         abrir();
-        banco.delete(tblname, "_id = " +id, null);
+        banco.delete(tblname, "_id = " + id + "USUARIO = ?", new String[]{usuario});
         fecha();
 
 
@@ -57,12 +61,12 @@ public class AlbumRepository {
     }
 
 
-    public void favoritar(long id){
+    public void favoritar(long id, String usuario) {
         String favorito= "F";
-        ContentValues produtoAlterado = new ContentValues();
-        produtoAlterado.put("status",favorito);
+        ContentValues FotoAlterada = new ContentValues();
+        FotoAlterada.put("status", favorito);
         abrir();
-        banco.update(tblname,produtoAlterado,"_id = "+ id,null);
+        banco.update(tblname, FotoAlterada, "_id = " + id + " and USUARIO = ?", new String[]{usuario});
         fecha();
 
     }
@@ -78,41 +82,48 @@ public class AlbumRepository {
     }
 
 
-    public void unfavoritar(long id){
+    public void unfavoritar(long id, String usuario) {
         String favorito= "N";
-        ContentValues produtoAlterado = new ContentValues();
-        produtoAlterado.put("status",favorito);
+        ContentValues FotoAlterada = new ContentValues();
+        FotoAlterada.put("status", favorito);
         abrir();
-        banco.update(tblname,produtoAlterado,"_id = "+ id,null);
+        banco.update(tblname, FotoAlterada, "_id = " + id + " and USUARIO = ?", new String[]{usuario});
         fecha();
 
     }
 
 
     public Cursor obterFotos(String usuario) {
-        return banco.query(tblname, null, "STATUS = 'N'  ", null, null, null, "FOTO");
+        return banco.query(tblname, null, "USUARIO = ?", new String[]{usuario}, null, null, "STATUS");
     }
 
-    public Cursor obterall(String usuario) {
-        return banco.query(tblname, null, null, null, null, null, "FOTO");
+    public Cursor obterFotosRecentes(String usuario) {
+        return banco.query(tblname, null, "USUARIO = ?", new String[]{usuario}, null, null, "DIA");
     }
+
 
     public Cursor obterFavoritos(String usuario) {
-        return banco.query(tblname, null, "STATUS = 'F' ", null, null, null, "FOTO");
+        return banco.query(tblname, null, "USUARIO = ? AND STATUS = 'F' ", new String[]{usuario}, null, null, "FOTO");
     }
 
     public Cursor obterUmEvento(long id){
         return banco.query(tblname,null,"_id = "+id,null,null,null,"ITEM");
     }
 
-    public int countEventos(){
+    public int contar(String usuario) {
         abrir();
-        Cursor mCount= banco.rawQuery("select count(*) from Lista" , null);
+        int count;
+        Cursor mCount = banco.query(tblname, null, "USUARIO = ? ", new String[]{usuario}, null, null, null);
         mCount.moveToFirst();
-        int count= mCount.getInt(0);
-        mCount.close();
-        fecha();
-         return count;
+        if (mCount.getCount() == 0) {
+            count = 0;
+            return count;
+        } else {
+            count = mCount.getInt(0);
+            mCount.close();
+            fecha();
+            return count;
+        }
     }
 
     public Album criafoto(Cursor resultado) {
@@ -127,12 +138,14 @@ public class AlbumRepository {
         String uri = resultado.getString(resultado.getColumnIndexOrThrow("FOTO"));
         String descricao = resultado.getString(resultado.getColumnIndexOrThrow("DESCRICAO"));
         String dia = resultado.getString(resultado.getColumnIndexOrThrow("DIA"));
+        String status = resultado.getString(resultado.getColumnIndexOrThrow("STATUS"));
         int id = resultado.getInt(resultado.getColumnIndexOrThrow("_id"));
 
         album.setId(id);
         album.setDia(dia);
         album.setFotouri(uri);
         album.setDescription(descricao);
+        album.setStatus(status);
 
         return album;
 

@@ -1,13 +1,22 @@
 package com.myself.todo;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -19,6 +28,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.dx.dxloadingbutton.lib.LoadingButton;
 import com.myself.todo.Beans.User;
 import com.myself.todo.Database.DadosOpenHelper;
 import com.myself.todo.Database.UserRepository;
@@ -27,11 +37,13 @@ import com.myself.todo.Utils.Utilities;
 import de.hdodenhof.circleimageview.CircleImageView;
 import de.mateware.snacky.Snacky;
 
+import static com.myself.todo.Mylist.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE;
+
 public class Login extends AppCompatActivity {
 
     private SQLiteDatabase conexao;
     private DadosOpenHelper dadosOpenHelper;
-    Button entrar;
+    LoadingButton entrar;
     EditText user,pass;
     User usuarioB;
     CircleImageView profilepic;
@@ -46,42 +58,23 @@ public class Login extends AppCompatActivity {
         pass = (findViewById(R.id.pass));
         TextView title = (findViewById(R.id.title));
         profilepic = (findViewById(R.id.profile_pic));
-        entrar = (findViewById(R.id.loginconfirm));
-        entrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                start();
-            }
-        });
+        entrar = findViewById(R.id.btnlogin);
         Typeface Atelas = Typeface.createFromAsset(getAssets(), "fonts/SF-Pro-Text-Regular.ttf");
 
         title.setTypeface(Atelas);
+        user.setTypeface(Atelas);
 
-        //setStatusBarColor();
-        pass.setOnKeyListener(new View.OnKeyListener() {
+        pass.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if (i == EditorInfo.IME_ACTION_SEARCH ||
-                        i == EditorInfo.IME_ACTION_DONE ||
-                        keyEvent.getAction() == KeyEvent.ACTION_DOWN &&
-                                keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-
-                    if (!keyEvent.isShiftPressed()) {
-                        Log.v("AndroidEnterKeyActivity", "Enter Key Pressed!");
-                        switch (view.getId()) {
-                            case 1:
-                                validarLogin();
-                                break;
-                        }
-                        return true;
-                    }
-
+            public boolean onEditorAction(TextView textView, int i, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (i == EditorInfo.IME_ACTION_DONE)) {
+                    validarLogin();
                 }
-                return false; // pass on to other listeners.
-
+                return false;
             }
         });
         criarConexao();
+        checkPermissionREAD_EXTERNAL_STORAGE(this);
 
 
 
@@ -94,11 +87,6 @@ public class Login extends AppCompatActivity {
 
         conexao = dadosOpenHelper.getWritableDatabase();
 
-        Snacky.builder()
-                .setActivity(this)
-                .setDuration(Snacky.LENGTH_SHORT)
-                .success()
-                .show();
         usuarioRepositorio = new UserRepository(conexao);
 
         //Toast.makeText(this,"CONEXÃO CRIADA COM SUCESSO!", Toast.LENGTH_SHORT).show();
@@ -141,7 +129,7 @@ public class Login extends AppCompatActivity {
                 } else {
 
                     criarConexao();
-                    usuario.setUser(user.getText().toString());
+                    usuario.setUser(usarioR.getText().toString());
                     usuario.setPassword(senha.getText().toString());
                     UserRepository usuarioRepository = new UserRepository(conexao);
                     usuarioRepository.inserir(usuario);
@@ -160,7 +148,7 @@ public class Login extends AppCompatActivity {
 
     }
 
-    public void start(){
+    public void begin() {
         Intent i = new Intent(this,Mylist.class);
         i.putExtra("usuario", usuarioB.getUser());
         i.putExtra("codigo", usuarioB.getCodigo());
@@ -169,6 +157,54 @@ public class Login extends AppCompatActivity {
         startActivity(i);
         this.finish();
 
+    }
+
+
+    public boolean checkPermissionREAD_EXTERNAL_STORAGE(
+            final Context context) {
+        int currentAPIVersion = Build.VERSION.SDK_INT;
+        if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                        (Activity) context,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    showDialog("Armazenamento externo", context,
+                            Manifest.permission.READ_EXTERNAL_STORAGE);
+
+                } else {
+                    ActivityCompat
+                            .requestPermissions(
+                                    (Activity) context,
+                                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                }
+                return false;
+            } else {
+                return true;
+            }
+
+        } else {
+            return true;
+        }
+    }
+
+    public void showDialog(final String msg, final Context context,
+                           final String permission) {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+        alertBuilder.setCancelable(true);
+        alertBuilder.setTitle("Permissão");
+        alertBuilder.setMessage(msg + " permissão necessária");
+        alertBuilder.setPositiveButton(android.R.string.yes,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions((Activity) context,
+                                new String[]{permission},
+                                MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                    }
+                });
+        AlertDialog alert = alertBuilder.create();
+        alert.show();
     }
 
 
@@ -183,10 +219,11 @@ public class Login extends AppCompatActivity {
 
 
     public void validarLogin() {
+
         String usuario = user.getText().toString();
         String senha = pass.getText().toString();
         final Animation myanim2 = AnimationUtils.loadAnimation(this, R.anim.popin);
-
+        entrar.startLoading();
         try {
             boolean isValid = usuarioRepositorio.validaLogin(usuario, senha);
             if (isValid) {
@@ -194,17 +231,29 @@ public class Login extends AppCompatActivity {
                 usuarioRepositorio.findByLogin(usuario, senha);
                 usuarioB = usuarioRepositorio.findByLogin(usuario, senha);
                 System.out.println(usuarioB.getProfilepic());
+
                 if (usuarioB.getProfilepic() == null) {
 
                     Snacky.builder()
                             .setActivity(this)
-                            .setText("Bem-vindo " + usuarioB.getUser())
+                            .setText("Sem foto de perfil " + usuarioB.getUser())
                             .setDuration(Snacky.LENGTH_SHORT)
                             .success()
                             .show();
 
-                    entrar.setVisibility(View.VISIBLE);
-                    entrar.setAnimation(myanim2);
+                    CountDownTimer counter = new CountDownTimer(2000, 100) {
+                        @Override
+                        public void onTick(long l) {
+                            entrar.loadingSuccessful();
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            begin();
+                        }
+                    };
+                    counter.start();
+
 
 
                 } else {
@@ -215,12 +264,23 @@ public class Login extends AppCompatActivity {
                             .success()
                             .show();
 
-                    entrar.setVisibility(View.VISIBLE);
-                    entrar.setAnimation(myanim2);
 
                     profilepic.setVisibility(View.VISIBLE);
                     profilepic.setAnimation(myanim2);
                     profilepic.setImageBitmap(Utilities.handleSamplingAndRotationBitmap(this, Uri.parse(usuarioB.getProfilepic())));
+
+                    CountDownTimer counter = new CountDownTimer(2000, 100) {
+                        @Override
+                        public void onTick(long l) {
+                            entrar.loadingSuccessful();
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            begin();
+                        }
+                    };
+                    counter.start();
                 }
 
 
@@ -229,6 +289,21 @@ public class Login extends AppCompatActivity {
 
             } else {
                 MessageError("Usuário e/ou senha incorretos");
+                CountDownTimer counter = new CountDownTimer(2000, 100) {
+                    @Override
+                    public void onTick(long l) {
+                        entrar.loadingFailed();
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        user.setFocusable(true);
+                        entrar.reset();
+                    }
+                };
+                counter.start();
+
             }
         } catch (Exception e) {
             MessageError("Erro ao fazer login " + e);

@@ -10,34 +10,13 @@
         android:background="@color/white"
         android:orientation="vertical">
 
-        <Spinner
-            android:id="@+id/options"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/albumItems"
-            android:foregroundTint="@color/blue_A700"
-            android:padding="3dp" />
+
 
         <FrameLayout
             android:id="@+id/albumframe"
-            android:layout_below="@id/options"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp" />
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
 
-        <ImageButton
-            android:id="@+id/photobtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:adjustViewBounds="true"
-            android:background="@drawable/circle"
-            android:backgroundTint="@color/blue_500"
-            android:drawableTint="@color/white"
-            android:onClick="foto"
-            android:src="@drawable/ic_camera_alt_black_24dp"
-            android:tint="@color/white" />
 
     </RelativeLayout>
 
