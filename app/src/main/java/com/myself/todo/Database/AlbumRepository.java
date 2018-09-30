@@ -43,17 +43,28 @@ public class AlbumRepository {
         banco.insert(tblname, null, novaFoto);
         fecha();
     }
-    public void alteraEvento(long id,String nome){
-        ContentValues produtoAlterado = new ContentValues();
-        produtoAlterado.put("item",nome);
-        abrir();
-        banco.update(tblname,produtoAlterado,"_id = "+ id,null);
-        fecha();
-    }
 
     public void apagar(long id, String usuario) {
         abrir();
-        banco.delete(tblname, "_id = " + id + "USUARIO = ?", new String[]{usuario});
+        banco.delete(tblname, "_id = " + id + " and USUARIO = ?", new String[]{usuario});
+        fecha();
+
+
+    }
+
+    public void apagarAll(String usuario) {
+        abrir();
+        banco.delete(tblname, "USUARIO = ?", new String[]{usuario});
+        fecha();
+
+
+    }
+
+    public void UpdateUser(String usuarioantigo, String usuarionovo) {
+        ContentValues produtoAlterado = new ContentValues();
+        produtoAlterado.put("USUARIO", usuarionovo);
+        abrir();
+        banco.update(tblname, produtoAlterado, "USUARIO = ? ", new String[]{usuarioantigo});
         fecha();
 
 
@@ -98,7 +109,7 @@ public class AlbumRepository {
     }
 
     public Cursor obterFotosRecentes(String usuario) {
-        return banco.query(tblname, null, "USUARIO = ?", new String[]{usuario}, null, null, "DIA");
+        return banco.query(tblname, null, "USUARIO = ?", new String[]{usuario}, null, null, "HORA");
     }
 
 

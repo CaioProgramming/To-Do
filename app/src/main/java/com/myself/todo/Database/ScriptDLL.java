@@ -22,7 +22,7 @@ public class ScriptDLL {
         sql.append("CREATE TABLE IF NOT EXISTS Agenda( ");
         sql.append(     "_id INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,");
         sql.append(     "ITEM VARCHAR(200) NOT NULL,DESCRICAO VARCHAR(50)," +
-                    "STATUS CHAR(1) NOT NULL DEFAULT 'N', DIA DATE default CURRENT_DATE, USUARIO VARCHAR(40)) ");
+                "STATUS CHAR(1) NOT NULL DEFAULT 'N', DIA DATE default CURRENT_DATE, HORA DATETIME DEFAULT (datetime('now','localtime')),USUARIO VARCHAR(40)) ");
 
         return sql.toString();
     }
@@ -33,7 +33,7 @@ public class ScriptDLL {
         sql.append("CREATE TABLE IF NOT EXISTS Album( ");
         sql.append("_id INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,");
         sql.append("FOTO VARCHAR(200) NOT NULL,DESCRICAO VARCHAR(50), STATUS CHAR(1) NOT NULL DEFAULT 'N'," +
-                "DIA DATE default CURRENT_DATE, USUARIO VARCHAR(40)) ");
+                "DIA DATE default CURRENT_DATE, USUARIO VARCHAR(40),HORA DATETIME DEFAULT (datetime('now','localtime'))) ");
 
         return sql.toString();
     }

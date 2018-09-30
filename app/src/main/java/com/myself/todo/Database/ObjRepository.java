@@ -44,6 +44,16 @@ public class ObjRepository {
         fecha();
     }
 
+    public void UpdateUser(String usuarioantigo, String usuarionovo) {
+        ContentValues produtoAlterado = new ContentValues();
+        produtoAlterado.put("USUARIO", usuarionovo);
+        abrir();
+        banco.update(tblname, produtoAlterado, "USUARIO = ? ", new String[]{usuarioantigo});
+        fecha();
+
+
+    }
+
     public void alteraEvento(long id, String nome) {
         ContentValues produtoAlterado = new ContentValues();
         produtoAlterado.put("item", nome);
@@ -55,6 +65,14 @@ public class ObjRepository {
     public void apagar(long id) {
         abrir();
         banco.delete(tblname, "_id = " + id, null);
+        fecha();
+
+
+    }
+
+    public void apagarAll(String usuario) {
+        abrir();
+        banco.delete(tblname, "usuario = ?", new String[]{usuario});
         fecha();
 
 
@@ -94,7 +112,7 @@ public class ObjRepository {
 
 
     public Cursor obterEventos(String usuario) {
-        return banco.query(tblname, null, "STATUS = 'N' and USUARIO = ? ", new String[]{usuario}, null, null, "DIA");
+        return banco.query(tblname, null, "STATUS = 'N' and USUARIO = ? ", new String[]{usuario}, null, null, "HORA");
     }
 
 

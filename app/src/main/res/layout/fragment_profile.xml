@@ -7,7 +7,7 @@
     android:background="@color/white"
     tools:context=".Fragments.ProfileFragment">
 
-    <android.support.v4.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -20,8 +20,7 @@
                 android:id="@+id/userdata"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/round2"
-                android:elevation="2dp">
+                android:elevation="1dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -45,95 +44,104 @@
                         android:textColor="@color/black"
                         android:textStyle="bold" />
                 </LinearLayout>
-
                 <LinearLayout
-                    android:id="@+id/data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_margin="15dp"
-                    android:background="@drawable/line2">
+                    android:orientation="vertical">
 
                     <LinearLayout
+                        android:id="@+id/data"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="5dp">
+                        android:layout_margin="15dp"
+                        android:background="@drawable/line2">
 
-                        <TextView
-                            android:id="@+id/picsnumber"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="0"
-                            android:textColor="@color/black" />
+                            android:orientation="vertical"
+                            android:padding="5dp">
 
-                        <TextView
+                            <TextView
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:id="@+id/picsnumber"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="0"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Fotos" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="Fotos" />
+                            android:orientation="vertical"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:id="@+id/objectivesnumber"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="0"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Objetivos" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:id="@+id/musics"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="0"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Músicas" />
+
+                        </LinearLayout>
+
 
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="5dp">
-
-                        <TextView
-                            android:id="@+id/objectivesnumber"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="0"
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="Objetivos" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="5dp">
-
-                        <TextView
-                            android:id="@+id/musics"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="0"
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="Músicas" />
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
 
                 <Button
-                    android:layout_width="wrap_content"
+                    android:id="@+id/profile"
+                    android:layout_width="match_parent"
+                    android:layout_margin="4dp"
                     android:layout_height="35dp"
-                    android:layout_alignBaseline="@id/data"
-                    android:layout_alignEnd="@id/data"
-                    android:layout_below="@id/data"
-                    android:layout_margin="15dp"
                     android:background="@drawable/retangle2"
-                    android:padding="10dp"
+                    android:backgroundTint="@color/grey_500"
                     android:text="Editar Perfil" />
-
+                </LinearLayout>
 
             </RelativeLayout>
 
@@ -146,11 +154,11 @@
                 android:progressTint="@color/black" />
 
             <ScrollView
+                android:visibility="invisible"
                 android:id="@+id/recently"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/userdata"
-                android:visibility="invisible">
+                android:layout_below="@id/userdata">
 
                 <LinearLayout
 
@@ -164,6 +172,11 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:layout_gravity="center"
+                            android:background="@drawable/line"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:typeface="serif"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Fotos recentemente adicionadas" />
@@ -186,6 +199,11 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:layout_gravity="center"
+                            android:background="@drawable/line"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:typeface="serif"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Objetivos recentemente adicionados" />
@@ -206,7 +224,7 @@
             </ScrollView>
 
         </RelativeLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </ScrollView>
 
     <com.github.mmin18.widget.RealtimeBlurView
         android:id="@+id/blur"

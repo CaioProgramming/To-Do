@@ -3,7 +3,6 @@ package com.myself.todo;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -19,10 +17,12 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.asksira.bsimagepicker.BSImagePicker;
+import com.asksira.bsimagepicker.Utils;
+import com.bumptech.glide.Glide;
 import com.myself.todo.Beans.Album;
 import com.myself.todo.Database.AlbumRepository;
 import com.myself.todo.Utils.Utilities;
@@ -31,7 +31,7 @@ import java.io.IOException;
 
 import de.mateware.snacky.Snacky;
 
-public class NewPicActivity extends AppCompatActivity {
+public class NewPicActivity extends AppCompatActivity implements BSImagePicker.OnSingleImageSelectedListener {
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
     ImageView fotopic;
     EditText desc;
@@ -80,29 +80,17 @@ public class NewPicActivity extends AppCompatActivity {
     }
 
     private void Picalert() {
-        Dialog myDialog = new Dialog(this);
-        myDialog.setContentView(R.layout.alertoptions);
-        Button selfiebtn = myDialog.findViewById(R.id.selfie);
-        Button gallerybtn = myDialog.findViewById(R.id.galeria);
+        BSImagePicker singleSelectionPicker = new BSImagePicker.Builder("com.myself.fileprovider")
+                //Default: Integer.MAX_VALUE. Don't worry about performance :)
+                .hideGalleryTile()
+                .setSpanCount(3) //Default: 3. This is the number of columns
+                .setGridSpacing(Utils.dp2px(2)) //Default: 2dp. Remember to pass in a value in pixel.
+                .setPeekHeight(Utils.dp2px(360))//Default: 360dp. This is the initial height of the dialog.
+                .setOverSelectTextColor(R.color.black)
+                .setMultiSelectDoneTextColor(R.color.blue_300)
+                .build();
 
-        selfiebtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takePicture, 0);
-            }
-        });
-
-        gallerybtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickPhoto, 1);
-
-            }
-        });
-        myDialog.show();
+        singleSelectionPicker.show(getSupportFragmentManager(), "picker");
     }
 
     @Override
@@ -248,5 +236,16 @@ public class NewPicActivity extends AppCompatActivity {
         System.out.println(usuario);
         albRepository.inserir(album, usuario);
         succes();
+    }
+
+    @Override
+    public void onSingleImageSelected(Uri uri) {
+        Glide.with(this).load(uri).into(fotopic);
+        album.setFotouri(uri.toString());
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

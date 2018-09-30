@@ -3,7 +3,6 @@ package com.myself.todo;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,10 +21,8 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dx.dxloadingbutton.lib.LoadingButton;
@@ -44,15 +41,31 @@ public class Login extends AppCompatActivity {
     private SQLiteDatabase conexao;
     private DadosOpenHelper dadosOpenHelper;
     LoadingButton entrar;
-    EditText user,pass;
+    EditText user, pass;
     User usuarioB;
     CircleImageView profilepic;
     private UserRepository usuarioRepositorio;
+    private TextView title;
+    private android.widget.LinearLayout form;
+    private LoadingButton btnlogin;
+    private EditText useregister;
+    private EditText passreg;
+    private android.widget.LinearLayout formregister;
+    private android.widget.RelativeLayout registerform;
+    private LoadingButton reg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        this.reg = findViewById(R.id.reg);
+        this.registerform = findViewById(R.id.registerform);
+        this.formregister = findViewById(R.id.formregister);
+        this.passreg = findViewById(R.id.passreg);
+        this.useregister = findViewById(R.id.useregister);
+        this.btnlogin = findViewById(R.id.btnlogin);
+        this.form = findViewById(R.id.form);
+        this.title = findViewById(R.id.title);
         usuarioB = new User();
         user = (findViewById(R.id.user));
         pass = (findViewById(R.id.pass));
@@ -77,12 +90,10 @@ public class Login extends AppCompatActivity {
         checkPermissionREAD_EXTERNAL_STORAGE(this);
 
 
-
     }
 
 
-
-    private void criarConexao(){
+    private void criarConexao() {
         dadosOpenHelper = new DadosOpenHelper(this);
 
         conexao = dadosOpenHelper.getWritableDatabase();
@@ -94,7 +105,7 @@ public class Login extends AppCompatActivity {
 
     }
 
-    public void MessageRegister(){
+    public void MessageRegister() {
         Snacky.builder()
                 .setActivity(this)
                 .setText("Cadastro concluído")
@@ -105,51 +116,15 @@ public class Login extends AppCompatActivity {
 
 
     public void register(View view) {
-        final User usuario = new User();
-        final Dialog myDialog = new Dialog(this);
-        myDialog.setContentView(R.layout.modalregistro);
-        final EditText usarioR, senha;
-        final RadioButton masc, fem;
-        final RadioGroup genres;
-        Button register;
-        //genres = myDialog.findViewById(R.id.generos);
-        usarioR = myDialog.findViewById(R.id.user);
-        senha = myDialog.findViewById(R.id.pass);
-        // masc = myDialog.findViewById(R.id.masc);
-        //fem = myDialog.findViewById(R.id.fem);
-        register = myDialog.findViewById(R.id.confirm);
-
-        register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (usarioR.getText().toString().equals("") || senha.getText().toString().equals("")) {
-                    MessageError("Sério? você quer cadastrar o nada?");
-
-
-                } else {
-
-                    criarConexao();
-                    usuario.setUser(usarioR.getText().toString());
-                    usuario.setPassword(senha.getText().toString());
-                    UserRepository usuarioRepository = new UserRepository(conexao);
-                    usuarioRepository.inserir(usuario);
-                    MessageRegister();
-                    myDialog.dismiss();
-                    user.setText(usuario.getUser());
-                    pass.setText(usuario.getPassword());
-                }
-
-            }
-        });
-
-        myDialog.show();
-
+        Animation myanim2 = AnimationUtils.loadAnimation(this, R.anim.slide_in_bottom);
+        this.registerform.setVisibility(View.VISIBLE);
+        this.registerform.startAnimation(myanim2);
 
 
     }
 
     public void begin() {
-        Intent i = new Intent(this,Mylist.class);
+        Intent i = new Intent(this, Mylist.class);
         i.putExtra("usuario", usuarioB.getUser());
         i.putExtra("codigo", usuarioB.getCodigo());
         i.putExtra("senha", usuarioB.getPassword());
@@ -255,7 +230,6 @@ public class Login extends AppCompatActivity {
                     counter.start();
 
 
-
                 } else {
                     Snacky.builder()
                             .setActivity(this)
@@ -307,13 +281,44 @@ public class Login extends AppCompatActivity {
             }
         } catch (Exception e) {
             MessageError("Erro ao fazer login " + e);
-                e.printStackTrace();
+            e.printStackTrace();
         }
     }
-    public void login(View view){
+
+    public void login(View view) {
         validarLogin();
 
     }
 
+    public void cadastrar(View view) {
+        this.reg.startLoading();
+        final RelativeLayout registerform = this.registerform;
+        final LoadingButton loadingButton = this.reg;
+        criarConexao();
+        User usuario = new User();
+        usuario.setUser(this.useregister.getText().toString());
+        usuario.setPassword(this.passreg.getText().toString());
+        UserRepository usuarioRepository = new UserRepository(conexao);
+        usuarioRepository.inserir(usuario);
+        MessageRegister();
+        final Animation out = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+
+
+        user.setText(usuario.getUser());
+        pass.setText(usuario.getPassword());
+        registerform.startAnimation(out);
+
+        CountDownTimer countDownTimer = new CountDownTimer(3000, 100) {
+            @Override
+            public void onTick(long l) {
+                loadingButton.loadingSuccessful();
+            }
+
+            @Override
+            public void onFinish() {
+                registerform.setVisibility(View.INVISIBLE);
+            }
+        }.start();
+    }
 
 }

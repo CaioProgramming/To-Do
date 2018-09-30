@@ -29,15 +29,7 @@ public class Splash extends AppCompatActivity {
         iv.startAnimation(myanim2);
         iv.setAnimation(myanim2);
         checkPermissionREAD_EXTERNAL_STORAGE(this);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            StartApp();
 
-
-        }
     }
     private void StartApp(){
 
@@ -80,10 +72,12 @@ public class Splash extends AppCompatActivity {
                 }
                 return false;
             } else {
+                StartApp();
                 return true;
             }
 
         } else {
+            StartApp();
             return true;
         }
     }

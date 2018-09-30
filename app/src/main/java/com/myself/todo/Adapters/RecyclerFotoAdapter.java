@@ -69,6 +69,8 @@ public class RecyclerFotoAdapter extends RecyclerView.Adapter<RecyclerFotoAdapte
         }
         Glide.with(mContext).load(mData.get(position).getFotouri()).into(holder.pic);
         final Animation myanim2 = AnimationUtils.loadAnimation(mContext, R.anim.fade_in);
+        final Animation myanim = AnimationUtils.loadAnimation(mContext, R.anim.pop_out);
+
         holder.fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,11 +89,11 @@ public class RecyclerFotoAdapter extends RecyclerView.Adapter<RecyclerFotoAdapte
 
                 } else {
                     AlbumRepository albumRepository = new AlbumRepository(mContext);
-                    albumRepository.favoritar(mData.get(position).getId(), mActivity.getIntent().getExtras().getString("usuario"));
+                    albumRepository.unfavoritar(mData.get(position).getId(), mActivity.getIntent().getExtras().getString("usuario"));
                     Snacky.builder()
                             .setText("Foto removida dos favoritos")
                             .setTextColor(Color.BLACK)
-                            .setIcon(R.drawable.ic_favorite_black_24dp)
+                            .setIcon(R.drawable.ic_favorite2_black_24dp)
                             .setBackgroundColor(Color.WHITE)
                             .setActivity(mActivity)
                             .setDuration(Snacky.LENGTH_SHORT)
@@ -112,7 +114,7 @@ public class RecyclerFotoAdapter extends RecyclerView.Adapter<RecyclerFotoAdapte
                     albumRepository.favoritar(mData.get(position).getId(), mActivity.getIntent().getExtras().getString("usuario"));
                     Snacky.builder()
                             .setText("Foto adcionada aos favoritos")
-                            .setIcon(R.drawable.ic_favorite2_black_24dp)
+                            .setIcon(R.drawable.ic_favorite_black_24dp)
                             .setBackgroundColor(Color.WHITE)
                             .setActivity(mActivity)
                             .setDuration(Snacky.LENGTH_SHORT)
@@ -149,10 +151,12 @@ public class RecyclerFotoAdapter extends RecyclerView.Adapter<RecyclerFotoAdapte
                     mBlur.animate();
                     mBlur.setBlurRadius(20);
                     myDialog = new Dialog(mContext);
+
                     myDialog.setContentView(R.layout.popupfoto);
                     TextView event, desc;
                     ImageView pic;
-                    final Button favbtn, dltbtn;
+                    final Button dltbtn;
+                    final CheckBox favbtn;
                     pic = myDialog.findViewById(R.id.albpic);
                     event = myDialog.findViewById(R.id.descricaopic);
                     desc = myDialog.findViewById(R.id.diapic);
@@ -167,15 +171,24 @@ public class RecyclerFotoAdapter extends RecyclerView.Adapter<RecyclerFotoAdapte
                         e.printStackTrace();
                     }
                     if (mData.get(position).getStatus().equals("F")) {
+                        favbtn.setChecked(true);
                     }
+
 
                     favbtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            lst = new AlbumRepository(mContext);
-                            lst.abrir();
-                            lst.favoritar(mData.get(position).getId(), mActivity.getIntent().getExtras().getString("usuario"));
-                            lst.fecha();
+                            if (favbtn.isChecked()) {
+                                lst = new AlbumRepository(mContext);
+                                lst.abrir();
+                                lst.unfavoritar(mData.get(position).getId(), mActivity.getIntent().getExtras().getString("usuario"));
+                                lst.fecha();
+                            } else {
+                                lst = new AlbumRepository(mContext);
+                                lst.abrir();
+                                lst.favoritar(mData.get(position).getId(), mActivity.getIntent().getExtras().getString("usuario"));
+                                lst.fecha();
+                            }
                         }
                     });
 
@@ -187,6 +200,8 @@ public class RecyclerFotoAdapter extends RecyclerView.Adapter<RecyclerFotoAdapte
                             lst.abrir();
                             lst.apagar(mData.get(position).getId(), mActivity.getIntent().getExtras().getString("usuario"));
                             lst.fecha();
+                            myDialog.dismiss();
+                            holder.card.startAnimation(myanim2);
                         }
                     });
 

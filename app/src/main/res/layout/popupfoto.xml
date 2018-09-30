@@ -13,12 +13,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <ImageView
+            android:maxHeight="400dp"
+            android:maxWidth="400dp"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:id="@+id/albpic"
             android:adjustViewBounds="true"
             android:contentDescription="Your saved Image"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             android:src="@drawable/nothinghere" />
         <TextView
             android:id="@+id/descricaopic"

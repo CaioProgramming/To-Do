@@ -1,6 +1,8 @@
 package com.myself.todo.Fragments;
 
 
+import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -15,10 +17,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.asksira.bsimagepicker.BSImagePicker;
+import com.asksira.bsimagepicker.Utils;
 import com.bumptech.glide.Glide;
 import com.github.mmin18.widget.RealtimeBlurView;
 import com.myself.todo.Adapters.RecyclerAdapter;
@@ -30,6 +37,7 @@ import com.myself.todo.Database.AlbumRepository;
 import com.myself.todo.Database.DadosOpenHelper;
 import com.myself.todo.Database.ObjRepository;
 import com.myself.todo.Database.UserRepository;
+import com.myself.todo.Profile;
 import com.myself.todo.R;
 
 import java.util.ArrayList;
@@ -60,6 +68,9 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        RelativeLayout userdata = view.findViewById(R.id.userdata);
+        final Button profile = view.findViewById(R.id.profile);
+        LinearLayout data = view.findViewById(R.id.data);
         RealtimeBlurView blur = view.findViewById(R.id.blur);
         RecyclerView objectiverecyler = view.findViewById(R.id.objectiverecyler);
         RecyclerView fotorecycler = view.findViewById(R.id.fotorecycler);
@@ -70,7 +81,12 @@ public class ProfileFragment extends Fragment {
         TextView picsnumber = view.findViewById(R.id.picsnumber);
         TextView username = view.findViewById(R.id.username);
         CircleImageView profilepic = view.findViewById(R.id.profilepic);
-        profilepic = view.findViewById(R.id.profilepic);
+        profilepic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Picalert();
+            }
+        });
         InitDB();
         String usuario = Objects.requireNonNull(Objects.requireNonNull(getActivity()).getIntent().getExtras()).getString("usuario");
         //int cod_usuario = getActivity().getIntent().getExtras().getInt("codigo");
@@ -79,7 +95,16 @@ public class ProfileFragment extends Fragment {
         System.out.println(usuario);
         criarConexao();
         userRepository = new UserRepository(conexao);
-        User usuarioB = userRepository.findByLogin(usuario, senha);
+        final User usuarioB = userRepository.findByLogin(usuario, senha);
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), Profile.class);
+                i.putExtra("usuario", usuarioB.getUser());
+                i.putExtra("senha", usuarioB.getPassword());
+                startActivity(i);
+            }
+        });
         System.out.println(usuarioB.getProfilepic());
         System.out.println(usuario);
         username.setText(usuarioB.getUser());
@@ -118,7 +143,22 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    private void ContarItems(TextView musics, TextView objectivesnumber, TextView picsnumber, TextView username, String usuario, User usuarioB) {
+    private void Picalert() {
+        BSImagePicker singleSelectionPicker = new BSImagePicker.Builder("com.myself.fileprovider")
+                //Default: Integer.MAX_VALUE. Don't worry about performance :)
+                .hideGalleryTile()
+
+                .setSpanCount(3) //Default: 3. This is the number of columns
+                .setGridSpacing(Utils.dp2px(2)) //Default: 2dp. Remember to pass in a value in pixel.
+                .setPeekHeight(Utils.dp2px(360))//Default: 360dp. This is the initial height of the dialog.
+                .setOverSelectTextColor(R.color.black)
+                .setMultiSelectDoneTextColor(R.color.blue_300)
+                .build();
+
+        singleSelectionPicker.show(getChildFragmentManager(), "picker");
+    }
+
+    private void ContarItems(final TextView musics, TextView objectivesnumber, TextView picsnumber, TextView username, String usuario, User usuarioB) {
         username.setText(usuario);
         picsnumber.setText(String.valueOf(albumRepository.contar(usuario)));
         objectivesnumber.setText(String.valueOf(objRepository.contar(usuarioB.getUser())));
@@ -127,6 +167,17 @@ public class ProfileFragment extends Fragment {
         Cursor cursor = Objects.requireNonNull(getActivity()).getContentResolver().query(uri, null, selection, null, MediaStore.Audio.Media.DATE_MODIFIED);
         assert cursor != null;
         musics.setText(String.valueOf(cursor.getCount()));
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(0, cursor.getCount());
+        valueAnimator.setDuration(1000);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+
+                musics.setText(valueAnimator.getAnimatedValue().toString());
+
+            }
+        });
+        valueAnimator.start();
     }
 
     private void InitDB() {
@@ -136,11 +187,11 @@ public class ProfileFragment extends Fragment {
         lstalbum = new ArrayList<>();
     }
 
-    private void CarregarFotos(RealtimeBlurView blur, RecyclerView fotorecycler, User usuarioB, TextView picnumber) {
+    private void CarregarFotos(RealtimeBlurView blur, RecyclerView fotorecycler, User usuarioB, final TextView picnumber) {
         albumRepository.abrir();
         Cursor evento = albumRepository.obterFotosRecentes(usuarioB.getUser());
         System.out.println(evento.getCount());
-        evento.moveToFirst();
+        evento.moveToLast();
 
         if (evento.getCount() == 0) {
 
@@ -153,13 +204,12 @@ public class ProfileFragment extends Fragment {
         for (int i = 0; i < evento.getCount(); i++) {
 
             lstalbum.add(albumRepository.criafoto(evento));
-            evento.moveToNext();
+            evento.moveToPrevious();
 
         }
         GridLayoutManager llm = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false);
         fotorecycler.setHasFixedSize(true);
         System.out.println(lstalbum.size());
-        picnumber.setText(String.valueOf(lstalbum.size()));
         albumRepository.fecha();
         final Animation myanim2 = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
         RecyclerFotoAdapter myadapter = new RecyclerFotoAdapter(getContext(), getActivity(), lstalbum, blur);
@@ -167,17 +217,27 @@ public class ProfileFragment extends Fragment {
         fotorecycler.setLayoutManager(llm);
         fotorecycler.startAnimation(myanim2);
         albumRepository.fecha();
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(0, lstalbum.size());
+        valueAnimator.setDuration(1500);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+
+                picnumber.setText(valueAnimator.getAnimatedValue().toString());
+
+            }
+        });
+        valueAnimator.start();
     }
 
-    private void CarregarObjetivos(RecyclerView objectiverecyler, User usuarioB, TextView objectivesnumber) {
+    private void CarregarObjetivos(RecyclerView objectiverecyler, User usuarioB, final TextView objectivesnumber) {
         objRepository = new ObjRepository(getActivity());
         objRepository.abrir();
 
 
         Cursor evento = objRepository.obterEventos(usuarioB.getUser());
         System.out.println(evento.getCount());
-        objectivesnumber.setText(String.valueOf(evento.getCount()));
-        evento.moveToFirst();
+        evento.moveToLast();
         if (evento.getCount() == 0) {
 
         } else {
@@ -188,7 +248,7 @@ public class ProfileFragment extends Fragment {
         for (int i = 0; i < evento.getCount(); i++) {
 
             lstevents.add(objRepository.criaevento(evento));
-            evento.moveToNext();
+            evento.moveToPrevious();
 
         }
         GridLayoutManager llm = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false);
@@ -202,6 +262,18 @@ public class ProfileFragment extends Fragment {
         objectiverecyler.setLayoutManager(llm);
         final Animation myanim2 = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
         objectiverecyler.startAnimation(myanim2);
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(0, lstevents.size());
+        valueAnimator.setDuration(1500);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+
+                objectivesnumber.setText(valueAnimator.getAnimatedValue().toString());
+
+            }
+        });
+        valueAnimator.start();
+
     }
 
     private void criarConexao() {

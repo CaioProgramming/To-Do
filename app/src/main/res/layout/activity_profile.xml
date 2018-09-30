@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Profile">
+
+    <RelativeLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/line2"
+        android:backgroundTint="@color/black"
+        android:elevation="1dp"
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/picback"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/nothinghere" />
+
+        <com.github.mmin18.widget.RealtimeBlurView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:realtimeBlurRadius="40dp"
+            app:realtimeOverlayColor="@color/lwhite" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_pic"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/nothinghere" />
+
+        <TextView
+            android:id="@+id/userid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="id"
+            android:textColor="@color/grey_200" />
+
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profile_pic"
+            android:layout_centerHorizontal="true"
+            android:text="user"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:typeface="serif" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top"
+        android:layout_centerInParent="true"
+        android:visibility="invisible">
+
+        <com.dx.dxloadingbutton.lib.LoadingButton
+            android:id="@+id/objetivesbtn"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            app:lb_btnColor="@color/grey_800"
+            app:lb_btnText="Apagar objetivos"
+            app:lb_resetAfterFailed="true" />
+
+        <com.dx.dxloadingbutton.lib.LoadingButton
+            android:id="@+id/fotosbtn"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            app:lb_btnColor="@color/orange_300"
+            app:lb_btnText="Apagar fotos"
+            app:lb_resetAfterFailed="true" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/form"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:visibility="invisible">
+
+        <AutoCompleteTextView
+            android:id="@+id/usernameedit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/transparent"
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/user"
+            android:imeOptions="actionNext"
+            android:inputType="textMultiLine"
+            android:padding="10dp"
+            android:text="Usuário"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <AutoCompleteTextView
+            android:id="@+id/usersenha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/pass"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:padding="10dp"
+            android:text="senha"
+            android:textSize="24sp" />
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/black"
+            android:foregroundTint="@color/black"
+            android:padding="12dp"
+            android:switchPadding="15dp"
+            android:text="Notificações"
+            android:textColor="@color/black"
+            android:thumbTint="@color/white"
+            android:trackTint="@color/black" />
+
+        <com.dx.dxloadingbutton.lib.LoadingButton
+            android:id="@+id/savebtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:lb_btnColor="@color/black"
+            app:lb_btnDisabledColor="@color/grey_200"
+            app:lb_btnRippleColor="@color/black"
+            app:lb_btnText="Salvar"
+            app:lb_resetAfterFailed="true" />
+
+        <com.dx.dxloadingbutton.lib.LoadingButton
+            android:id="@+id/wipeoutbtn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:lb_btnColor="@color/red_300"
+            app:lb_btnRippleColor="@color/red_300"
+            app:lb_btnText="Apagar tudo" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        android:indeterminateDrawable="@mipmap/ic_launcher" />
+
+
+</RelativeLayout>

@@ -3,7 +3,6 @@ package com.myself.todo;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,7 +15,6 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -27,10 +25,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.asksira.bsimagepicker.BSImagePicker;
+import com.asksira.bsimagepicker.Utils;
 import com.bumptech.glide.Glide;
 import com.github.mmin18.widget.RealtimeBlurView;
 import com.myself.todo.Beans.User;
@@ -47,7 +46,7 @@ import com.myself.todo.Fragments.ProfileFragment;
 import de.hdodenhof.circleimageview.CircleImageView;
 import de.mateware.snacky.Snacky;
 
-public class Mylist extends AppCompatActivity {
+public class Mylist extends AppCompatActivity implements BSImagePicker.OnSingleImageSelectedListener {
 
     private TextView mTextMessage, albumcount, musicount, objectivecount;
     int cod_usuario;
@@ -176,9 +175,9 @@ public class Mylist extends AppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.navigation);
         //Semevento();
 
-
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_objectives);
+
 
         //CountObjectives();
 
@@ -259,7 +258,7 @@ public class Mylist extends AppCompatActivity {
 
     public void foto(View view) {
 
-        Dialog myDialog = new Dialog(this);
+       /*Dialog myDialog = new Dialog(this);
         myDialog.setContentView(R.layout.alertoptions);
         Button selfiebtn = myDialog.findViewById(R.id.selfie);
         Button gallerybtn = myDialog.findViewById(R.id.galeria);
@@ -269,21 +268,34 @@ public class Mylist extends AppCompatActivity {
             public void onClick(View view) {
                 Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(takePicture, 0);
+                takePicture.addFlags(FLAG_GRANT_READ_URI_PERMISSION);
+                takePicture.addFlags(FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
             }
         });
 
         gallerybtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickPhoto, 1);
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK);
+                galleryIntent.setType("image/*, video/*");
+                if (galleryIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(Intent.createChooser(galleryIntent, "Select File"), 1);
+                }
 
             }
         });
-        myDialog.show();
+        myDialog.show();*/
 
+        BSImagePicker singleSelectionPicker = new BSImagePicker.Builder("com.myself.fileprovider")
+                .hideGalleryTile()//Default: Integer.MAX_VALUE. Don't worry about performance :)
+                .setSpanCount(3) //Default: 3. This is the number of columns
+                .setGridSpacing(Utils.dp2px(2)) //Default: 2dp. Remember to pass in a value in pixel.
+                .setPeekHeight(Utils.dp2px(360))//Default: 360dp. This is the initial height of the dialog.
+                .setOverSelectTextColor(R.color.black)
+                .setMultiSelectDoneTextColor(R.color.blue_300)
+                .build();
 
+        singleSelectionPicker.show(getSupportFragmentManager(), "picker");
     }
 
     public void newfoto(View view) {
@@ -411,4 +423,28 @@ public class Mylist extends AppCompatActivity {
         alert.show();
     }
 
+    @Override
+    public void onSingleImageSelected(Uri uri) {
+        uri.getPath();
+
+        Glide.with(this).load(uri).into(profilepic);
+        usuarioB.setProfilepic(uri.toString());
+        System.out.println(usuarioB.getProfilepic());
+        if (checkPermissionREAD_EXTERNAL_STORAGE(this)) {
+            try {
+                criarConexao();
+                usuarioRepositorio = new UserRepository(conexao);
+                usuarioRepositorio.update(usuarioB);
+
+                succes(usuarioB);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
 }

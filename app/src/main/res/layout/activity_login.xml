@@ -120,5 +120,82 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/registerform"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
 
+        <com.github.mmin18.widget.RealtimeBlurView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            fancy:realtimeBlurRadius="15dp"
+            fancy:realtimeOverlayColor="@color/lblack" />
+
+        <LinearLayout
+            android:id="@+id/formregister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="55dp"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/grey_500">
+
+                <EditText
+                    android:id="@+id/useregister"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round"
+                    android:backgroundTint="@color/grey_200"
+                    android:drawablePadding="10dp"
+                    android:drawableStart="@drawable/user"
+                    android:hint="Usuário"
+                    android:imeOptions="actionNext"
+                    android:padding="10dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="20dp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColorHint="@color/grey_500">
+
+                <EditText
+                    android:id="@+id/passreg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round"
+                    android:backgroundTint="@color/grey_200"
+                    android:drawablePadding="10dp"
+                    android:drawableStart="@drawable/pass"
+                    android:foregroundTint="@color/black"
+                    android:hint="Senha"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPassword"
+                    android:padding="15dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <com.dx.dxloadingbutton.lib.LoadingButton
+                android:id="@+id/reg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="cadastrar"
+                fancy:lb_btnColor="@color/grey_500"
+                fancy:lb_btnRippleColor="@color/blue_300"
+                fancy:lb_btnText="Cadastrar" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
 </RelativeLayout>
