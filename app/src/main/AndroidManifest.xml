@@ -3,6 +3,7 @@
     package="com.myself.todo">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -22,6 +23,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,6 +37,7 @@
             android:label="@string/title_activity_mylist" />
         <activity android:name=".NewPicActivity" />
         <activity android:name=".Profile" />
+        <activity android:name=".WelcomeActivity"></activity>
     </application>
 
 </manifest>

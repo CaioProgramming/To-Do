@@ -152,7 +152,7 @@ public class AlbumRepository {
         String status = resultado.getString(resultado.getColumnIndexOrThrow("STATUS"));
         int id = resultado.getInt(resultado.getColumnIndexOrThrow("_id"));
 
-        album.setId(id);
+        album.setId(String.valueOf(id));
         album.setDia(dia);
         album.setFotouri(uri);
         album.setDescription(descricao);

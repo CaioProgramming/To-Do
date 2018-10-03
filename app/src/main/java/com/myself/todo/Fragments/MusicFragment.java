@@ -68,8 +68,7 @@ public class MusicFragment extends Fragment {
     }
 
     private void loadsongs() {
-        MusicRepository musicRepository = new MusicRepository(getContext());
-        musicRepository.abrir();
+
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         String selection = MediaStore.Audio.Media.IS_MUSIC + "!=0";
         Cursor cursor = Objects.requireNonNull(getActivity()).getContentResolver().query(uri, null, selection, null, MediaStore.Audio.Media.DATE_MODIFIED);

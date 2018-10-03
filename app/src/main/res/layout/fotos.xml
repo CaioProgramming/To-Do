@@ -52,6 +52,7 @@
         android:gravity="end">
 
         <Switch
+            style="@style/SwitchCompatTheme"
             android:id="@+id/favoriteswitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -1,9 +1,9 @@
 package com.myself.todo;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -19,27 +19,27 @@ import com.asksira.bsimagepicker.BSImagePicker;
 import com.asksira.bsimagepicker.Utils;
 import com.bumptech.glide.Glide;
 import com.dx.dxloadingbutton.lib.LoadingButton;
-import com.myself.todo.Beans.User;
-import com.myself.todo.Database.AlbumRepository;
-import com.myself.todo.Database.DadosOpenHelper;
-import com.myself.todo.Database.ObjRepository;
-import com.myself.todo.Database.UserRepository;
-
-import java.util.Objects;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import de.mateware.snacky.Snacky;
 
 public class Profile extends AppCompatActivity {
-    UserRepository userRepository;
-    ObjRepository objRepository;
-    AlbumRepository albumRepository;
-    User user;
+
+    DatabaseReference raiz;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        final AutoCompleteTextView emailedit = findViewById(R.id.emailedit);
         final LoadingButton wipeoutbtn = findViewById(R.id.wipeoutbtn);
         final LoadingButton savebtn = findViewById(R.id.savebtn);
         final LoadingButton fotosbtn = findViewById(R.id.fotosbtn);
@@ -60,23 +60,33 @@ public class Profile extends AppCompatActivity {
             }
         });
         ImageView picback = findViewById(R.id.picback);
-        criarConexao();
-        user = userRepository.findByLogin(Objects.requireNonNull(getIntent().getExtras()).getString("usuario"), getIntent().getExtras().getString("senha"));
-        username.setText(user.getUser());
-        usernameedit.setText(user.getUser());
-        usersenha.setText(user.getPassword());
-        userid.setText(String.valueOf(user.getCodigo()));
-        Glide.with(this).load(user.getProfilepic()).into(picback);
-        Glide.with(this).load(user.getProfilepic()).into(profilepic);
+        if (user != null) {
+            Glide.with(this).load(user.getPhotoUrl()).into(picback);
+            Glide.with(this).load(user.getPhotoUrl()).into(profilepic);
+            username.setText(user.getDisplayName());
+            usernameedit.setText(user.getDisplayName());
+            userid.setText(user.getUid());
+
+        }
         final Animation myanim = AnimationUtils.loadAnimation(this, R.anim.fade_in);
         final Animation myanim2 = AnimationUtils.loadAnimation(this, R.anim.slide_in_top);
         final Animation myanim3 = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+
         objetivesbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 objetivesbtn.startLoading();
-                albumRepository.apagarAll(user.getUser());
+                DatabaseReference eventsreference = FirebaseDatabase.getInstance().getReference("events");
+                if (user != null) {
+                    eventsreference.child("userID").child(user.getUid()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                        }
+                    });
+                }
+
                 CountDownTimer countDownTimer = new CountDownTimer(3000, 100) {
+
                     @Override
                     public void onTick(long l) {
 
@@ -84,8 +94,8 @@ public class Profile extends AppCompatActivity {
 
                     @Override
                     public void onFinish() {
-                        fotosbtn.loadingSuccessful();
-                        AllDeleted("Você apagou todas as suas fotos");
+                        objetivesbtn.reset();
+                        Message("Você apagou todos seus objetivos");
                     }
                 }.start();
 
@@ -96,7 +106,18 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 fotosbtn.startLoading();
-                objRepository.apagarAll(user.getUser());
+                raiz = FirebaseDatabase.getInstance().getReference("album");
+                raiz.keepSynced(true);
+                if (user != null) {
+                    raiz.child("userID").child(user.getUid()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Message("Você removeu todas as fotos");
+                            fotosbtn.loadingSuccessful();
+                        }
+                    });
+                }
+                //objRepository.apagarAll(user.getUser());
                 CountDownTimer countDownTimer = new CountDownTimer(3000, 100) {
                     @Override
                     public void onTick(long l) {
@@ -105,8 +126,7 @@ public class Profile extends AppCompatActivity {
 
                     @Override
                     public void onFinish() {
-                        objetivesbtn.loadingSuccessful();
-                        AllDeleted("Você apagou todos os seus objetivos");
+                        fotosbtn.reset();
                     }
                 }.start();
             }
@@ -116,12 +136,39 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 savebtn.startLoading();
-                final User newuser = new User();
-                newuser.setUser(usernameedit.getText().toString());
-                newuser.setPassword(usernameedit.getText().toString());
-                userRepository.update(user);
-                albumRepository.UpdateUser(user.getUser(), newuser.getUser());
-                objRepository.UpdateUser(user.getUser(), newuser.getUser());
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                        .setDisplayName(usernameedit.getText().toString())
+                        .build();
+                if (user != null) {
+                    user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Message("Nome alterado");
+                            }
+                        }
+                    });
+                }
+                if (user != null) {
+                    user.updateEmail(emailedit.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Message("Email alterado");
+                            }
+                        }
+                    });
+                }
+                if (user != null) {
+                    user.updatePassword(usersenha.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Message("Senha alterada");
+                            }
+                        }
+                    });
+                }
 
                 CountDownTimer countDownTimer = new CountDownTimer(3000, 100) {
                     @Override
@@ -132,8 +179,7 @@ public class Profile extends AppCompatActivity {
                     @Override
                     public void onFinish() {
                         savebtn.loadingSuccessful();
-                        user = newuser;
-                        UserUpdate(user.getUser());
+
 
                     }
                 }.start();
@@ -145,9 +191,19 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 wipeoutbtn.startLoading();
-                userRepository.excluir(user.getCodigo());
-                albumRepository.apagarAll(user.getUser());
-                objRepository.apagarAll(user.getUser());
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                if (user != null) {
+                    raiz = FirebaseDatabase.getInstance().getReference("album");
+                    raiz.child("userID").child(user.getUid()).removeValue();
+
+                    raiz = FirebaseDatabase.getInstance().getReference("events");
+                    raiz.child("userID").child(user.getUid()).removeValue();
+                    user.delete();
+
+                }
+
+                //objRepository.apagarAll(user.getUser());
                 CountDownTimer countDownTimer = new CountDownTimer(3000, 100) {
                     @Override
                     public void onTick(long l) {
@@ -157,7 +213,7 @@ public class Profile extends AppCompatActivity {
                     @Override
                     public void onFinish() {
                         wipeoutbtn.loadingSuccessful();
-                        AllDeleted("Você apagou todos os seus dados");
+                        Message("Você apagou todos os seus dados");
                         top.startAnimation(myanim3);
                         form.startAnimation(myanim3);
                         options.startAnimation(myanim3);
@@ -228,38 +284,20 @@ public class Profile extends AppCompatActivity {
     private void GoBack() {
         Intent i = new Intent(this, Login.class);
         startActivity(i);
+        this.finish();
     }
 
     @Override
     public void onBackPressed() {
         Intent i = new Intent(this, Mylist.class);
-        i.putExtra("usuario", user.getUser());
-        i.putExtra("senha", user.getPassword());
         startActivity(i);
         this.finish();
     }
 
-    private void UserUpdate(String newuser) {
-        Snacky.builder().setActivity(this).setText("Usuario " + user.getUser() + "alterado para " + user).success().show();
-    }
 
-    private void AllDeleted(String msg) {
+    private void Message(String msg) {
         Snacky.builder().setActivity(this).success().setText(msg).show();
     }
 
-    private void criarConexao() {
-        DadosOpenHelper dadosOpenHelper = new DadosOpenHelper(this);
-
-        SQLiteDatabase conexao = dadosOpenHelper.getWritableDatabase();
-
-
-        userRepository = new UserRepository(conexao);
-        objRepository = new ObjRepository(this);
-        albumRepository = new AlbumRepository(this);
-
-        //Toast.makeText(this,"CONEXÃO CRIADA COM SUCESSO!", Toast.LENGTH_SHORT).show();
-
-
-    }
 
 }

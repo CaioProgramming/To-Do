@@ -3,12 +3,19 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:statusBarColor">@color/grey_200</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="windowActionBar">false</item>
         <item name="colorPrimary">@color/white</item>
-        <item name="colorPrimaryDark">@color/blue_300</item>
-        <item name="colorAccent">@color/blue_A700</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+
+    <style name="SwitchCompatTheme">
+        <item name="colorControlActivated">@color/red_300</item>
+        <item name="thumbTint">@color/switch_color</item>
+        <item name="trackTint">@color/switch_color</item>
+        <item name="android:thumb">@drawable/swich_thumb</item>
     </style>
 
     <style name="CustomDialog" parent="@android:style/Theme.Dialog">

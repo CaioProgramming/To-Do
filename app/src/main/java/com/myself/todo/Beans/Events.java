@@ -1,24 +1,34 @@
 package com.myself.todo.Beans;
 
-import com.myself.todo.Utils.Utilities;
-
 public class Events {
 
     private String evento;
-    private String usuario;
+    String descricao;
+    private String UserID;
     private String data;
-    private int id;
+    private String id;
+    private String status;
 
-    public int getId() {
+
+    public Events(String id, String evento, String descricao, String usuario, String data, String status) {
+        this.evento = evento;
+        this.UserID = usuario;
+        this.data = data;
+        this.id = id;
+        this.descricao = descricao;
+        this.status = status;
+    }
+
+    public Events() {
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
-
-    String descricao;
-    public Events(){}
 
     public String getEvento() {
         return evento;
@@ -28,12 +38,20 @@ public class Events {
         this.evento = evento;
     }
 
-    public String getUsuario() {
-        return usuario;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public String getUserID() {
+        return UserID;
+    }
+
+    public void setUserID(String usuario) {
+        this.UserID = usuario;
     }
 
     public String getData() {
@@ -43,16 +61,16 @@ public class Events {
     public void setData(String data) {
 
 
-        this.data = Utilities.convertDate(data);
+        this.data = data;
 
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getStatus() {
+        return status;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 

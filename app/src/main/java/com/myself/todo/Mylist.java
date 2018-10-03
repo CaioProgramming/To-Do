@@ -7,10 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
@@ -32,15 +29,17 @@ import com.asksira.bsimagepicker.BSImagePicker;
 import com.asksira.bsimagepicker.Utils;
 import com.bumptech.glide.Glide;
 import com.github.mmin18.widget.RealtimeBlurView;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.myself.todo.Beans.User;
-import com.myself.todo.Database.AlbumRepository;
 import com.myself.todo.Database.DadosOpenHelper;
-import com.myself.todo.Database.ObjRepository;
 import com.myself.todo.Database.UserRepository;
+import com.myself.todo.Fragments.EventsFragment;
 import com.myself.todo.Fragments.FotosFragment;
 import com.myself.todo.Fragments.MusicFragment;
-import com.myself.todo.Fragments.NewEvent;
-import com.myself.todo.Fragments.ObjFragment;
 import com.myself.todo.Fragments.ProfileFragment;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -51,62 +50,46 @@ public class Mylist extends AppCompatActivity implements BSImagePicker.OnSingleI
     private TextView mTextMessage, albumcount, musicount, objectivecount;
     int cod_usuario;
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
+    public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 112;
     String usuario, senha;
     private CircleImageView profilepic;
     private SQLiteDatabase conexao;
     private DadosOpenHelper dadosOpenHelper;
     private UserRepository usuarioRepositorio;
-    private ObjRepository objRepository;
-    private AlbumRepository albumRepository;
     private User usuarioB;
     Toolbar myToolbar;
+    private FirebaseAuth mAuth;
+
 
     RealtimeBlurView blur;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            BottomNavigationView navigation2 = findViewById(R.id.navigation);
             switch (item.getItemId()) {
 
                 case R.id.navigation_album:
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        //tb.setBackground(getDrawable(R.drawable.gradalbum));
-                        //navigation2.setBackground(getDrawable(R.color.orange_A100));
 
-                    }
                     getSupportActionBar().show();
                     //CountFotos();
                     //CountObjectives();
                     FotosFragment fotosFragment = new FotosFragment();
-                    fotosFragment.setBlur(blur);
                     getSupportFragmentManager()
                                 .beginTransaction()
                             .replace(R.id.fragment, fotosFragment)
                                 .commit();
                      return true;
                 case R.id.navigation_objectives:
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        //tb.setBackground(getDrawable(R.drawable.gradobjectives));
-                        //navigation2.setBackground(getDrawable(R.drawable.gradobjectives));
 
-
-                    }
                     getSupportActionBar().show();
-                    //CountFotos();
-                    //CountObjectives();
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.fragment, new ObjFragment())
+                            .replace(R.id.fragment, new EventsFragment())
                             .commit();
 
                     return true;
                 case R.id.navigation_musics:
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        //tb.setBackground(getDrawable(R.drawable.gradmusic));
-                        //navigation2.setBackground(getDrawable(R.drawable.gradmusic));
 
-                    }
                     getSupportActionBar().show();
                     // Semevento();
                     getSupportFragmentManager()
@@ -119,8 +102,6 @@ public class Mylist extends AppCompatActivity implements BSImagePicker.OnSingleI
                 case R.id.navigation_you:
 
 
-                    //CountFotos();
-                    //CountObjectives();
                     getSupportActionBar().hide();
                     myToolbar.hideOverflowMenu();
                     myToolbar.collapseActionView();
@@ -143,22 +124,18 @@ public class Mylist extends AppCompatActivity implements BSImagePicker.OnSingleI
         //this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mylist);
-        TextView user = findViewById(R.id.usertxt);
+        TextView usertxt = findViewById(R.id.usertxt);
+
         profilepic = findViewById(R.id.userpic);
         blur = findViewById(R.id.rootblur);
-        //albumcount = findViewById(R.id.albumcount);
-        //objectivecount = findViewById(R.id.objectivecount);
-        //musicount = findViewById(R.id.musicount);
-        ///ImageView genr = findViewById(R.id.genre);
         Typeface Atelas = Typeface.createFromAsset(getAssets(), "fonts/Atelas_PersonalUseOnly.ttf");
-        user.setTypeface(Atelas);
-        criarConexao();
+        usertxt.setTypeface(Atelas);
         checkPermissionREAD_EXTERNAL_STORAGE(this);
 
         if (savedInstanceState == null){
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fragment,new NewEvent())
+                    .add(R.id.fragment, new EventsFragment())
                     .commit();
 
 
@@ -177,14 +154,21 @@ public class Mylist extends AppCompatActivity implements BSImagePicker.OnSingleI
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_objectives);
-
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        usuarioB = new User();
+        if (user != null) {
+            usuarioB.setUser(user.getDisplayName());
+            usuarioB.setProfilepic(String.valueOf(user.getPhotoUrl()));
+            usertxt.setText(usuarioB.getUser());
+            Glide.with(this).load(usuarioB.getProfilepic()).into(profilepic);
+        }
 
         //CountObjectives();
 
         //CountFotos();
 
 
-        SetProfilePic(user, profilepic);
+        //SetProfilePic(user, profilepic);
 
     }
 
@@ -212,80 +196,10 @@ public class Mylist extends AppCompatActivity implements BSImagePicker.OnSingleI
         }
     }
 
-    /*private void CountFotos() {
-        albumRepository = new AlbumRepository(this);
-        albumRepository.abrir();
-        Cursor fotos = albumRepository.obterFotos(null);
-        albumcount.setText(String.valueOf(fotos.getCount()));
-        if (fotos.getCount() == 0 ){
-            albumcount.setTextColor(Color.RED);
-        }
-        albumRepository.fecha();
-    }
-
-    private void CountObjectives() {
-        objRepository = new ObjRepository(this);
-        objRepository.abrir();
-        Cursor objetivos = objRepository.obterEventos(null);
-        objectivecount.setText(String.valueOf(objetivos.getCount()));
-        if (objetivos.getCount() == 0 ){
-            objectivecount.setTextColor(Color.RED);
-        }
-        objRepository.fecha();
-    }
-*/
 
 
-    private BottomNavigationView Semevento() {
-        BottomNavigationView navigation2 = findViewById(R.id.navigation);
-        ObjRepository objRepository = new ObjRepository(this);
-        objRepository.abrir();
-        Cursor evento = objRepository.obterEventosconcluidos(usuario);
-        Cursor evento1 = objRepository.obterEventos(usuario);
-        Cursor evento2 = objRepository.obterFavoritos(usuario);
-
-        if (evento.getCount() == 0 || evento1.getCount() == 0|| evento2.getCount() == 0){
-            navigation2.setItemTextColor(ColorStateList.valueOf(Color.RED));
-            navigation2.setItemIconTintList(ColorStateList.valueOf(Color.RED));
-
-        }else{
-
-            return navigation2;
-        }
-
-        return navigation2;
-    }
 
     public void foto(View view) {
-
-       /*Dialog myDialog = new Dialog(this);
-        myDialog.setContentView(R.layout.alertoptions);
-        Button selfiebtn = myDialog.findViewById(R.id.selfie);
-        Button gallerybtn = myDialog.findViewById(R.id.galeria);
-
-        selfiebtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takePicture, 0);
-                takePicture.addFlags(FLAG_GRANT_READ_URI_PERMISSION);
-                takePicture.addFlags(FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
-            }
-        });
-
-        gallerybtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK);
-                galleryIntent.setType("image/*, video/*");
-                if (galleryIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivityForResult(Intent.createChooser(galleryIntent, "Select File"), 1);
-                }
-
-            }
-        });
-        myDialog.show();*/
-
         BSImagePicker singleSelectionPicker = new BSImagePicker.Builder("com.myself.fileprovider")
                 .hideGalleryTile()//Default: Integer.MAX_VALUE. Don't worry about performance :)
                 .setSpanCount(3) //Default: 3. This is the number of columns
@@ -315,66 +229,6 @@ public class Mylist extends AppCompatActivity implements BSImagePicker.OnSingleI
                 .show();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent imageselect) {
-
-
-        try {
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        switch (requestCode) {
-            case 0:
-                if (resultCode == RESULT_OK) {
-                    Uri selectedImage = imageselect.getData();
-                    profilepic.setImageURI(selectedImage);
-                    usuarioB.setProfilepic(selectedImage.toString());
-                    System.out.println(usuarioB.getProfilepic());
-                    if (checkPermissionREAD_EXTERNAL_STORAGE(this)) {
-                        try {
-                            criarConexao();
-                            usuarioRepositorio = new UserRepository(conexao);
-                            usuarioRepositorio.update(usuarioB);
-
-                            succes(usuarioB);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                }
-
-                break;
-            case 1:
-                if (resultCode == RESULT_OK) {
-                    Uri selectedImage = imageselect.getData();
-                    profilepic.setImageURI(selectedImage);
-                    usuarioB.setProfilepic(selectedImage.toString());
-                    System.out.println(usuarioB.getProfilepic());
-                    if (checkPermissionREAD_EXTERNAL_STORAGE(this)) {
-                        criarConexao();
-                        usuarioRepositorio = new UserRepository(conexao);
-                        usuarioRepositorio.update(usuarioB);
-
-                        succes(usuarioB);
-                    }
-                }
-                break;
-        }
-    }
-
-    private void criarConexao() {
-        dadosOpenHelper = new DadosOpenHelper(this);
-
-        conexao = dadosOpenHelper.getWritableDatabase();
-
-
-        usuarioRepositorio = new UserRepository(conexao);
-
-        //Toast.makeText(this,"CONEXÃO CRIADA COM SUCESSO!", Toast.LENGTH_SHORT).show();
-
-
-    }
 
     public boolean checkPermissionREAD_EXTERNAL_STORAGE(
             final Context context) {
@@ -423,12 +277,33 @@ public class Mylist extends AppCompatActivity implements BSImagePicker.OnSingleI
         alert.show();
     }
 
+    public void updateprofilepic(final Uri path) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final Context context = this;
+        final Activity activity = this;
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setPhotoUri(Uri.parse(path.toString()))
+                .build();
+        if (user != null) {
+            user.updateProfile(profileUpdates)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Glide.with(context).load(path).into(profilepic);
+                                Snacky.builder().setActivity(activity).success().setText("Foto de perfil alterada").show();
+                            }
+                        }
+                    });
+        }
+    }
+
     @Override
     public void onSingleImageSelected(Uri uri) {
-        uri.getPath();
+        updateprofilepic(uri);
 
-        Glide.with(this).load(uri).into(profilepic);
-        usuarioB.setProfilepic(uri.toString());
+
+        /*/usuarioB.setProfilepic(uri.toString());
         System.out.println(usuarioB.getProfilepic());
         if (checkPermissionREAD_EXTERNAL_STORAGE(this)) {
             try {
@@ -440,8 +315,10 @@ public class Mylist extends AppCompatActivity implements BSImagePicker.OnSingleI
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
+
+
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {

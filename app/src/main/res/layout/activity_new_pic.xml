@@ -54,7 +54,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:background="@color/transparent"
-            android:backgroundTint="@color/green_300"
             android:drawableEnd="@drawable/ic_check_black_24dp"
             android:drawableTint="@color/black"
             android:onClick="salvar"

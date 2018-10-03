@@ -1,15 +1,35 @@
 package com.myself.todo.Beans;
 
-import com.myself.todo.Utils.Utilities;
-
 public class Album {
+    private String userID;
     private String fotouri;
     private String description;
     private String dia;
     private String status;
+    private String id;
 
 
-    private int id;
+    public Album(String id, String fotouri, String description, String dia, String status, String userID) {
+        this.fotouri = fotouri;
+        this.description = description;
+        this.dia = dia;
+        this.status = status;
+        this.id = id;
+        this.userID = userID;
+    }
+
+    public Album() {
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+
 
     public String getFotouri() {
         return fotouri;
@@ -32,14 +52,14 @@ public class Album {
     }
 
     public void setDia(String dia) {
-        this.dia = Utilities.convertDate(dia);
+        this.dia = dia;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

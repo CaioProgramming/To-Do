@@ -1,17 +1,15 @@
 package com.myself.todo.Fragments;
 
 
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -19,13 +17,22 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 
 import com.github.mmin18.widget.RealtimeBlurView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.myself.todo.Adapters.RecyclerFotoAdapter;
 import com.myself.todo.Beans.Album;
-import com.myself.todo.Database.AlbumRepository;
 import com.myself.todo.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import de.mateware.snacky.Snacky;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,7 +40,7 @@ import java.util.List;
 public class FotosFragment extends Fragment {
 
     List<Album> lstalbum;
-    AlbumRepository albRepository;
+
     Switch favorites;
 
 
@@ -42,10 +49,7 @@ public class FotosFragment extends Fragment {
     }
 
     RealtimeBlurView blur;
-
-    public void setBlur(RealtimeBlurView blur) {
-        this.blur = blur;
-    }
+    ProgressBar pb;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,15 +58,12 @@ public class FotosFragment extends Fragment {
         View view = inflater.inflate(R.layout.fotos, container, false);
         FrameLayout frameLayout = view.findViewById(R.id.fotos);
         lstalbum = new ArrayList<>();
-        //blur = view.findViewById(R.id.blur);
+        blur = getActivity().findViewById(R.id.rootblur);
         favorites = view.findViewById(R.id.favoriteswitch);
         final RecyclerView recycler = view.findViewById(R.id.recyclerviewfotos);
         final LinearLayout empty = view.findViewById(R.id.nofotos);
-        albRepository = new AlbumRepository(getActivity());
         final ProgressBar pb = view.findViewById(R.id.progress);
-        albRepository.abrir();
-        final String usuario = getActivity().getIntent().getExtras().getString("usuario");
-        CarregarFotos(recycler, empty, usuario);
+        CarregarFotos(recycler, empty);
 
 
         favorites.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -84,7 +85,7 @@ public class FotosFragment extends Fragment {
                         public void onFinish() {
                             pb.setVisibility(View.INVISIBLE);
                             recycler.setVisibility(View.VISIBLE);
-                            CarregarFotosFavoritas(recycler, empty, usuario);
+                            CarregarFotosFavoritas(recycler, empty);
                         }
                     }.start();
 
@@ -105,7 +106,7 @@ public class FotosFragment extends Fragment {
                         public void onFinish() {
                             pb.setVisibility(View.INVISIBLE);
                             recycler.setVisibility(View.VISIBLE);
-                            CarregarFotos(recycler, empty, usuario);
+                            CarregarFotos(recycler, empty);
                         }
                     }.start();
                 }
@@ -117,70 +118,111 @@ public class FotosFragment extends Fragment {
 
     }
 
-    private void CarregarFotos(RecyclerView recycler, LinearLayout empty, String usuario) {
-        albRepository.abrir();
-        Cursor evento = albRepository.obterFotos(usuario);
-        System.out.println(evento.getCount());
-        evento.moveToFirst();
+    private void CarregarFotos(final RecyclerView recycler, LinearLayout empty) {
 
-        if (evento.getCount() == 0) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        } else {
-
-            empty.setVisibility(View.INVISIBLE);
-            recycler.setVisibility(View.VISIBLE);
-
-
+        DatabaseReference raiz = FirebaseDatabase.getInstance().getReference().child("album");
+        raiz.keepSynced(true);
+        if (user != null) {
+            raiz.child("album").orderByChild("userID").equalTo(user.getUid());
         }
-        for (int i = 0; i < evento.getCount(); i++) {
+        raiz.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot d : dataSnapshot.getChildren()) {
+                    Album a = d.getValue(Album.class);
+                    Album album = new Album();
+                    if (a != null) {
+                        System.out.println(a.getId());
+                        System.out.println(d.getKey());
+                        album.setFotouri(a.getFotouri());
+                        album.setDescription(a.getDescription());
+                        album.setStatus(a.getStatus());
+                        album.setDia(a.getDia());
+                        album.setId(d.getKey());
+                        album.setUserID(a.getUserID());
+                        lstalbum.add(album);
+                        System.out.println(album.getId());
+                        System.out.println(lstalbum.size());
 
-            lstalbum.add(albRepository.criafoto(evento));
-            evento.moveToNext();
+                    }
 
-        }
-        GridLayoutManager llm = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false);
-        recycler.setHasFixedSize(true);
-        System.out.println(lstalbum.size());
-        albRepository.fecha();
-        final Animation myanim2 = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_bottom);
-        RecyclerFotoAdapter myadapter = new RecyclerFotoAdapter(getContext(), getActivity(), lstalbum, blur);
-        recycler.setAdapter(myadapter);
-        recycler.setLayoutManager(llm);
-        recycler.startAnimation(myanim2);
-        albRepository.fecha();
+
+                }
+                recycler.setVisibility(View.VISIBLE);
+                GridLayoutManager llm = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false);
+                recycler.setHasFixedSize(true);
+                System.out.println(lstalbum.size());
+                //final Animation myanim2 = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_bottom);
+                RecyclerFotoAdapter myadapter = new RecyclerFotoAdapter(getContext(), getActivity(), lstalbum, blur);
+                recycler.setAdapter(myadapter);
+                recycler.setLayoutManager(llm);
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Snacky.builder().setActivity(Objects.requireNonNull(getActivity())).error().setText("Erro " + databaseError).show();
+
+            }
+        });
+
     }
 
-    private void CarregarFotosFavoritas(RecyclerView recycler, LinearLayout empty, String usuario) {
-        albRepository.abrir();
-        Cursor evento = albRepository.obterFavoritos(usuario);
-        System.out.println(evento.getCount());
-        evento.moveToFirst();
+    private void CarregarFotosFavoritas(final RecyclerView recycler, final LinearLayout empty) {
 
-        if (evento.getCount() == 0) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        } else {
-
-            empty.setVisibility(View.INVISIBLE);
-            recycler.setVisibility(View.VISIBLE);
-
-
+        DatabaseReference raiz = FirebaseDatabase.getInstance().getReference().child("album");
+        raiz.keepSynced(true);
+        if (user != null) {
+            raiz.child("album").orderByChild("userID").equalTo(user.getUid());
         }
-        for (int i = 0; i < evento.getCount(); i++) {
+        raiz.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot d : dataSnapshot.getChildren()) {
+                    Album a = d.getValue(Album.class);
+                    Album album = new Album();
+                    if (a != null) {
+                        album.setFotouri(a.getFotouri());
+                        album.setDescription(a.getDescription());
+                        album.setStatus(a.getStatus());
+                        album.setDia(a.getDia());
+                        album.setId(a.getId());
+                        album.setUserID(a.getUserID());
+                        System.out.println(a.getStatus());
+                        if (album.getStatus().equals("F")) {
+                            lstalbum.clear();
+                            lstalbum.add(a);
+                            System.out.println(lstalbum.size());
 
-            lstalbum.add(albRepository.criafoto(evento));
-            evento.moveToNext();
+                        }
+                    }
 
-        }
-        GridLayoutManager llm = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false);
-        recycler.setHasFixedSize(true);
-        System.out.println(lstalbum.size());
-        albRepository.fecha();
-        final Animation myanim2 = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_bottom);
-        RecyclerFotoAdapter myadapter = new RecyclerFotoAdapter(getContext(), getActivity(), lstalbum, blur);
-        recycler.setAdapter(myadapter);
-        recycler.setLayoutManager(llm);
-        recycler.startAnimation(myanim2);
-        albRepository.fecha();
+
+                }
+                recycler.setVisibility(View.VISIBLE);
+                GridLayoutManager llm = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false);
+                recycler.setHasFixedSize(true);
+                System.out.println(lstalbum.size());
+                //final Animation myanim2 = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_bottom);
+                RecyclerFotoAdapter myadapter = new RecyclerFotoAdapter(getContext(), getActivity(), lstalbum, blur);
+                recycler.setAdapter(myadapter);
+                recycler.setLayoutManager(llm);
+                //recycler.startAnimation(myanim2);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Snacky.builder().setActivity(Objects.requireNonNull(getActivity())).error().setText("Erro " + databaseError).show();
+
+            }
+        });
+
     }
 
 

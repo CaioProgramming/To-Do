@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:fancy="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
+    android:background="@color/grey_900"
     android:fitsSystemWindows="true"
     tools:context=".Login">
 
@@ -24,14 +24,14 @@
          android:layout_width="wrap_content"
          android:id="@+id/title"
          android:layout_below="@id/profile_pic"
-         android:drawableTint="@color/black"
+         android:drawableTint="@color/white"
          android:layout_centerInParent="true"
          android:drawableEnd="@drawable/ic_box_open_shape"
          android:layout_height="wrap_content"
-         android:textColor="@color/black"
+         android:textColor="@color/white"
          android:text="@string/app_name"
          android:textStyle="bold"
-         android:textSize="25dp"
+         android:textSize="25sp"
          />
     <LinearLayout
         android:layout_below="@id/title"
@@ -48,16 +48,18 @@
             android:layout_height="wrap_content">
 
             <EditText
+                android:backgroundTint="@color/lblack"
                 android:imeOptions="actionNext"
                 android:background="@drawable/round"
-                android:backgroundTint="@color/grey_200"
+                android:drawableStart="@drawable/email"
+                android:drawableTint="@color/white"
                 android:drawablePadding="10dp"
-                android:drawableStart="@drawable/user"
+                android:hint="Endereço de email"
                 android:padding="10dp"
                 android:textAlignment="center"
                 android:id="@+id/user"
-                android:hint="Usuário"
-                android:textColor="@color/black"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/white"
                 android:textSize="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -72,14 +74,15 @@
             android:imeOptions="actionDone"
             android:textAlignment="center"
             android:background="@drawable/round"
-            android:backgroundTint="@color/grey_200"
+            android:backgroundTint="@color/lblack"
             android:drawablePadding="10dp"
+            android:drawableTint="@color/white"
             android:drawableStart="@drawable/pass"
             android:padding="15dp"
             android:id="@+id/pass"
             android:foregroundTint="@color/black"
             android:hint="Senha"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:inputType="textPassword"
             android:textSize="20sp"
             android:layout_width="match_parent"
@@ -103,27 +106,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="login"
-            fancy:lb_btnColor="@color/blue_300"
+            fancy:lb_btnColor="@color/black"
             fancy:lb_btnRippleColor="@color/blue_300"
             fancy:lb_btnText="Login"
             fancy:lb_resetAfterFailed="true" />
 
-        <com.dx.dxloadingbutton.lib.LoadingButton
+        <Button
+            android:id="@+id/formregbtn"
             android:onClick="register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fancy:lb_btnColor="@color/red_500"
-            fancy:lb_btnRippleColor="@color/red_500"
-            fancy:lb_btnText="Cadastrar"
-            fancy:lb_resetAfterFailed="true" />
+            android:background="@color/white"
+            android:padding="15dp"
+            android:text="Cadastrar"
+            android:textColor="@color/black" />
 
 
     </LinearLayout>
 
     <RelativeLayout
+        android:layout_height="match_parent"
         android:id="@+id/registerform"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:visibility="invisible">
 
         <com.github.mmin18.widget.RealtimeBlurView
@@ -146,14 +150,15 @@
                 android:textColorHint="@color/grey_500">
 
                 <EditText
+                    android:backgroundTint="@color/white"
                     android:id="@+id/useregister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/round"
-                    android:backgroundTint="@color/grey_200"
+                    android:drawableStart="@drawable/email"
                     android:drawablePadding="10dp"
-                    android:drawableStart="@drawable/user"
-                    android:hint="Usuário"
+                    android:hint="Endereço de e-mail"
+                    android:inputType="textEmailAddress"
                     android:imeOptions="actionNext"
                     android:padding="10dp"
                     android:textAlignment="center"
@@ -172,7 +177,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/round"
-                    android:backgroundTint="@color/grey_200"
+                    android:backgroundTint="@color/white"
                     android:drawablePadding="10dp"
                     android:drawableStart="@drawable/pass"
                     android:foregroundTint="@color/black"
@@ -190,7 +195,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="cadastrar"
-                fancy:lb_btnColor="@color/grey_500"
+                fancy:lb_btnColor="@color/black"
                 fancy:lb_btnRippleColor="@color/blue_300"
                 fancy:lb_btnText="Cadastrar" />
 
@@ -198,4 +203,33 @@
 
 
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/profileback"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fitsSystemWindows="true"
+        android:scaleType="centerCrop"
+        android:visibility="invisible" />
+
+    <com.github.mmin18.widget.RealtimeBlurView
+        android:id="@+id/welcomeblur"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        fancy:realtimeBlurRadius="15dp"
+        fancy:realtimeOverlayColor="@color/transparent" />
+
+    <TextView
+        android:id="@+id/usernamelogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Olá"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="50dp"
+        android:textStyle="bold"
+        android:typeface="serif"
+        android:visibility="invisible" />
 </RelativeLayout>

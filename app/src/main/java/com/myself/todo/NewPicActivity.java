@@ -10,9 +10,12 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -23,11 +26,19 @@ import android.widget.ImageView;
 import com.asksira.bsimagepicker.BSImagePicker;
 import com.asksira.bsimagepicker.Utils;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.myself.todo.Beans.Album;
 import com.myself.todo.Database.AlbumRepository;
 import com.myself.todo.Utils.Utilities;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 
 import de.mateware.snacky.Snacky;
 
@@ -36,14 +47,18 @@ public class NewPicActivity extends AppCompatActivity implements BSImagePicker.O
     ImageView fotopic;
     EditText desc;
     Album album;
+    Uri photouri;
+
     AlbumRepository albRepository;
     String usuario;
+    DatabaseReference raiz;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_pic);
-        usuario = getIntent().getStringExtra("usuario");
+        raiz = FirebaseDatabase.getInstance().getReference("album");
         album = new Album();
         fotopic = findViewById(R.id.pic);
         desc = findViewById(R.id.picdesc);
@@ -230,16 +245,44 @@ public class NewPicActivity extends AppCompatActivity implements BSImagePicker.O
     }
 
     private void save() {
-        album.setDescription(String.valueOf(desc.getText()));
-        albRepository = new AlbumRepository(this);
-        albRepository.abrir();
-        System.out.println(usuario);
-        albRepository.inserir(album, usuario);
-        succes();
+        Date datenow = Calendar.getInstance().getTime();
+        Time today = new Time(Time.getCurrentTimezone());
+        today.setToNow();
+        //String time = String.valueOf(today);
+        String dia = String.valueOf(datenow);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (!TextUtils.isEmpty(desc.toString())) {
+            String id = raiz.push().getKey();
+            Album album = new Album(id, photouri.toString(), desc.getText().toString(), dia, "N", user.getUid());
+            raiz.child(id).setValue(album).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        succes("Foto adicionada ");
+                    } else {
+                        error("Erro " + task.getException());
+                    }
+                }
+            });
+
+        } else {
+            Snacky.builder().setActivity(this).error().setText("Escreva algo sobre a foto").show();
+        }
+
+
+    }
+
+    public void succes(String s) {
+        Snacky.builder().setActivity(this).success().setText(s).show();
+    }
+
+    public void error(String s) {
+        Snacky.builder().setActivity(this).success().setText(s).show();
     }
 
     @Override
     public void onSingleImageSelected(Uri uri) {
+        photouri = uri;
         Glide.with(this).load(uri).into(fotopic);
         album.setFotouri(uri.toString());
     }

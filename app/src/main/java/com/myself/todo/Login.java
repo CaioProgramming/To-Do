@@ -13,23 +13,35 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.dx.dxloadingbutton.lib.LoadingButton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.myself.todo.Beans.User;
 import com.myself.todo.Database.DadosOpenHelper;
 import com.myself.todo.Database.UserRepository;
 import com.myself.todo.Utils.Utilities;
+
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import de.mateware.snacky.Snacky;
@@ -41,7 +53,7 @@ public class Login extends AppCompatActivity {
     private SQLiteDatabase conexao;
     private DadosOpenHelper dadosOpenHelper;
     LoadingButton entrar;
-    EditText user, pass;
+    EditText userinput, pass;
     User usuarioB;
     CircleImageView profilepic;
     private UserRepository usuarioRepositorio;
@@ -53,11 +65,26 @@ public class Login extends AppCompatActivity {
     private android.widget.LinearLayout formregister;
     private android.widget.RelativeLayout registerform;
     private LoadingButton reg;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseAuth mAuth;
+    private com.github.mmin18.widget.RealtimeBlurView welcomeblur;
+    private TextView usernamelogin;
+    private Button formregbtn;
+    private ImageView profileback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        );
+        this.profileback = findViewById(R.id.profileback);
+        this.formregbtn = findViewById(R.id.formregbtn);
+        this.usernamelogin = findViewById(R.id.usernamelogin);
+        this.welcomeblur = findViewById(R.id.welcomeblur);
+        mAuth = FirebaseAuth.getInstance();
         this.reg = findViewById(R.id.reg);
         this.registerform = findViewById(R.id.registerform);
         this.formregister = findViewById(R.id.formregister);
@@ -67,7 +94,7 @@ public class Login extends AppCompatActivity {
         this.form = findViewById(R.id.form);
         this.title = findViewById(R.id.title);
         usuarioB = new User();
-        user = (findViewById(R.id.user));
+        userinput = (findViewById(R.id.user));
         pass = (findViewById(R.id.pass));
         TextView title = (findViewById(R.id.title));
         profilepic = (findViewById(R.id.profile_pic));
@@ -75,7 +102,7 @@ public class Login extends AppCompatActivity {
         Typeface Atelas = Typeface.createFromAsset(getAssets(), "fonts/SF-Pro-Text-Regular.ttf");
 
         title.setTypeface(Atelas);
-        user.setTypeface(Atelas);
+        userinput.setTypeface(Atelas);
 
         pass.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -92,6 +119,16 @@ public class Login extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null && currentUser.getEmail() != null) {
+            begin();
+        }
+        //begin();
+
+    }
 
     private void criarConexao() {
         dadosOpenHelper = new DadosOpenHelper(this);
@@ -124,13 +161,58 @@ public class Login extends AppCompatActivity {
     }
 
     public void begin() {
-        Intent i = new Intent(this, Mylist.class);
-        i.putExtra("usuario", usuarioB.getUser());
-        i.putExtra("codigo", usuarioB.getCodigo());
-        i.putExtra("senha", usuarioB.getPassword());
+        this.form.setVisibility(View.INVISIBLE);
+        this.btnlogin.setVisibility(View.INVISIBLE);
+        this.reg.setVisibility(View.INVISIBLE);
+        this.formregbtn.setVisibility(View.INVISIBLE);
 
-        startActivity(i);
-        this.finish();
+        this.welcomeblur.setVisibility(View.VISIBLE);
+        Glide.with(this).load(user.getPhotoUrl()).into(profileback);
+
+
+        this.usernamelogin.setText("Olá " + (user != null ? user.getDisplayName() : null));
+        final Animation in = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        this.welcomeblur.startAnimation(in);
+        this.profileback.startAnimation(in);
+        this.usernamelogin.startAnimation(in);
+        CountDownTimer countDownTimer = new CountDownTimer(5000, 300) {
+            @Override
+            public void onTick(long l) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                StartApp();
+
+            }
+        }.start();
+
+
+    }
+
+    public void StartApp() {
+        final Intent i = new Intent(this, WelcomeActivity.class);
+        final Intent i2 = new Intent(this, Mylist.class);
+
+        if (Objects.equals(user.getDisplayName(), null) || Objects.equals(user.getDisplayName(), "")) {
+            startActivity(i);
+            this.finish();
+
+        } else {
+            startActivity(i2);
+            this.finish();
+        }
+    }
+
+    public boolean userDefined() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        boolean usuario = false;
+        if (user != null) {
+            return user.getDisplayName() != null;
+        } else {
+            return false;
+        }
 
     }
 
@@ -195,7 +277,7 @@ public class Login extends AppCompatActivity {
 
     public void validarLogin() {
 
-        String usuario = user.getText().toString();
+        String usuario = userinput.getText().toString();
         String senha = pass.getText().toString();
         final Animation myanim2 = AnimationUtils.loadAnimation(this, R.anim.popin);
         entrar.startLoading();
@@ -272,7 +354,7 @@ public class Login extends AppCompatActivity {
 
                     @Override
                     public void onFinish() {
-                        user.setFocusable(true);
+                        userinput.setFocusable(true);
                         entrar.reset();
                     }
                 };
@@ -285,26 +367,70 @@ public class Login extends AppCompatActivity {
         }
     }
 
+    private void LoginSucess(String usuario) {
+        Snacky.builder()
+                .setActivity(this)
+                .success()
+                .setText("Bem-vindo " + usuario)
+                .show();
+
+    }
+
     public void login(View view) {
+        mAuth.signInWithEmailAndPassword(userinput.getText().toString(), pass.getText().toString())
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            LoginSucess(user.getDisplayName());
+                            SetProfilePic(user.getPhotoUrl());
+                            begin();
+                        } else {
+                            MessageError("Erro ao fazer login " + task.getException());
+                        }
+                    }
+                });
         validarLogin();
 
     }
 
+    public void SetProfilePic(Uri uri) {
+        Glide.with(this).load(uri).into(profilepic);
+    }
+
     public void cadastrar(View view) {
+
+
         this.reg.startLoading();
+
+
         final RelativeLayout registerform = this.registerform;
         final LoadingButton loadingButton = this.reg;
         criarConexao();
         User usuario = new User();
         usuario.setUser(this.useregister.getText().toString());
         usuario.setPassword(this.passreg.getText().toString());
-        UserRepository usuarioRepository = new UserRepository(conexao);
-        usuarioRepository.inserir(usuario);
+        mAuth.createUserWithEmailAndPassword(usuario.getUser(), usuario.getPassword()).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    loadingButton.loadingSuccessful();
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    usuarioB.setUser(user.getDisplayName());
+                    usuarioB.setProfilepic(String.valueOf(user.getPhotoUrl()));
+                    begin();
+                    MessageRegister();
+                } else {
+                    MessageError("Erro ao cadastrar " + task.getException());
+                }
+            }
+        });
         MessageRegister();
         final Animation out = AnimationUtils.loadAnimation(this, R.anim.fade_out);
 
 
-        user.setText(usuario.getUser());
+        userinput.setText(usuario.getUser());
         pass.setText(usuario.getPassword());
         registerform.startAnimation(out);
 

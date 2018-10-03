@@ -113,6 +113,22 @@
             android:textStyle="bold" />
 
         <AutoCompleteTextView
+            android:id="@+id/emailedit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/transparent"
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/email"
+            android:imeOptions="actionNext"
+            android:inputType="textMultiLine"
+            android:padding="10dp"
+            android:text="Usuário"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <AutoCompleteTextView
             android:id="@+id/usersenha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

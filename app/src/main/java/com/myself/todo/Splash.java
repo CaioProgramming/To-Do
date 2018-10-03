@@ -17,6 +17,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import static com.myself.todo.Mylist.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE;
+import static com.myself.todo.Mylist.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE;
 
 public class Splash extends AppCompatActivity {
 
@@ -34,21 +35,8 @@ public class Splash extends AppCompatActivity {
     private void StartApp(){
 
         final Intent i = new Intent(this,Login.class);
-        Thread timer= new Thread(){
-            public void run(){
-                try {
-                    sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                finally {
-                    startActivity(i);
-                    finish();
-                }
-            }
-
-        };
-        timer.start();
+        startActivity(i);
+        this.finish();
     }
 
     public boolean checkPermissionREAD_EXTERNAL_STORAGE(
@@ -81,6 +69,38 @@ public class Splash extends AppCompatActivity {
             return true;
         }
     }
+
+    public boolean checkPermissionWRITE_EXTERNAL_STORAGE(
+            final Context context) {
+        int currentAPIVersion = Build.VERSION.SDK_INT;
+        if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                        (Activity) context,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    showDialog("Armazenamento externo", context,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+                } else {
+                    ActivityCompat
+                            .requestPermissions(
+                                    (Activity) context,
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                }
+                return false;
+            } else {
+                StartApp();
+                return true;
+            }
+
+        } else {
+            StartApp();
+            return true;
+        }
+    }
+
 
     public void showDialog(final String msg, final Context context,
                            final String permission) {
