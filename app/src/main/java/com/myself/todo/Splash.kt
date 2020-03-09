@@ -1,105 +1,77 @@
 package com.myself.todo
-
-import android.Manifest
 import android.app.Activity
-import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.view.LayoutInflater
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import org.junit.runner.RunWith
+import androidx.databinding.DataBindingUtil
+import com.bumptech.glide.Glide
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
+import com.google.firebase.auth.FirebaseAuth
+import com.myself.todo.Utils.Utilities.Companion.RC_SIGN_IN
+import com.myself.todo.databinding.ActivitySplashBinding
+import kotlinx.android.synthetic.main.activity_splash.*
+import java.util.*
 
 class Splash : AppCompatActivity() {
+    val  splashBinding: ActivitySplashBinding = DataBindingUtil.inflate(LayoutInflater.from(this),R.layout.activity_splash,null,false)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+
+        setContentView(splashBinding.root)
         val myanim2 = AnimationUtils.loadAnimation(this, R.anim.popin)
-        val iv = findViewById<ImageView?>(R.id.splash)
-        iv.startAnimation(myanim2)
-        iv.setAnimation(myanim2)
-        checkPermissionREAD_EXTERNAL_STORAGE(this)
+        SignIn()
+
     }
 
-    private fun StartApp() {
-        val i = Intent(this, Login::class.java)
+    private fun SignIn() {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            val providers = Arrays.asList<AuthUI.IdpConfig>(
+                    AuthUI.IdpConfig.GoogleBuilder().build(),
+                    AuthUI.IdpConfig.EmailBuilder().build())
+            startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
+                    .setLogo(R.mipmap.ic_launcher)
+                    .setAvailableProviders(providers)
+                    .setTheme(R.style.AppTheme)
+                    .build(), RC_SIGN_IN)
+        } else {
+            val i = Intent(this, Mylist.javaClass)
+            i.putExtra("novo", false)
+            i.putExtra("notification", true)
+            startActivity(i)
+            this.finish()
+        }
+    }
+
+    private fun startApp() {
+        val i = Intent(this, Mylist::class.java)
         startActivity(i)
         finish()
     }
 
-    fun checkPermissionREAD_EXTERNAL_STORAGE(
-            context: Context?): Boolean {
-        val currentAPIVersion = Build.VERSION.SDK_INT
-        return if (currentAPIVersion >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(context,
-                            Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(
-                                context as Activity?,
-                                Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    showDialog("Armazenamento externo", context,
-                            Manifest.permission.READ_EXTERNAL_STORAGE)
-                } else {
-                    ActivityCompat
-                            .requestPermissions(
-                                    context as Activity?, arrayOf<String?>(Manifest.permission.READ_EXTERNAL_STORAGE),
-                                    Mylist.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE)
-                }
-                false
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_SIGN_IN) {
+            val response = IdpResponse.fromResultIntent(data)
+            if (resultCode == Activity.RESULT_OK) {
+                Glide.with(this).load(R.drawable.ic_box_open_shape).into(splash)
+                val handler = Handler()
+                handler.postDelayed({startApp()},2000)
             } else {
-                StartApp()
-                true
+                if (response != null) {
+                    Toast.makeText(this,"Ocorreu um erro ao fazer login, tentando novamente...",LENGTH_LONG).show()
+                    SignIn()
+                }
             }
-        } else {
-            StartApp()
-            true
+
         }
     }
 
-    fun checkPermissionWRITE_EXTERNAL_STORAGE(
-            context: Context?): Boolean {
-        val currentAPIVersion = Build.VERSION.SDK_INT
-        return if (currentAPIVersion >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(context,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(
-                                context as Activity?,
-                                Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    showDialog("Armazenamento externo", context,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                } else {
-                    ActivityCompat
-                            .requestPermissions(
-                                    context as Activity?, arrayOf<String?>(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                                    Mylist.Companion.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE)
-                }
-                false
-            } else {
-                StartApp()
-                true
-            }
-        } else {
-            StartApp()
-            true
-        }
-    }
 
-    fun showDialog(msg: String?, context: Context?,
-                   permission: String?) {
-        val alertBuilder = AlertDialog.Builder(context)
-        alertBuilder.setCancelable(true)
-        alertBuilder.setTitle("Permissão")
-        alertBuilder.setMessage("$msg permissão necessária")
-        alertBuilder.setPositiveButton(android.R.string.yes
-        ) { dialog, which ->
-            ActivityCompat.requestPermissions(context as Activity?, arrayOf(permission),
-                    Mylist.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE)
-        }
-        val alert = alertBuilder.create()
-        alert.show()
-    }
 }

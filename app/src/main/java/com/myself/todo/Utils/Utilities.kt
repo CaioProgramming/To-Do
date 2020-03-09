@@ -26,32 +26,13 @@ class Utilities {
         return calendar
     }
 
-    //Convert Calendar to Date
-    private fun calendarToDate(calendar: Calendar?): Date? {
-        return calendar.getTime()
-    }
+
+
+
 
     companion object {
-        fun saveImage(bitmap: Bitmap?, username: String?) {
-            val output: OutputStream?
-            var recentImageInCache: String
-            val filepath = Environment.getExternalStorageDirectory()
-            // Create a new folder in SD Card
-            val dir = File(filepath.absolutePath
-                    + "/ToDo/user" + username)
-            dir.mkdirs()
-            // Create a name for the saved image
-            val file = File(dir, "$username.jpg")
-            try {
-                output = FileOutputStream(file)
-                // Compress into png format image from 0% - 100%
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, output)
-                output.flush()
-                output.close()
-            } catch (e: Exception) { // TODO Auto-generated catch block
-                e.printStackTrace()
-            }
-        }
+        val RC_SIGN_IN = 1;
+
 
         @Throws(IOException::class)
         fun handleSamplingAndRotationBitmap(context: Context?, selectedImage: Uri?): Bitmap? {
@@ -135,5 +116,6 @@ class Utilities {
             println(dia)
             return dia
         }
+
     }
 }

@@ -169,7 +169,7 @@ class Profile : AppCompatActivity() {
     }
 
     private fun GoBack() {
-        val i = Intent(this, Login::class.java)
+        val i = Intent(this, Splash::class.java)
         startActivity(i)
         finish()
     }
@@ -181,6 +181,6 @@ class Profile : AppCompatActivity() {
     }
 
     private fun Message(msg: String?) {
-        Snacky.builder().setActivity(this).success().setText(msg).show()
+        Snacky.builder().setActivity(this).success().setText(msg!!).show()
     }
 }

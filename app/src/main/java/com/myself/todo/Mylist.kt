@@ -36,107 +36,22 @@ import com.myself.todo.Fragments.MusicFragment
 import com.myself.todo.Fragments.ProfileFragment
 import de.hdodenhof.circleimageview.CircleImageView
 import de.mateware.snacky.Snacky
+import kotlinx.android.synthetic.main.activity_mylist.*
+import kotlinx.android.synthetic.main.fragment_profile.*
 import org.junit.runner.RunWith
 
-class Mylist : AppCompatActivity(), OnSingleImageSelectedListener {
-    private var mTextMessage: TextView? = null
-    private val albumcount: TextView? = null
-    private val musicount: TextView? = null
-    private val objectivecount: TextView? = null
-    var cod_usuario = 0
-    var usuario: String? = null
-    var senha: String? = null
-    private var profilepic: CircleImageView? = null
-    private val conexao: SQLiteDatabase? = null
-    private val dadosOpenHelper: DadosOpenHelper? = null
-    private var usuarioRepositorio: UserRepository? = null
-    private var usuarioB: User? = null
-    var myToolbar: Toolbar? = null
-    private val mAuth: FirebaseAuth? = null
-    var blur: RealtimeBlurView? = null
-    private val mOnNavigationItemSelectedListener: BottomNavigationView.OnNavigationItemSelectedListener? = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigation_album -> {
-                supportActionBar.show()
-                //CountFotos();
-//CountObjectives();
-                val fotosFragment = FotosFragment()
-                supportFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.fragment, fotosFragment)
-                        .commit()
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_objectives -> {
-                supportActionBar.show()
-                supportFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.fragment, EventsFragment())
-                        .commit()
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_musics -> {
-                supportActionBar.show()
-                // Semevento();
-                supportFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.fragment, MusicFragment())
-                        .commit()
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_you -> {
-                supportActionBar.hide()
-                myToolbar.hideOverflowMenu()
-                myToolbar.collapseActionView()
-                supportFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.fragment, ProfileFragment())
-                        .commit()
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        //CountFotos();
-//CountObjectives();
-        false
-    }
+class Mylist : AppCompatActivity(){
 
-    override fun onCreate(savedInstanceState: Bundle?) { //requestWindowFeature(Window.FEATURE_NO_TITLE);
-//this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mylist)
-        val usertxt = findViewById<TextView?>(R.id.usertxt)
-        profilepic = findViewById<CircleImageView?>(R.id.userpic)
-        blur = findViewById<RealtimeBlurView?>(R.id.rootblur)
-        val Atelas = Typeface.createFromAsset(assets, "fonts/Atelas_PersonalUseOnly.ttf")
-        usertxt.setTypeface(Atelas)
-        checkPermissionREAD_EXTERNAL_STORAGE(this)
-        if (savedInstanceState == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.fragment, EventsFragment())
-                    .commit()
-        }
-        myToolbar = findViewById<Toolbar?>(R.id.my_toolbar)
-        setSupportActionBar(myToolbar)
-        supportActionBar
-        val myanim2 = AnimationUtils.loadAnimation(this, R.anim.slide_in_top)
-        myToolbar.startAnimation(myanim2)
-        mTextMessage = findViewById<TextView?>(R.id.message)
-        val navigation = findViewById<BottomNavigationView?>(R.id.navigation)
-        //Semevento();
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        navigation.setSelectedItemId(R.id.navigation_objectives)
+        setSupportActionBar(my_toolbar)
+        navigation.setOnTabSelectListener()
         val user = FirebaseAuth.getInstance().currentUser
-        usuarioB = User()
         if (user != null) {
-            usuarioB.setUser(user.displayName)
-            usuarioB.setProfilepic(user.photoUrl.toString())
-            usertxt.setText(usuarioB.getUser())
-            Glide.with(this).load(usuarioB.getProfilepic()).into(profilepic)
+            Glide.with(this).load(user.photoUrl).into(userpic)
         }
-        //CountObjectives();
-//CountFotos();
-//SetProfilePic(user, profilepic);
+
     }
 
     private fun SetProfilePic(user: TextView?, pic: ImageView?) {

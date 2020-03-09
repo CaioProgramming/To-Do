@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:id="@+id/layout"
-    android:background="@color/white"
-    android:layout_height="match_parent"
-    tools:context=".Splash">
-
-    <ImageView
-        android:id="@+id/splash"
+<layout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="wrap_content"
+        android:id="@+id/layout"
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:animateLayoutChanges="true"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher"
-        android:layout_centerInParent="true"
-        />
+        tools:context=".Splash">
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/splash"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_box"
+            android:layout_centerInParent="true"
+            />
+
+    </RelativeLayout>
+</layout>
