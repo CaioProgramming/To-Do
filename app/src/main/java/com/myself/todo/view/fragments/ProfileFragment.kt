@@ -1,4 +1,4 @@
-package com.myself.todo.Fragments
+package com.myself.todo.view.fragments
 
 import android.animation.ValueAnimator
 import android.content.Intent
@@ -21,11 +21,11 @@ import com.github.mmin18.widget.RealtimeBlurView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.*
-import com.myself.todo.Adapters.RecyclerAdapter
-import com.myself.todo.Adapters.RecyclerFotoAdapter
+import com.myself.todo.adapters.RecyclerAdapter
+import com.myself.todo.adapters.RecyclerFotoAdapter
 import com.myself.todo.Beans.Album
 import com.myself.todo.Beans.Events
-import com.myself.todo.Profile
+import com.myself.todo.view.activities.ActivityProfileEdit
 import com.myself.todo.R
 import de.hdodenhof.circleimageview.CircleImageView
 import de.mateware.snacky.Snacky
@@ -64,7 +64,7 @@ class ProfileFragment : Fragment(), OnSingleImageSelectedListener {
         profilepic.setOnClickListener { Picalert() }
         InitDB()
         profile.setOnClickListener(View.OnClickListener {
-            val i = Intent(activity, Profile::class.java)
+            val i = Intent(activity, ActivityProfileEdit::class.java)
             startActivity(i)
         })
         val user = FirebaseAuth.getInstance().currentUser

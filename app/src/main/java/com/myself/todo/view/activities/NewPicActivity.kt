@@ -1,4 +1,4 @@
-package com.myself.todo
+package com.myself.todo.view.activities
 
 import android.Manifest
 import android.app.Activity
@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.myself.todo.Beans.Album
 import com.myself.todo.Database.AlbumRepository
+import com.myself.todo.R
 import com.myself.todo.Utils.Utilities
 import de.mateware.snacky.Snacky
 import java.io.IOException
@@ -49,7 +50,7 @@ class NewPicActivity : AppCompatActivity(), OnSingleImageSelectedListener {
         album = Album()
         fotopic = findViewById<ImageView?>(R.id.pic)
         desc = findViewById<EditText?>(R.id.picdesc)
-        desc.setOnKeyListener(View.OnKeyListener { view, i, keyEvent ->
+        desc?.setOnKeyListener(View.OnKeyListener { view, i, keyEvent ->
             if (i == EditorInfo.IME_ACTION_SEARCH || i == EditorInfo.IME_ACTION_DONE || keyEvent.action == KeyEvent.ACTION_DOWN &&
                     keyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
                 if (!keyEvent.isShiftPressed) {

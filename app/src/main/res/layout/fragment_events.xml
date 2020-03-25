@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_margin="15dp"
+                android:id="@+id/title"
+                android:text="Olá Caio! \nVocê possui 10 tarefas!"
+                style="@style/TextAppearance.MaterialComponents.Headline5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_gravity="center"
+                android:id="@+id/recyclertasks"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_alignParentBottom="true"
+            android:layout_margin="10dp"
+            android:layout_centerInParent="true"
+            android:id="@+id/favoritesbutton"
+            app:backgroundTint="@color/red_500"
+            android:src="@drawable/ic_favorite_black_24dp"
+            app:rippleColor="@color/white"
+            android:layout_width="wrap_content"
+            android:foregroundTint="@color/white"
+            android:tint="@color/white"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+</layout>

@@ -1,47 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="250dp"
-    android:layout_margin="10dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="10dp"
-    android:id="@+id/eventcard"
-    android:layout_height="wrap_content">
-    <LinearLayout
-        android:id="@+id/cardlayout"
-        android:padding="25dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="date"
-            android:layout_gravity="end"
-            android:textColor="@color/black"
-            />
-        <TextView
-            android:id="@+id/titulo"
+<layout>
+    <data>
+        <variable
+            name="eventData"
+            type="com.myself.todo.Beans.Events" />
+    </data>
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="200dp"
+        android:layout_margin="10dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="3dp"
+        android:id="@+id/eventcard"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/mainlayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Event"
-            android:textColor="@color/black"
-            android:textSize="32dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.ramijemli.percentagechartview.PercentageChartView
+                    app:pcv_backgroundColor="?android:textColorHint"
+                    app:pcv_progressBarThickness="1dp"
+                    app:pcv_mode="ring"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"/>
+                <TextView
+                    android:text="Programar"
+                    android:textStyle="bold"
+                    android:padding="4dp"
+                    android:layout_margin="10dp"
+                    style="@style/TextAppearance.MaterialComponents.Headline5"
+                    android:textAlignment="center"
+                    android:id="@+id/titulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:visibility="gone"
+                android:padding="10dp"
+                android:id="@+id/tasks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="descricao"
+                android:textColor="@color/blue_200"
+                />
+
+            <TextView
+                android:foreground="?attr/selectableItemBackground"
+                android:id="@+id/addnewtasks"
+                android:padding="10dp"
+                android:textAlignment="center"
+                android:drawableBottom="@drawable/ic_add_black_24dp"
+                android:text="Adicionar novas tarefas para esse evento"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+
+
+
+        </LinearLayout>
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/addnewevent"
             android:textStyle="bold"
-            />
-        <TextView
-            android:id="@+id/descricao"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="descricao"
-            android:textColor="@color/blue_200"
-            />
-
-
-    </LinearLayout>
-
+            android:padding="50dp"
+            android:layout_gravity="center"
+            android:textSize="18dp"
+            android:drawableTop="@drawable/ic_add_box_black_24dp"
+            android:textColor="?android:textColorPrimary"
+            android:textAlignment="center"
+            android:text="Adicionar novo evento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
 
 
-
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
+</layout>

@@ -24,7 +24,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".Splash">
+        <activity android:name=".view.activities.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,11 +32,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Mylist"
+            android:name=".view.activities.MainActivity"
             android:label="@string/title_activity_mylist" />
-        <activity android:name=".NewPicActivity" />
-        <activity android:name=".Profile" />
-        <activity android:name=".WelcomeActivity"></activity>
+        <activity android:name=".view.activities.NewPicActivity" />
+        <activity android:name=".view.activities.ActivityProfileEdit" />
+        <activity android:name=".view.activities.WelcomeActivity"></activity>
     </application>
 
 </manifest>

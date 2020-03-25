@@ -1,235 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".Fragments.ProfileFragment">
-
-    <ScrollView
+<layout>
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".view.fragments.ProfileFragment">
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white">
-
-            <RelativeLayout
-                android:id="@+id/userdata"
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:elevation="1dp">
-
+                android:layout_height="wrap_content">
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical">
-
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:id="@+id/userdata"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                     <de.hdodenhof.circleimageview.CircleImageView
+                        app:civ_border_width="3dp"
+                        app:civ_border_color="?android:colorBackground"
+                        android:layout_centerHorizontal="true"
                         android:id="@+id/profilepic"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
                         android:src="@drawable/nothinghere" />
 
                     <TextView
+                        style="@style/TextAppearance.MaterialComponents.Headline5"
+                        android:layout_centerInParent="true"
+                        android:layout_below="@id/profilepic"
                         android:id="@+id/username"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
                         android:text="username"
                         android:textAlignment="center"
-                        android:textColor="@color/black"
                         android:textStyle="bold" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:id="@+id/data"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="15dp"
-                        android:background="@drawable/line2">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="5dp">
-
-                            <TextView
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:id="@+id/picsnumber"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="0"
-                                android:textColor="@color/black" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="Fotos" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="5dp">
-
-                            <TextView
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:id="@+id/objectivesnumber"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="0"
-                                android:textColor="@color/black" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="Objetivos" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="5dp">
-
-                            <TextView
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:id="@+id/musics"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="0"
-                                android:textColor="@color/black" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="Músicas" />
-
-                        </LinearLayout>
-
-
-                    </LinearLayout>
-
-                <Button
-                    android:id="@+id/profile"
-                    android:layout_width="match_parent"
-                    android:layout_margin="4dp"
-                    android:layout_height="35dp"
-                    android:background="@drawable/retangle2"
-                    android:backgroundTint="@color/grey_500"
-                    android:text="Editar Perfil" />
-                </LinearLayout>
-
-            </RelativeLayout>
-
-            <ProgressBar
-                android:id="@+id/progress"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_centerInParent="true"
-                android:indeterminateTint="@color/black"
-                android:progressTint="@color/black" />
-
-            <ScrollView
-                android:visibility="invisible"
-                android:id="@+id/recently"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/userdata">
-
-                <LinearLayout
-
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <LinearLayout
+                    <Button
+                        android:elevation="0dp"
+                        android:layout_margin="5dp"
+                        style="@style/Widget.MaterialComponents.Button"
+                        android:layout_below="@id/username"
+                        android:id="@+id/profileedit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_gravity="center"
-                            android:background="@drawable/line"
-                            android:textColor="@color/black"
-                            android:textSize="18sp"
-                            android:typeface="serif"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Fotos recentemente adicionadas" />
-
-                        <ScrollView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/fotorecycler"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent" />
-                        </ScrollView>
-                    </LinearLayout>
+                        android:backgroundTint="@color/colorAccent"
+                        android:text="Editar Perfil" />
 
                     <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_below="@id/profileedit"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:elevation="4dp"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content">
 
                         <TextView
-                            android:layout_gravity="center"
-                            android:background="@drawable/line"
-                            android:textColor="@color/black"
-                            android:textSize="18sp"
-                            android:typeface="serif"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Objetivos recentemente adicionados" />
-
-                        <ScrollView
+                            android:drawablePadding="5dp"
+                            android:drawableStart="@drawable/ic_photo_camera_black_24dp"
+                            style="@style/TextAppearance.MaterialComponents.Body1"
+                            android:padding="10dp"
+                            android:text="10 fotos"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/objectiverecyler"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent" />
-                        </ScrollView>
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:drawablePadding="5dp"
+                            android:drawableStart="@drawable/ic_check_black_24dp"
+                            style="@style/TextAppearance.MaterialComponents.Body1"
+                            android:padding="10dp"
+                            android:text="10 tarefas"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
                     </LinearLayout>
+
                 </LinearLayout>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
 
+        </com.google.android.material.appbar.AppBarLayout>
 
-            </ScrollView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/useritemsrecycler"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-        </RelativeLayout>
-    </ScrollView>
-
-    <com.github.mmin18.widget.RealtimeBlurView
-        android:id="@+id/blur"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        app:realtimeBlurRadius="0dp"
-        app:realtimeOverlayColor="@color/transparent" />
-</FrameLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

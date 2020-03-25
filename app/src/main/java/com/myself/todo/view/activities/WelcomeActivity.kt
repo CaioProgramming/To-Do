@@ -1,4 +1,4 @@
-package com.myself.todo
+package com.myself.todo.view.activities
 
 import android.app.Activity
 import android.content.Context
@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide
 import com.github.mmin18.widget.RealtimeBlurView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.myself.todo.R
 import de.hdodenhof.circleimageview.CircleImageView
 import de.mateware.snacky.Snacky
 import org.junit.runner.RunWith
@@ -112,7 +113,7 @@ class WelcomeActivity : AppCompatActivity(), OnSingleImageSelectedListener {
 
     fun save(view: View?) {
         val out = AnimationUtils.loadAnimation(this, R.anim.pop_out)
-        val i = Intent(this, Mylist::class.java)
+        val i = Intent(this, MainActivity::class.java)
         val user = FirebaseAuth.getInstance().currentUser
         val profileUpdates = UserProfileChangeRequest.Builder()
                 .setDisplayName(username.getText().toString())

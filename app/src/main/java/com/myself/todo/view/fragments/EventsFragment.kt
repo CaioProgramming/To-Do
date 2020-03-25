@@ -1,4 +1,4 @@
-package com.myself.todo.Fragments
+package com.myself.todo.view.fragments
 
 import android.os.Bundle
 import android.text.TextUtils
@@ -7,15 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.*
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.github.mmin18.widget.RealtimeBlurView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.myself.todo.Adapters.RecyclerAdapter
+import com.myself.todo.adapters.RecyclerAdapter
 import com.myself.todo.Beans.Events
 import com.myself.todo.R
+import com.myself.todo.databinding.FragmentEventsBinding
+import com.myself.todo.presenter.EventsPresenter
 import de.mateware.snacky.Snacky
 import org.junit.runner.RunWith
 import java.util.*
@@ -24,60 +26,13 @@ import java.util.*
  * A simple [Fragment] subclass.
  */
 class EventsFragment : Fragment() {
-    var lstevents: MutableList<Events?>? = null
-    var events: FrameLayout? = null
-    var neweventform: LinearLayout? = null
-    var neweventdescription: EditText? = null
-    var neweventtext: EditText? = null
-    var newbtn: Button? = null
-    var blur: RealtimeBlurView? = null
-    var recyclerviewevents: RecyclerView? = null
-    var successwitch: Switch? = null
-    var favoriteswitch: Switch? = null
-    var noevents: LinearLayout? = null
-    var content: LinearLayout? = null
-    var eventform: Button? = null
-    var raiz: DatabaseReference? = null
+    var eventsBinding: FragmentEventsBinding? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = Objects.requireNonNull<LayoutInflater?>(inflater).inflate(R.layout.events, container, false)
-        raiz = FirebaseDatabase.getInstance().getReference("events")
-        lstevents = ArrayList()
-        val voltar = view.findViewById<TextView?>(R.id.voltar)
-        content = view.findViewById<LinearLayout?>(R.id.content)
-        events = view.findViewById<FrameLayout?>(R.id.events)
-        neweventform = view.findViewById<LinearLayout?>(R.id.neweventform)
-        newbtn = view.findViewById<Button?>(R.id.newbtn)
-        eventform = view.findViewById<Button?>(R.id.eventform)
-        neweventdescription = view.findViewById<EditText?>(R.id.neweventdescription)
-        neweventtext = view.findViewById<EditText?>(R.id.neweventtext)
-        blur = view.findViewById(R.id.blur)
-        recyclerviewevents = view.findViewById(R.id.recyclerviewevents)
-        successwitch = view.findViewById<Switch?>(R.id.successwitch)
-        favoriteswitch = view.findViewById<Switch?>(R.id.favoriteswitch)
-        noevents = view.findViewById<LinearLayout?>(R.id.noevents)
-        newbtn.setOnClickListener(View.OnClickListener { SalvarEvento() })
-        voltar.setOnClickListener(View.OnClickListener { HideEventform() })
-        eventform.setOnClickListener(View.OnClickListener { Showform() })
-        Carregar(recyclerviewevents, noevents)
-        successwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { compoundButton, b ->
-            if (successwitch.isChecked()) {
-                Carregar(recyclerviewevents, noevents)
-                favoriteswitch.setChecked(false)
-            } else {
-                CarregarConcluidos(recyclerviewevents, noevents)
-                favoriteswitch.setChecked(false)
-            }
-        })
-        favoriteswitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { compoundButton, b ->
-            if (favoriteswitch.isChecked()) {
-                Carregar(recyclerviewevents, noevents)
-                successwitch.setChecked(false)
-            } else {
-                CarregarFavoritos(recyclerviewevents, noevents)
-                successwitch.setChecked(false)
-            }
-        })
-        return view
+
+        eventsBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_events,container,false)
+        val eventsPresenter = EventsPresenter(this)
+        return eventsBinding?.root
+
     }
 
     private fun SalvarEvento() {

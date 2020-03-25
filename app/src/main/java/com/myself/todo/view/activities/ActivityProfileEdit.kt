@@ -1,4 +1,4 @@
-package com.myself.todo
+package com.myself.todo.view.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -15,11 +15,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.myself.todo.R
 import de.hdodenhof.circleimageview.CircleImageView
 import de.mateware.snacky.Snacky
 import org.junit.runner.RunWith
 
-class Profile : AppCompatActivity() {
+class ActivityProfileEdit : AppCompatActivity() {
     var raiz: DatabaseReference? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         val user = FirebaseAuth.getInstance().currentUser
@@ -71,7 +72,7 @@ class Profile : AppCompatActivity() {
             raiz.keepSynced(true)
             if (user != null) {
                 raiz.child("userID").child(user.uid).removeValue().addOnCompleteListener {
-                    Message("Você removeu todas as fotos")
+                    Message("Você removeu todas as fragment_fotos")
                     fotosbtn.loadingSuccessful()
                 }
             }
@@ -175,7 +176,7 @@ class Profile : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val i = Intent(this, Mylist::class.java)
+        val i = Intent(this, MainActivity::class.java)
         startActivity(i)
         finish()
     }

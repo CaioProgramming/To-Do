@@ -1,4 +1,4 @@
-package com.myself.todo.Adapters
+package com.myself.todo.adapters
 
 import android.app.Activity
 import android.app.Dialog

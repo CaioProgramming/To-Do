@@ -1,4 +1,4 @@
-package com.myself.todo.Fragments
+package com.myself.todo.view.fragments
 
 import android.os.Bundle
 import android.provider.MediaStore
@@ -10,7 +10,7 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.myself.todo.Adapters.RecyclerMusicAdapter
+import com.myself.todo.adapters.RecyclerMusicAdapter
 import com.myself.todo.Beans.Music
 import com.myself.todo.Database.MusicRepository
 import com.myself.todo.R

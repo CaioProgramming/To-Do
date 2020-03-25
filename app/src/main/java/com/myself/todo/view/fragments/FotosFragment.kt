@@ -1,4 +1,4 @@
-package com.myself.todo.Fragments
+package com.myself.todo.view.fragments
 
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -15,7 +15,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.myself.todo.Adapters.RecyclerFotoAdapter
+import com.myself.todo.adapters.RecyclerFotoAdapter
 import com.myself.todo.Beans.Album
 import com.myself.todo.R
 import de.mateware.snacky.Snacky
@@ -31,7 +31,7 @@ class FotosFragment : Fragment() {
     var blur: RealtimeBlurView? = null
     var pb: ProgressBar? = null
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fotos, container, false)
+        val view = inflater.inflate(R.layout.fragment_fotos, container, false)
         val frameLayout = view.findViewById<FrameLayout?>(R.id.fotos)
         lstalbum = ArrayList()
         blur = activity.findViewById(R.id.rootblur)

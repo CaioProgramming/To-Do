@@ -1,4 +1,4 @@
-package com.myself.todo
+package com.myself.todo.view.activities
 
 import android.Manifest
 import android.app.Activity
@@ -6,45 +6,33 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.database.sqlite.SQLiteDatabase
-import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.asksira.bsimagepicker.BSImagePicker
-import com.asksira.bsimagepicker.BSImagePicker.OnSingleImageSelectedListener
 import com.asksira.bsimagepicker.Utils
 import com.bumptech.glide.Glide
-import com.github.mmin18.widget.RealtimeBlurView
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.myself.todo.Beans.User
-import com.myself.todo.Database.DadosOpenHelper
 import com.myself.todo.Database.UserRepository
-import com.myself.todo.Fragments.EventsFragment
-import com.myself.todo.Fragments.FotosFragment
-import com.myself.todo.Fragments.MusicFragment
-import com.myself.todo.Fragments.ProfileFragment
-import de.hdodenhof.circleimageview.CircleImageView
+import com.myself.todo.R
 import de.mateware.snacky.Snacky
-import kotlinx.android.synthetic.main.activity_mylist.*
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import org.junit.runner.RunWith
 
-class Mylist : AppCompatActivity(){
+class MainActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_mylist)
+        setContentView(R.layout.activity_main)
         setSupportActionBar(my_toolbar)
         navigation.setOnTabSelectListener()
         val user = FirebaseAuth.getInstance().currentUser

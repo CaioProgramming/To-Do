@@ -1,4 +1,4 @@
-package com.myself.todo
+package com.myself.todo.view.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -13,13 +13,14 @@ import com.bumptech.glide.Glide
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
+import com.myself.todo.R
 import com.myself.todo.Utils.Utilities.Companion.RC_SIGN_IN
 import com.myself.todo.databinding.ActivitySplashBinding
 import kotlinx.android.synthetic.main.activity_splash.*
 import java.util.*
 
 class Splash : AppCompatActivity() {
-    val  splashBinding: ActivitySplashBinding = DataBindingUtil.inflate(LayoutInflater.from(this),R.layout.activity_splash,null,false)
+    val  splashBinding: ActivitySplashBinding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_splash,null,false)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -41,7 +42,7 @@ class Splash : AppCompatActivity() {
                     .setTheme(R.style.AppTheme)
                     .build(), RC_SIGN_IN)
         } else {
-            val i = Intent(this, Mylist.javaClass)
+            val i = Intent(this, MainActivity.javaClass)
             i.putExtra("novo", false)
             i.putExtra("notification", true)
             startActivity(i)
@@ -50,7 +51,7 @@ class Splash : AppCompatActivity() {
     }
 
     private fun startApp() {
-        val i = Intent(this, Mylist::class.java)
+        val i = Intent(this, MainActivity::class.java)
         startActivity(i)
         finish()
     }

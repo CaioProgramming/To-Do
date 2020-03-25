@@ -9,7 +9,7 @@
         android:padding="10dp"
         android:animateLayoutChanges="true"
         android:layout_height="wrap_content"
-        tools:context=".Splash">
+        tools:context=".view.activities.Splash">
 
         <ImageView
             android:id="@+id/splash"
