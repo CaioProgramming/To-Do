@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-    <data>
-        <variable
-            name="eventData"
-            type="com.myself.todo.Beans.Events" />
-    </data>
-    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
         android:layout_width="200dp"
         android:layout_margin="10dp"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        app:cardCornerRadius="5dp"
+        app:cardCornerRadius="10dp"
         app:cardElevation="3dp"
         android:id="@+id/eventcard"
         android:layout_height="wrap_content">
@@ -19,22 +15,29 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
             <LinearLayout
+                android:layout_margin="10dp"
                 android:gravity="center"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <com.ramijemli.percentagechartview.PercentageChartView
-                    app:pcv_backgroundColor="?android:textColorHint"
-                    app:pcv_progressBarThickness="1dp"
-                    app:pcv_mode="ring"
+
+                <io.netopen.hotbitmapgg.library.view.RingProgressBar
+                    android:id="@+id/progress"
                     android:layout_width="32dp"
-                    android:layout_height="32dp"/>
+                    android:layout_height="32dp"
+                    app:max="100"
+                    app:ringColor="@color/colorPrimary"
+                    app:ringProgressColor="@color/colorPrimaryDark"
+                    app:ringWidth="3dp"
+                    app:style="FILL"
+                    app:textIsShow="false"
+                    />
+
                 <TextView
                     android:text="Programar"
                     android:textStyle="bold"
                     android:padding="4dp"
-                    android:layout_margin="10dp"
-                    style="@style/TextAppearance.MaterialComponents.Headline5"
+                    style="@style/TextAppearance.AppCompat.Title"
                     android:textAlignment="center"
                     android:id="@+id/titulo"
                     android:layout_width="match_parent"
@@ -57,8 +60,8 @@
                 android:id="@+id/addnewtasks"
                 android:padding="10dp"
                 android:textAlignment="center"
-                android:drawableBottom="@drawable/ic_add_black_24dp"
-                android:text="Adicionar novas tarefas para esse evento"
+                android:drawableStart="@drawable/ic_add_black_24dp"
+                android:text="Adicionar novas tarefa"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

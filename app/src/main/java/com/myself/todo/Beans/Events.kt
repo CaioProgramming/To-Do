@@ -14,13 +14,12 @@ class Events {
 
 
     constructor()
-    constructor(evento: String, descricao: String, UserID: String, data: String, id: String, complete: Boolean, favorite: Boolean) {
+    constructor(evento: String, descricao: String, UserID: String, data: String, id: String, favorite: Boolean,tarefas: ArrayList<Tarefas>) {
         this.evento = evento
         this.descricao = descricao
         this.UserID = UserID
         this.data = data
         this.id = id
-        this.complete = complete
         this.favorite = favorite
     }
 

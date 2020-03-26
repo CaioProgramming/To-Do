@@ -1,6 +1,5 @@
 package com.myself.todo.Beans
 
-import org.junit.runner.RunWith
 
 class Album {
     private var userID: String? = null
@@ -19,7 +18,7 @@ class Album {
         this.userID = userID
     }
 
-    constructor() {}
+    constructor()
 
     fun getUserID(): String? {
         return userID
