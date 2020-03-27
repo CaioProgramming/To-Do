@@ -13,14 +13,21 @@ class EventsDB(activity: Activity) : ModelBase(activity),ValueEventListener {
     constructor(eventsPresenter: EventsPresenter) : this(eventsPresenter.activity){
         this.eventsPresenter = eventsPresenter
         this.path = "Events"
+        succesmesage = "Evento salvo com sucesso! \uD83D\uDE0C"
+        errormessage = "Ocorreu um erro salvando o seu evento... \uD83D\uDE2D"
     }
 
 
     var eventsPresenter: EventsPresenter? = null
-
+    var eventoLoadedListener = object : ModelListeners.eventosLoadedCompleteListener {
+        override fun loadComplete(eventos: ArrayList<Events>) {
+            eventsPresenter?.updaterecycler(eventos)
+        }
+    }
 
     override fun onCancelled(p0: DatabaseError) {
-        TODO("Not yet implemented")
+        errormessage = p0.message
+        taskError()
     }
     override fun onDataChange(dataSnapshot: DataSnapshot) {
         val eventslist = ArrayList<Events>()
@@ -29,8 +36,14 @@ class EventsDB(activity: Activity) : ModelBase(activity),ValueEventListener {
             e?.id = d.key
             e?.let { getTarefas(it) }
         }
-        eventsPresenter?.updaterecycler(eventslist)
+        eventoLoadedListener.loadComplete(eventslist)
     }
+
+
+    public fun setLoadCompleteListener(eventosLoadedCompleteListener: ModelListeners.eventosLoadedCompleteListener){
+        this.eventoLoadedListener = eventosLoadedCompleteListener
+    }
+
 
 
     fun getTarefas(event: Events){

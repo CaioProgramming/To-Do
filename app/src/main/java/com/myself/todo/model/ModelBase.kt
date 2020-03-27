@@ -9,15 +9,19 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.myself.todo.presenter.EventsPresenter
+import de.mateware.snacky.Snacky
 
 abstract class ModelBase(val activity: Activity) : ModelContract{
     var path = ""
     val raiz =  FirebaseDatabase.getInstance().reference.child(path)
     val user = FirebaseAuth.getInstance().currentUser
+    var succesmesage = "Salvo com sucesso."
+    var errormessage = "Erro ao salvar."
 
     override fun remover(id: String) {
         raiz.child(id).removeValue(removeListener)
     }
+
 
 
     override fun alterar(id: String, obj: Any) {
@@ -27,10 +31,22 @@ abstract class ModelBase(val activity: Activity) : ModelContract{
     }
 
     override fun inserir(obj: Any) {
-        raiz.push().setValue(obj)
+        raiz.push().setValue(obj).addOnCompleteListener { task -> if (task.isSuccessful){
+            taskComplete()
+        }else{
+            taskError()
+        }
+        }
     }
 
 
+    fun taskError(){
+        Snacky.builder().setActivity(activity).success().setText(errormessage).show()
+
+    }
+    fun taskComplete(){
+        Snacky.builder().setActivity(activity).success().setText(succesmesage).show()
+    }
 
     val removeListener = DatabaseReference.CompletionListener { error, _ ->
         if (error == null){

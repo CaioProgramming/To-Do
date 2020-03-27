@@ -30,7 +30,7 @@ class Utilities {
             val df: DateFormat = SimpleDateFormat("yyy-MM-dd")
             try {
                 val result = df.parse(dia)
-                val format = SimpleDateFormat("d/m/y")
+                val format = SimpleDateFormat("dd/MM/yyy")
                 dia = format.format(result)
             } catch (e: ParseException) {
                 e.printStackTrace()

@@ -25,7 +25,7 @@ import java.util.*
 /**
  * A simple [Fragment] subclass.
  */
-class FotosFragment : Fragment() {
+class PicturesFragment : Fragment() {
     var fotosBinding:FragmentFotosBinding? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         fotosBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_fotos,container,false)

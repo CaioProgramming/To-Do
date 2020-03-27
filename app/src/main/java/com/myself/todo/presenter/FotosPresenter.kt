@@ -5,9 +5,9 @@ import com.myself.todo.Beans.Album
 import com.myself.todo.Beans.AlbumHead
 import com.myself.todo.adapters.RecyclerFotoGroupAdapter
 import com.myself.todo.model.FotosDB
-import com.myself.todo.view.fragments.FotosFragment
+import com.myself.todo.view.fragments.PicturesFragment
 
-class FotosPresenter(fragment: FotosFragment) : PresenterBase(fragment) {
+class FotosPresenter(fragment: PicturesFragment) : PresenterBase(fragment) {
     private val fotosBinding = fragment.fotosBinding!!
     private val albumheads: ArrayList<AlbumHead> = ArrayList()
     private var fotoGroupAdapter: RecyclerFotoGroupAdapter? = RecyclerFotoGroupAdapter(fragment.activity!!,albumheads)

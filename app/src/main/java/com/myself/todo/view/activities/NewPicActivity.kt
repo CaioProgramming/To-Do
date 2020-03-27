@@ -1,209 +1,113 @@
 package com.myself.todo.view.activities
 
 import android.Manifest
-import android.app.Activity
-import android.app.AlertDialog
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.text.TextUtils
-import android.text.format.Time
-import android.util.Log
-import android.view.KeyEvent
-import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import com.asksira.bsimagepicker.BSImagePicker
-import com.asksira.bsimagepicker.BSImagePicker.OnSingleImageSelectedListener
-import com.asksira.bsimagepicker.Utils
 import com.bumptech.glide.Glide
+import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.TedPermission
 import com.myself.todo.Beans.Album
-import com.myself.todo.Database.AlbumRepository
 import com.myself.todo.R
 import com.myself.todo.Utils.Utilities
-import com.myself.todo.databinding.ActivityCreateEventBinding
 import com.myself.todo.databinding.ActivityNewPicBinding
+import com.myself.todo.model.FotosDB
 import de.mateware.snacky.Snacky
-import java.io.IOException
+import gun0912.tedbottompicker.TedBottomPicker
+import kotlinx.android.synthetic.main.activity_new_pic.*
 import java.util.*
 
-class NewPicActivity : AppCompatActivity(), OnSingleImageSelectedListener {
+class NewPicActivity : AppCompatActivity(),PermissionListener {
     var url: String? = null
+    val user = FirebaseAuth.getInstance().currentUser
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val actbind: ActivityNewPicBinding = DataBindingUtil.setContentView(this, R.layout.activity_new_pic)
-
+        setupview()
+        requestPermissions()
+        startPicker()
         setContentView(actbind.root)
+    }
+
+    private fun setupview(){
+        save.setOnClickListener { save() }
+        picturecard.setOnClickListener { startPicker() }
+        diapic.text = Utilities.actualday()
 
     }
 
-    private fun Picalert() {
-        val singleSelectionPicker = BSImagePicker.Builder("com.myself.fileprovider") //Default: Integer.MAX_VALUE. Don't worry about performance :)
-                .hideGalleryTile()
-                .setSpanCount(3) //Default: 3. This is the number of columns
-                .setGridSpacing(Utils.dp2px(2)) //Default: 2dp. Remember to pass in a value in pixel.
-                .setPeekHeight(Utils.dp2px(360)) //Default: 360dp. This is the initial height of the dialog.
-                .setOverSelectTextColor(R.color.black)
-                .setMultiSelectDoneTextColor(R.color.blue_300)
-                .build()
-        singleSelectionPicker.show(supportFragmentManager, "picker")
+    private fun startPicker() {
+        TedBottomPicker.with(this)
+                .show { uri -> url = uri!!.path
+                    loadpic()
+                }
+
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, imageselect: Intent?) {
-        try {
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        when (requestCode) {
-            0 -> if (resultCode == Activity.RESULT_OK) {
-                val selectedImage = imageselect.getData()
-                try {
-                    fotopic.setImageBitmap(Utilities.Companion.handleSamplingAndRotationBitmap(this, selectedImage))
-                    album.setFotouri(selectedImage.toString())
-                    onBackPressed()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-                //fotopic.setImageURI(selectedImage);
-//album.setFotouri(Objects.requireNonNull(selectedImage).toString());
-                println(album.getFotouri())
-                if (checkPermissionREAD_EXTERNAL_STORAGE(this)) {
-                    try {
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
-            }
-            1 -> if (resultCode == Activity.RESULT_OK) {
-                val selectedImage = imageselect.getData()
-                try {
-                    fotopic.setImageBitmap(Utilities.Companion.handleSamplingAndRotationBitmap(this, selectedImage))
-                    album.setFotouri(selectedImage.toString())
-                    onBackPressed()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-                println(album.getFotouri())
-                if (checkPermissionREAD_EXTERNAL_STORAGE(this)) {
-                }
-            }
+    private fun requestPermissions(){
+        TedPermission.with(this)
+                .setPermissionListener(this)
+                .setDeniedMessage("Se você não aceitar essa permissão não poderá adicionar fotos...\n\nPor favor ligue as permissões em [Configurações] > [Permissões]")
+                .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE)
+                .check()
+    }
+
+
+    private fun loadpic(){
+        Glide.with(this).load(url).into(albpic)
+    }
+
+
+
+    private fun createAlbum():Album{
+        return Album(null,url,descricaopic.text.toString(),Utilities.actualday(),false,user?.uid)
+    }
+    private fun SignIn() {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            val providers = Arrays.asList(
+                    AuthUI.IdpConfig.GoogleBuilder().build(),
+                    AuthUI.IdpConfig.EmailBuilder().build())
+            startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
+                    .setLogo(R.mipmap.ic_launcher)
+                    .setAvailableProviders(providers)
+                    .setTheme(R.style.AppTheme)
+                    .build(), Utilities.RC_SIGN_IN)
         }
     }
 
-    private fun succes() {
-        Snacky.builder()
-                .setActivity(this)
-                .setText("Foto adcionada,pressione o botão de voltar para sair!")
-                .setDuration(Snacky.LENGTH_SHORT)
-                .success()
-                .show()
-        //onBackPressed();
-    }
-
-    fun checkPermissionREAD_EXTERNAL_STORAGE(
-            context: Context?): Boolean {
-        val currentAPIVersion = Build.VERSION.SDK_INT
-        return if (currentAPIVersion >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(context,
-                            Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(
-                                context as Activity?,
-                                Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    showDialog("Armazenamento externo", context,
-                            Manifest.permission.READ_EXTERNAL_STORAGE)
-                } else {
-                    ActivityCompat
-                            .requestPermissions(
-                                    context as Activity?, arrayOf<String?>(Manifest.permission.READ_EXTERNAL_STORAGE),
-                                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE)
-                }
-                false
-            } else {
-                true
-            }
-        } else {
-            true
-        }
-    }
-
-    fun showDialog(msg: String?, context: Context?,
-                   permission: String?) {
-        val alertBuilder = AlertDialog.Builder(context)
-        alertBuilder.setCancelable(true)
-        alertBuilder.setTitle("Permissão")
-        alertBuilder.setMessage("$msg permissão necessária")
-        alertBuilder.setPositiveButton(android.R.string.yes
-        ) { dialog, which ->
-            ActivityCompat.requestPermissions(context as Activity?, arrayOf(permission),
-                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE)
-        }
-        val alert = alertBuilder.create()
-        alert.show()
-    }
-
-    fun salvar(view: View?) {
-        if (desc.getText().toString() == "") {
-            Snacky.builder()
-                    .setActivity(this)
-                    .setText("Escreva alguma coisa sobre a foto!")
-                    .setDuration(Snacky.LENGTH_SHORT)
-                    .error()
-                    .show()
-        } else {
-            save()
-        }
-    }
 
     private fun save() {
-        val datenow = Calendar.getInstance().time
-        val today = Time(Time.getCurrentTimezone())
-        today.setToNow()
-        //String time = String.valueOf(today);
-        val dia = datenow.toString()
-        val user = FirebaseAuth.getInstance().currentUser
-        if (!TextUtils.isEmpty(desc.toString())) {
-            val id = raiz.push().key
-            val album = Album(id, photouri.toString(), desc.getText().toString(), dia, "N", user.getUid())
-            raiz.child(id).setValue(album).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    succes("Foto adicionada ")
-                } else {
-                    error("Erro " + task.exception)
-                }
-            }
-        } else {
-            Snacky.builder().setActivity(this).error().setText("Escreva algo sobre a foto").show()
+        if (user == null){
+            Snacky.builder().error().setText("Você precisa estar logado para salvar.").setAction("Login") {
+                SignIn()
+            }.show()
+            return
         }
+        val album = createAlbum()
+        if (album.description.isNullOrBlank()){
+            Snacky.builder().setActivity(this).warning()
+                    .setText("Você está prestes a salvar uma foto sem legenda, deseja salvar assim mesmo?")
+                    .setAction("Salvar") {
+                        FotosDB(this).inserir(album)
+                    }.show()
+        }
+        FotosDB(this).inserir(createAlbum())
     }
 
-    fun succes(s: String?) {
-        Snacky.builder().setActivity(this).success().setText(s).show()
+
+
+
+
+
+
+    override fun onPermissionGranted() {
+        startPicker()
     }
 
-    fun error(s: String?) {
-        Snacky.builder().setActivity(this).success().setText(s).show()
-    }
-
-    override fun onSingleImageSelected(uri: Uri?) {
-        photouri = uri
-        Glide.with(this).load(uri).into(fotopic)
-        album.setFotouri(uri.toString())
-    }
-
-    override fun onPointerCaptureChanged(hasCapture: Boolean) {}
-
-    companion object {
-        const val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123
+    override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
+        Snacky.builder().setActivity(this).error().setText("Se não permitir o acesso não da para salvar as fotos...")
     }
 }
