@@ -1,10 +1,10 @@
 package com.myself.todo.presenter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
-import com.myself.todo.Beans.Album
-import com.myself.todo.Beans.AlbumHead
 import com.myself.todo.adapters.RecyclerFotoGroupAdapter
 import com.myself.todo.model.FotosDB
+import com.myself.todo.model.beans.Album
+import com.myself.todo.model.beans.AlbumHead
 import com.myself.todo.view.fragments.PicturesFragment
 
 class FotosPresenter(fragment: PicturesFragment) : PresenterBase(fragment) {

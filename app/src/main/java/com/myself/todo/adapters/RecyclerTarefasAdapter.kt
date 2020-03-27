@@ -7,11 +7,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.myself.todo.Beans.Events
-import com.myself.todo.Beans.Tarefas
 import com.myself.todo.R
 import com.myself.todo.databinding.TasksLayoutBinding
 import com.myself.todo.model.EventsDB
+import com.myself.todo.model.beans.Events
 import kotlinx.android.synthetic.main.tasks_layout.view.*
 
 class RecyclerTarefasAdapter(val activity: Activity,val events: Events) : RecyclerView.Adapter<RecyclerTarefasAdapter.TarefasViewHolder>() {
@@ -22,7 +21,7 @@ class RecyclerTarefasAdapter(val activity: Activity,val events: Events) : Recycl
     }
 
     override fun onBindViewHolder(holder: TarefasViewHolder, position: Int) {
-            val task = events.tasks!![position]
+        val task = events.tasks[position]
             holder.tasksLayoutBinding.taskname.taskname.text = task.tarefa
             holder.tasksLayoutBinding.date.text = task.data
             holder.tasksLayoutBinding.taskCheck.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -39,15 +38,15 @@ class RecyclerTarefasAdapter(val activity: Activity,val events: Events) : Recycl
     }
 
     private fun complete(position: Int,boolean: Boolean){
-        val task = events.tasks!![position]
-        events.tasks!![position] = task
+        val task = events.tasks[position]
+        events.tasks[position] = task
         EventsDB(activity).alterar(events.id!!,events)
     }
 
 
 
     override fun getItemCount(): Int {
-      return events.tasks!!.size
+        return events.tasks.size
     }
 
     class TarefasViewHolder(val tasksLayoutBinding: TasksLayoutBinding) : RecyclerView.ViewHolder(tasksLayoutBinding.root)

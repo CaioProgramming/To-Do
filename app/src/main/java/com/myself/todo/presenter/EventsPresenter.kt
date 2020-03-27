@@ -1,19 +1,18 @@
 package com.myself.todo.presenter
-import android.app.Activity
 import android.text.Html
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.myself.todo.adapters.RecyclerAdapter
-import com.myself.todo.Beans.Events
-import com.myself.todo.view.fragments.EventsFragment
 import com.myself.todo.model.EventsDB
+import com.myself.todo.model.ModelListeners
+import com.myself.todo.model.beans.Events
+import com.myself.todo.view.fragments.EventsFragment
 
 class EventsPresenter(eventsFragment: EventsFragment): PresenterBase(eventsFragment) {
     private var showingfavorites = false
     var recyclerAdapter: RecyclerAdapter? = null
-    private val eventsDB = EventsDB(this)
-    val activity: Activity = eventsFragment.activity!!
+    private val eventsDB = EventsDB(activity)
     private val eventsBinding = eventsFragment.eventsBinding!!
     val user = FirebaseAuth.getInstance().currentUser
 
@@ -22,6 +21,7 @@ class EventsPresenter(eventsFragment: EventsFragment): PresenterBase(eventsFragm
     fun updaterecycler(eventslist: ArrayList<Events>){
         if (recyclerAdapter != null) {
             recyclerAdapter?.let {
+                recyclerAdapter!!.eventList.clear()
                 it.eventList.addAll(eventslist)
                 it.notifyItemRangeChanged(0,eventslist.size)
             }
@@ -38,6 +38,11 @@ class EventsPresenter(eventsFragment: EventsFragment): PresenterBase(eventsFragm
 
     override fun initview() {
         eventsDB.carregar()
+        eventsDB.setLoadCompleteListener(object : ModelListeners.EventosLoadedCompleteListener {
+            override fun loadComplete(eventos: ArrayList<Events>) {
+                updaterecycler(eventos)
+            }
+        })
         eventsBinding.favoritesbutton.setOnClickListener {
             if (!showingfavorites){
                 val filteredlist = recyclerAdapter!!.eventList.filter { events -> events.favorite }

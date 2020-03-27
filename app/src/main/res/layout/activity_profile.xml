@@ -1,113 +1,336 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.activities.ActivityProfileEdit">
-    <LinearLayout
-        android:padding="4dp"
-        android:orientation="horizontal"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="user"
+            type="com.google.firebase.auth.FirebaseUser" />
+    </data>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/viewShimmer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        app:shimmer_auto_start="true"
+        app:shimmer_base_color="?android:textColorHint"
+        app:shimmer_clip_to_children="true"
+        app:shimmer_colored="true"
+        app:shimmer_highlight_color="@color/colorAccent">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profile_pic"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_centerInParent="true"
-            android:src="@drawable/nothinghere" />
-        <TextView
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_margin="10dp"
-            android:layout_gravity="center"
-            android:id="@+id/username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="user"
-            />
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".view.activities.ActivityProfileEdit">
 
-    </LinearLayout>
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-    <EditText
-        android:layout_margin="15dp"
-        android:id="@+id/usernameedit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@color/transparent"
-        android:textAlignment="center"
-        android:imeOptions="actionNext"
-        android:inputType="textMultiLine"
-        android:padding="10dp"
-        android:hint="Mudar nome de usuário"
-        android:textStyle="bold" />
-    <CheckBox
-        android:checked="true"
-        android:button="@drawable/notifications"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:buttonTint="@color/black"
-        android:foregroundTint="@color/black"
-        android:padding="12dp"
-        android:switchPadding="15dp"
-        android:text="Notificações"
-        android:textColor="@color/black"
-        android:thumbTint="@color/white"
-        android:trackTint="@color/black" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
-    <com.dx.dxloadingbutton.lib.LoadingButton
-        android:id="@+id/objetivesbtn"
-        android:layout_width="match_parent"
-        android:textAlignment="viewStart"
-        android:layout_margin="10dp"
-        android:layout_height="wrap_content"
-        app:lb_btnColor="@color/transparent"
-        app:lb_btnText="Apagar objetivos"
-        app:lb_textColor="?android:textColorPrimary"
-        app:lb_resetAfterFailed="true" />
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="4dp">
 
-    <com.dx.dxloadingbutton.lib.LoadingButton
-        android:layout_margin="10dp"
-        android:background="@drawable/line"
-        android:id="@+id/fotosbtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:lb_btnText="Apagar fotos"
-        app:lb_btnColor="@color/transparent"
-        app:lb_textColor="?android:textColorPrimary"
-        app:lb_resetAfterFailed="true" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <TextView
+                                style="@style/TextAppearance.AppCompat.Title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:text="Conta" />
+
+                            <LinearLayout
+                                android:id="@+id/name_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:foreground="?attr/selectableItemBackground"
+                                android:orientation="horizontal"
+                                android:padding="10dp">
+
+                                <ProgressBar
+                                    android:id="@+id/nameload"
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:layout_gravity="center"
+                                    android:visibility="invisible" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:padding="10dp"
+                                    android:src="@drawable/ic_tie" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:drawableEnd="@drawable/ic_next"
+                                        android:text="Nome"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/username"
+                                        style="@style/TextAppearance.MaterialComponents.Caption"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:text="@{user.displayName}" />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="?android:colorControlHighlight"
+                                android:orientation="horizontal"
+                                android:padding="10dp">
+
+                                <ProgressBar
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:layout_gravity="center"
+                                    android:visibility="invisible" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:padding="10dp"
+                                    android:src="@drawable/ic_mail" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Email"
+                                        android:textColor="?android:textColorHint"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/useremail"
+                                        style="@style/TextAppearance.MaterialComponents.Caption"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:text="@{user.email}"
+                                        android:textColor="?android:textColorHint" />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/line"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:padding="10dp">
+
+                                <CheckBox
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:button="@drawable/notifications"
+                                    android:text="Notificações" />
 
 
+                            </LinearLayout>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="4dp">
+
+                        <LinearLayout
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <TextView
+                                style="@style/TextAppearance.AppCompat.Title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:text="Opções" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:padding="10dp">
+
+                                <com.dx.dxloadingbutton.lib.LoadingButton
+                                    android:id="@+id/objetivesbtn"
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:layout_gravity="center"
+                                    app:lb_btnColor="@color/transparent"
+                                    app:lb_btnRippleColor="@color/colorAccent"
+                                    app:lb_resetAfterFailed="true"
+                                    app:lb_textColor="?android:textColorPrimary" />
+
+                                <TextView
+                                    style="@style/TextAppearance.MaterialComponents.Body1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:drawableStart="@drawable/ic_delete_events"
+                                    android:drawableEnd="@drawable/ic_next"
+                                    android:drawablePadding="10dp"
+                                    android:padding="10dp"
+                                    android:text="Apagar eventos" />
 
 
-    <com.dx.dxloadingbutton.lib.LoadingButton
-        android:id="@+id/wipeoutbtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:lb_btnColor="@color/transparent"
-        app:lb_btnRippleColor="@color/red_300"
-        app:lb_textColor="@color/red_500"
-        app:lb_btnText="Apagar tudo" />
-    <ProgressBar
-        android:layout_gravity="center"
-        android:id="@+id/progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:indeterminateDrawable="@mipmap/ic_launcher" />
-    <com.dx.dxloadingbutton.lib.LoadingButton
-        android:id="@+id/savebtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:lb_btnText="Salvar"
-        app:lb_btnColor="?android:textColorPrimary"
-        app:lb_textColor="?android:colorBackground"
-        app:lb_resetAfterFailed="true" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/line"
+                                android:orientation="horizontal"
+                                android:padding="10dp">
+
+                                <com.dx.dxloadingbutton.lib.LoadingButton
+                                    android:id="@+id/fotosbtn"
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:layout_gravity="center"
+                                    app:lb_btnColor="@color/transparent"
+                                    app:lb_resetAfterFailed="true"
+                                    app:lb_textColor="?android:textColorPrimary" />
+
+                                <TextView
+                                    style="@style/TextAppearance.MaterialComponents.Body1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:drawableStart="@drawable/ic_delete_pictures"
+                                    android:drawableEnd="@drawable/ic_next"
+                                    android:drawablePadding="10dp"
+                                    android:padding="10dp"
+                                    android:text="Apagar fotos" />
 
 
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/line"
+                                android:orientation="horizontal"
+                                android:padding="10dp">
+
+                                <com.dx.dxloadingbutton.lib.LoadingButton
+                                    android:id="@+id/wipeoutbtn"
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:layout_gravity="center"
+                                    app:lb_btnColor="@color/transparent"
+                                    app:lb_btnRippleColor="@color/red_300"
+                                    app:lb_textColor="@color/red_500" />
+
+                                <TextView
+                                    style="@style/TextAppearance.MaterialComponents.Body1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:drawableStart="@drawable/ic_radiation"
+                                    android:drawableEnd="@drawable/ic_next"
+                                    android:drawablePadding="10dp"
+                                    android:padding="10dp"
+                                    android:text="Apagar tudo"
+                                    android:textColor="@color/red_500"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+            </ScrollView>
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:colorBackground">
+
+                <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:contentScrim="?android:colorBackground"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        app:layout_collapseMode="parallax">
+
+                        <TextView
+                            style="@style/TextAppearance.AppCompat.Display2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:text="Olá, Caio"
+                            android:textColor="?android:textColorPrimary" />
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/profile_pic"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/nothinghere" />
+
+                    </LinearLayout>
+
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="?attr/actionBarSize"
+                        app:layout_collapseMode="pin" />
+                </com.google.android.material.appbar.CollapsingToolbarLayout>
+            </com.google.android.material.appbar.AppBarLayout>
 
 
-</LinearLayout>
+            <com.github.mmin18.widget.RealtimeBlurView
+                android:id="@+id/rootblur"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0" />
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+</layout>

@@ -1,27 +1,25 @@
 package com.myself.todo.model
 import android.app.Activity
+import android.widget.Toast
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.myself.todo.Beans.Events
-import com.myself.todo.Beans.Tarefas
-import com.myself.todo.presenter.EventsPresenter
+import com.myself.todo.model.beans.Events
+import com.myself.todo.model.beans.Tarefas
 
 class EventsDB(activity: Activity) : ModelBase(activity),ValueEventListener {
 
-
-    constructor(eventsPresenter: EventsPresenter) : this(eventsPresenter.activity){
-        this.eventsPresenter = eventsPresenter
+    init {
         this.path = "Events"
         succesmesage = "Evento salvo com sucesso! \uD83D\uDE0C"
         errormessage = "Ocorreu um erro salvando o seu evento... \uD83D\uDE2D"
+        confirmmessage = "Tem certeza que deseja remover os eventos?"
     }
 
 
-    var eventsPresenter: EventsPresenter? = null
-    var eventoLoadedListener = object : ModelListeners.eventosLoadedCompleteListener {
+    var eventoLoadedListener = object : ModelListeners.EventosLoadedCompleteListener {
         override fun loadComplete(eventos: ArrayList<Events>) {
-            eventsPresenter?.updaterecycler(eventos)
+            Toast.makeText(activity, "Carregado ${eventos.size} eventos!", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -40,8 +38,8 @@ class EventsDB(activity: Activity) : ModelBase(activity),ValueEventListener {
     }
 
 
-    public fun setLoadCompleteListener(eventosLoadedCompleteListener: ModelListeners.eventosLoadedCompleteListener){
-        this.eventoLoadedListener = eventosLoadedCompleteListener
+    fun setLoadCompleteListener(EventosLoadedCompleteListener: ModelListeners.EventosLoadedCompleteListener) {
+        this.eventoLoadedListener = EventosLoadedCompleteListener
     }
 
 

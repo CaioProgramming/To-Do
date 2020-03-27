@@ -7,13 +7,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
-import com.myself.todo.Beans.Album
-import com.myself.todo.Beans.AlbumHead
-import com.myself.todo.Beans.Events
 import com.myself.todo.databinding.AlbumGroupLayoutBinding
 import com.myself.todo.model.EventsDB
 import com.myself.todo.model.FotosDB
 import com.myself.todo.model.ModelListeners
+import com.myself.todo.model.beans.Album
+import com.myself.todo.model.beans.Events
 
 class ProfileRecyclerAdapter(val activity: Activity) : RecyclerView.Adapter<ProfileRecyclerAdapter.ProfileViewHolder>() {
 
@@ -34,7 +33,7 @@ class ProfileRecyclerAdapter(val activity: Activity) : RecyclerView.Adapter<Prof
 
     private fun loadPictures(albumGroupLayoutBinding: AlbumGroupLayoutBinding){
         val fotosDB = FotosDB(activity)
-        fotosDB.setOnFotosLoadedListener(object : ModelListeners.fotosLoadedCompleteListener {
+        fotosDB.setOnFotosLoadedListener(object : ModelListeners.FotosLoadedCompleteListener {
             override fun loadComplete(pictures: ArrayList<Album>) {
                 albumGroupLayoutBinding.title.text = "${pictures.size} fotos salvas"
                 albumGroupLayoutBinding.picturesrecycler.adapter = RecyclerFotoAdapter(activity,pictures)
@@ -46,7 +45,7 @@ class ProfileRecyclerAdapter(val activity: Activity) : RecyclerView.Adapter<Prof
 
     private fun loadEvents(albumGroupLayoutBinding: AlbumGroupLayoutBinding){
         val eventsDB= EventsDB(activity)
-        eventsDB.setLoadCompleteListener(object : ModelListeners.eventosLoadedCompleteListener {
+        eventsDB.setLoadCompleteListener(object : ModelListeners.EventosLoadedCompleteListener {
             override fun loadComplete(eventos: ArrayList<Events>) {
                 albumGroupLayoutBinding.title.text = "${eventos.size} Eventos"
                 albumGroupLayoutBinding.picturesrecycler.adapter = RecyclerAdapter(activity,eventos)

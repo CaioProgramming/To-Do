@@ -1,13 +1,14 @@
 package com.myself.todo.model
 
-import com.myself.todo.Beans.Album
-import com.myself.todo.Beans.Events
+import com.myself.todo.model.beans.Album
+import com.myself.todo.model.beans.Events
 
 interface ModelListeners {
-    interface fotosLoadedCompleteListener {
+    interface FotosLoadedCompleteListener {
         fun loadComplete(pictures: ArrayList<Album>)
     }
-    interface eventosLoadedCompleteListener {
+
+    interface EventosLoadedCompleteListener {
         fun loadComplete(eventos: ArrayList<Events>)
     }
 }

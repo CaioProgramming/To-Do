@@ -20,14 +20,14 @@ class ProfilePresenter(profileFragment: ProfileFragment): PresenterBase(profileF
         loadItems()
     }
     val user = FirebaseAuth.getInstance().currentUser
-    val profileBinding = profileFragment.fragmentProfileBinding!!
+    private val profileBinding = profileFragment.fragmentProfileBinding!!
 
     private fun setupuserinfo(){
         profileBinding.username.text = user?.displayName
         Glide.with(activity).load(user?.photoUrl).into(profileBinding.profilepic)
         profileBinding.profileedit.visibility = if (user != null) VISIBLE else GONE
         profileBinding.profilepic.setOnClickListener { startPicker() }
-        profileBinding.profilepic.setOnClickListener {
+        profileBinding.profileedit.setOnClickListener {
             val intent = Intent(activity,ActivityProfileEdit::class.java)
             activity.startActivity(intent)
         }

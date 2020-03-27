@@ -2,50 +2,50 @@ package com.myself.todo.view.alerts
 
 import android.app.Activity
 import android.view.LayoutInflater
-import android.view.View.VISIBLE
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
-import com.bumptech.glide.Glide
-import com.myself.todo.Beans.Album
+import androidx.viewbinding.ViewBinding
+import androidx.viewpager.widget.ViewPager
 import com.myself.todo.R
-import com.myself.todo.Utils.Utilities
-import com.myself.todo.databinding.PopupfotoBinding
+import com.myself.todo.adapters.FotosPopupPager
+import com.myself.todo.databinding.PopupPagerBinding
 import com.myself.todo.model.FotosDB
+import com.myself.todo.model.beans.Album
 
-class FotoAlert(activity: Activity,val album: Album) :AlertBase(activity) {
-    private val popupfotoBinding: PopupfotoBinding = DataBindingUtil.inflate(LayoutInflater.from(activity),R.layout.popupfoto,null,false)
-    init {
-        dialog.setContentView(popupfotoBinding.root)
-        setupAlert()
-        dialog.show()
-    }
+class FotoAlert(activity: Activity, val fotos: ArrayList<Album>, val position: Int) : AlertBase(activity) {
+    private val popupPagerBinding: PopupPagerBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.popup_pager, null, false)
+    override var viewBinding: ViewBinding = popupPagerBinding
+
 
     override fun setupAlert() {
-        popupfotoBinding.descricaopic.text = album.description
-        popupfotoBinding.dlgfavcheck.isChecked = album.favorite
-        popupfotoBinding.diapic.text = Utilities.convertDate(album.dia)
-        Glide.with(activity).load(album.fotouri).into(popupfotoBinding.albpic)
-        popupfotoBinding.dlgexcluir.setOnClickListener { FotosDB(activity).remover(album.id!!) }
-        popupfotoBinding.dlgsalvar.setOnClickListener {
-            album.description = popupfotoBinding.descricaopic.text.toString()
-            FotosDB(activity).alterar(album.id!!,album)
+        popupPagerBinding.fotospager.adapter = FotosPopupPager(activity, fotos)
+        popupPagerBinding.fotospager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
+                print("page scrolled")
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                print("page scrolled")
+            }
+
+            override fun onPageSelected(position: Int) {
+                val album = fotos[position]
+                popupPagerBinding.dlgfavcheck.isChecked = album.favorite
+            }
+
+        })
+
+        popupPagerBinding.dlgexcluir.setOnClickListener {
+            val a = fotos[popupPagerBinding.fotospager.currentItem]
+            FotosDB(activity).remover(a.id!!)
+            dialog.dismiss()
         }
-        popupfotoBinding.dlgfavcheck.setOnCheckedChangeListener { buttonView, isChecked ->
-                    album.favorite = isChecked
-                    FotosDB(activity).alterar(album.id!!,album)
-            }
-        popupfotoBinding.descricaopic.setOnClickListener {
-                enableEdit(popupfotoBinding.descricaopic)
-                popupfotoBinding.dlgsalvar.visibility = VISIBLE
-            }
+        popupPagerBinding.dlgfavcheck.setOnCheckedChangeListener { buttonView, isChecked ->
+            val a = fotos[popupPagerBinding.fotospager.currentItem]
+            a.favorite = isChecked
+            FotosDB(activity).alterar(a.id!!, a)
+        }
+
     }
 
-    private fun enableEdit(tv:TextView){
-        tv.isFocusable = true
-        tv.isEnabled = true
-        tv.isClickable = true
-        tv.isFocusableInTouchMode = true
-        tv.requestFocus()
-    }
 
 }

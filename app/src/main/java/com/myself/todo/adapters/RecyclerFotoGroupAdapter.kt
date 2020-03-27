@@ -1,12 +1,13 @@
 package com.myself.todo.adapters
 import android.app.Activity
-import android.view.*
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.myself.todo.Beans.AlbumHead
 import com.myself.todo.R
 import com.myself.todo.databinding.AlbumGroupLayoutBinding
+import com.myself.todo.model.beans.AlbumHead
 import java.util.*
 
 class RecyclerFotoGroupAdapter(val activity: Activity, var albumlist: ArrayList<AlbumHead>) : RecyclerView.Adapter<RecyclerFotoGroupAdapter.PicturesGroupViewHolder>() {

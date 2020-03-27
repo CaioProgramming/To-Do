@@ -3,21 +3,6 @@
     <string name="title_activity_mylist">Mylist</string>
 
 
-    <string-array name="objectiveItems">
-        <item>Novo objetivo</item>
-        <item>Objetivos</item>
-        <item>Objetivos favoritos</item>
-        <item>Objetivos concluídos</item>
-    </string-array>
-
-
-    <string-array name="albumItems">
-        <item>Fotos</item>
-        <item>Fotos favoritas</item>
-
-    </string-array>
-
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

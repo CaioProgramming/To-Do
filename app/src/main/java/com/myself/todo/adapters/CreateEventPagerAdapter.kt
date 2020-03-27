@@ -13,14 +13,14 @@ import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.myself.todo.Beans.Events
-import com.myself.todo.Beans.Tarefas
 import com.myself.todo.R
 import com.myself.todo.Utils.Utilities
 import com.myself.todo.databinding.CreateEventPagerBinding
 import com.myself.todo.databinding.EventResumeLayoutBinding
+import com.myself.todo.model.beans.Events
+import com.myself.todo.model.beans.Tarefas
 
-class CreateEventPagerAdapter(val activity:Activity, val background:CardView, val myevent:Events, val doneListener: TextView.OnEditorActionListener): PagerAdapter() {
+class CreateEventPagerAdapter(val activity: Activity, val background: CardView, private val myevent: Events, val doneListener: TextView.OnEditorActionListener) : PagerAdapter() {
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
         return view == `object`
     }

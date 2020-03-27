@@ -17,7 +17,6 @@ import com.myself.todo.R
 import com.myself.todo.Utils.Utilities.Companion.RC_SIGN_IN
 import com.myself.todo.databinding.ActivitySplashBinding
 import kotlinx.android.synthetic.main.activity_splash.*
-import java.util.*
 
 class Splash : AppCompatActivity() {
     val  splashBinding: ActivitySplashBinding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_splash,null,false)
@@ -26,14 +25,14 @@ class Splash : AppCompatActivity() {
 
         setContentView(splashBinding.root)
         val myanim2 = AnimationUtils.loadAnimation(this, R.anim.popin)
-        SignIn()
+        signIn()
 
     }
 
-    private fun SignIn() {
+    private fun signIn() {
         val user = FirebaseAuth.getInstance().currentUser
         if (user == null) {
-            val providers = Arrays.asList<AuthUI.IdpConfig>(
+            val providers = listOf<AuthUI.IdpConfig>(
                     AuthUI.IdpConfig.GoogleBuilder().build(),
                     AuthUI.IdpConfig.EmailBuilder().build())
             startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
@@ -42,7 +41,7 @@ class Splash : AppCompatActivity() {
                     .setTheme(R.style.AppTheme)
                     .build(), RC_SIGN_IN)
         } else {
-            val i = Intent(this, MainActivity.javaClass)
+            val i = Intent(this, MainActivity::class.java)
             i.putExtra("novo", false)
             i.putExtra("notification", true)
             startActivity(i)
@@ -67,7 +66,7 @@ class Splash : AppCompatActivity() {
             } else {
                 if (response != null) {
                     Toast.makeText(this,"Ocorreu um erro ao fazer login, tentando novamente...",LENGTH_LONG).show()
-                    SignIn()
+                    signIn()
                 }
             }
 

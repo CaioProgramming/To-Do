@@ -3,7 +3,7 @@ import android.app.Activity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.myself.todo.Beans.Album
+import com.myself.todo.model.beans.Album
 import com.myself.todo.presenter.FotosPresenter
 
 class FotosDB(activity: Activity) : ModelBase(activity),ValueEventListener{
@@ -22,13 +22,13 @@ class FotosDB(activity: Activity) : ModelBase(activity),ValueEventListener{
     }
 
 
-    var fotosLoadedCompleteListener = object : ModelListeners.fotosLoadedCompleteListener {
+    var fotosLoadedCompleteListener = object : ModelListeners.FotosLoadedCompleteListener {
         override fun loadComplete(pictures: ArrayList<Album>) {
             fotosPresenter?.filterlists(pictures)
         }
     }
 
-    public fun setOnFotosLoadedListener(fotoloadedListener:ModelListeners.fotosLoadedCompleteListener){
+    fun setOnFotosLoadedListener(fotoloadedListener: ModelListeners.FotosLoadedCompleteListener) {
         this.fotosLoadedCompleteListener = fotoloadedListener
     }
 

@@ -2,7 +2,6 @@ package com.myself.todo.adapters
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View.GONE
@@ -10,10 +9,10 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.myself.todo.Beans.Events
 import com.myself.todo.R
 import com.myself.todo.databinding.CardlayoutBinding
 import com.myself.todo.model.EventsDB
+import com.myself.todo.model.beans.Events
 import com.myself.todo.view.activities.CreateEventActivity
 
 class RecyclerAdapter(val activity: Activity, var eventList: ArrayList<Events>) : RecyclerView.Adapter<RecyclerAdapter.EventsViewHolder>() {
@@ -45,11 +44,7 @@ class RecyclerAdapter(val activity: Activity, var eventList: ArrayList<Events>) 
                 AlertDialog.Builder(activity)
                         .setTitle("Tem certeza")
                         .setMessage("Deseja remover essa atividade?")
-                        .setPositiveButton("Remover", object : DialogInterface.OnClickListener {
-                            override fun onClick(dialog: DialogInterface?, which: Int) {
-                                EventsDB(activity).remover(event.id!!)
-                            }
-                        })
+                        .setPositiveButton("Remover") { dialog, which -> EventsDB(activity).remover(event.id!!) }
                         .create()
                         .show()
                 return@setOnLongClickListener false
@@ -64,6 +59,7 @@ class RecyclerAdapter(val activity: Activity, var eventList: ArrayList<Events>) 
                 addnewevent()
             }
         }
+
 
     }
 

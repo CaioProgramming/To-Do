@@ -2,8 +2,9 @@ package com.myself.todo.adapters
 
 import android.app.Activity
 import android.graphics.drawable.Drawable
-import android.view.*
+import android.view.LayoutInflater
 import android.view.View.GONE
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -12,10 +13,9 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.mikhaellopez.rxanimation.fadeIn
-import com.myself.todo.Beans.Album
 import com.myself.todo.R
 import com.myself.todo.databinding.CardlayoutfotosBinding
+import com.myself.todo.model.beans.Album
 import com.myself.todo.view.alerts.FotoAlert
 import java.util.*
 

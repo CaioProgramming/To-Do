@@ -2,6 +2,7 @@ package com.myself.todo.Utils
 
 import android.annotation.SuppressLint
 import com.myself.todo.R
+import com.myself.todo.model.beans.OnBoard
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -20,10 +21,18 @@ class Utilities {
 
 
     companion object {
-        val RC_SIGN_IN = 1
+        const val RC_SIGN_IN = 1
+
         val pagers = arrayOf(Pagersettings(R.drawable.il_idea,R.color.colorPrimary,"Escreva o nome do seu evento",false),
                 Pagersettings(R.drawable.il_tasks,R.color.colorPrimaryDark,"Adicione tarefas ao seu evento",true),
                 Pagersettings(null,R.color.colorAccent,"Esta é seu evento... Clique em salvar finalizar.",false))
+
+        val onBoardScreens = arrayOf(OnBoard("Bem-Vindo ao You", "O seu espaço, para guardar tudo que é mais importante!", R.drawable.ic_box),
+                OnBoard("Seus momentos!", "Guarde suas fotos mais importantes aqui, chega de se perder na galeria, aqui é apenas o que você não quer esquecer!", R.drawable.ic_camera_shadowed),
+                OnBoard("Suas tarefas", "o You é o seu espaço para se lembrar de tudo que quer fazer(não precisa nem fazer é só para que você possa se lembrar de seus objetivos \uD83E\uDD2A)", R.drawable.ic_basketball),
+                OnBoard("Está pronto", "Isso é tudo que você precisa saber sobre o You, aproveite o quanto quiser sem se preocupar!", R.drawable.ic_startup)
+        )
+
         fun convertDate(dia: String?): String? { //2. Test - Convert Date to Calendar
 //3. Test - Convert Calendar to Date
             var dia = dia
@@ -46,6 +55,7 @@ class Utilities {
             println(dia)
             return dia
         }
+
 
     }
 

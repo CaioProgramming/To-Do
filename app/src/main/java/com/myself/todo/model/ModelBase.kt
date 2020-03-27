@@ -2,13 +2,10 @@ package com.myself.todo.model
 
 import android.app.Activity
 import android.widget.Toast
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.myself.todo.presenter.EventsPresenter
+import com.google.firebase.database.*
+import com.myself.todo.view.alerts.AlertContract
+import com.myself.todo.view.alerts.MessageAlert
 import de.mateware.snacky.Snacky
 
 abstract class ModelBase(val activity: Activity) : ModelContract{
@@ -17,9 +14,36 @@ abstract class ModelBase(val activity: Activity) : ModelContract{
     val user = FirebaseAuth.getInstance().currentUser
     var succesmesage = "Salvo com sucesso."
     var errormessage = "Erro ao salvar."
+    var confirmmessage = "Tem certeza que deseja remover?"
+    val deleteAllListener: ValueEventListener = object : ValueEventListener {
+        override fun onCancelled(p0: DatabaseError) {
+            errormessage = "Erro ao encontrar dados"
+            taskError()
+        }
+
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            for (d in dataSnapshot.children) {
+                d.ref.removeValue()
+            }
+        }
+    }
+
 
     override fun remover(id: String) {
-        raiz.child(id).removeValue(removeListener)
+        if (id.isNotBlank()) {
+            raiz.child(id).removeValue(removeListener)
+        } else {
+            val messageAlert = MessageAlert(activity, confirmmessage)
+            messageAlert.actionsListener = object : AlertContract.ActionsListener {
+                override fun primaryAction() {
+                    raiz.orderByChild("userID").equalTo(user!!.uid).addValueEventListener(deleteAllListener)
+                }
+
+                override fun secondaryAction() {
+                    messageAlert.dimiss()
+                }
+            }
+        }
     }
 
 
