@@ -4,14 +4,17 @@ package com.myself.todo.Beans
 class Events {
     var evento: String? = null
     var descricao: String? = null
-    private var UserID: String? = null
-    private var data: String? = null
+    var UserID: String? = null
+    var data: String? = null
     var id: String? = null
     var favorite = false
-    var tasks:ArrayList<Tarefas>? = null
+    var tasks:ArrayList<Tarefas> = ArrayList()
 
 
 
+    fun isAcreateEvent():Boolean{
+      return  id.equals("createEvnt")
+    }
 
     constructor()
     constructor(evento: String, descricao: String, UserID: String, data: String, id: String, favorite: Boolean,tarefas: ArrayList<Tarefas>) {
@@ -21,6 +24,14 @@ class Events {
         this.data = data
         this.id = id
         this.favorite = favorite
+        this.tasks = tarefas
     }
 
+    companion object{
+        fun createEvent():Events{
+            val e = Events()
+            e.id = "createEvnt"
+            return e
+        }
+    }
 }

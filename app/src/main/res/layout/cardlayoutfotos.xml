@@ -1,45 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/fotocard"
-    android:hapticFeedbackEnabled="false"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    app:cardCornerRadius="20dp">
+    >
+    <androidx.cardview.widget.CardView
+        android:id="@+id/albcard"
+        android:layout_margin="4dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="5dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <ImageView
+                android:src="@drawable/il_idea"
+                android:layout_margin="15dp"
+                android:layout_above="@id/diapic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/albpic"
+                android:scaleType="centerCrop" />
+            <TextView
+                android:textStyle="bold"
+                android:fontFamily="@font/damion_regular"
+                android:padding="10dp"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/diapic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                />
+        </RelativeLayout>
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:id="@+id/pic"
-        android:layout_height="fill_parent"
-        android:scaleType="centerCrop"
-        android:adjustViewBounds="true"
-        android:maxHeight="200dp"
-        android:maxWidth="150dp"
-        android:minHeight="200dp"
-        android:minWidth="150dp"
-        android:src="@drawable/nothinghere" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:layout_gravity="bottom"
-        android:background="@color/white" />
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:background="@drawable/circle">
-
-        <CheckBox
-            android:layout_centerInParent="true"
-            android:id="@+id/favcheck"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:button="@drawable/favoritecheck"
-            android:tint="@color/red_700" />
-    </RelativeLayout>
-
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
+</layout>

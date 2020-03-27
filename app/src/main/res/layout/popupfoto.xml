@@ -1,80 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.AlertDialogLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@color/transparent"
-    android:padding="-10dp">
+<layout>
 
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:background="@drawable/dialog"
-        android:padding="-5dp"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <ImageView
-            android:maxHeight="400dp"
-            android:maxWidth="400dp"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/albpic"
-            android:adjustViewBounds="true"
-            android:contentDescription="Your saved Image"
-            android:scaleType="fitCenter"
-            android:src="@drawable/nothinghere" />
-        <TextView
-            android:id="@+id/descricaopic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="15dp"
-            android:text="descricao"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="22dp" />
+        android:layout_gravity="center"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:cardCornerRadius="10dp">
 
-        <TextView
-            android:id="@+id/diapic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="descricao"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="15dp" />
 
+        <androidx.cardview.widget.CardView
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="5dp"
+            android:layout_gravity="center"
+            android:layout_width="300dp"
+            android:layout_height="300dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_above="@id/diapic"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/albpic"
+                    android:scaleType="centerCrop" />
+                <TextView
+                    android:textStyle="bold"
+                    android:fontFamily="@font/damion_regular"
+                    android:padding="10dp"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_alignParentBottom="true"
+                    android:id="@+id/diapic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="1/8/18"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    />
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center|bottom"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/line"
-            android:gravity="center"
-            android:padding="5dp">
-
-            <CheckBox
-                android:id="@+id/dlgfavpic"
-                android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/descricaopic"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@color/transparent"
-                android:button="@drawable/favoritecheck"
+                android:layout_margin="15dp"
+                android:text="descricao"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="22dp" />
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                />
+                <Button
+                    android:drawableTop="@drawable/save"
+                    android:text="Salvar"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/delete"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/dlgsalvar"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:textColor="?android:textColorPrimary"
 
-            <Button
-                android:layout_width="35dp"
-                android:id="@+id/dlgexcluir"
-                android:layout_height="35dp"
-                android:layout_margin="3dp"
-                android:layout_gravity="center"
-                android:background="@color/transparent"
-                android:drawableTop="@drawable/delete"
+                    />
+                <CheckBox
+                    android:gravity="center"
+                    android:buttonTint="?android:textColorPrimary"
+                    android:id="@+id/dlgfavcheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/favorite"
+                    />
+                <Button
+                    android:drawableTop="@drawable/delete"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/delete"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/dlgexcluir"
+                    android:layout_height="wrap_content"
+                    android:backgroundt="@color/transparent"
+                    android:textColor="?android:textColorPrimary"
+                    android:text="Remover"
 
-                />
-
+                    />
+            </LinearLayout>
         </LinearLayout>
+
+
     </LinearLayout>
-
-
-</androidx.appcompat.widget.AlertDialogLayout>
+</layout>

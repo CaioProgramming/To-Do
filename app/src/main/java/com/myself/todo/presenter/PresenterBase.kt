@@ -1,5 +1,11 @@
 package com.myself.todo.presenter
 
-abstract class PresenterBase: PresenterContract {
+import androidx.fragment.app.Fragment
+
+abstract class PresenterBase(val fragment: Fragment): PresenterContract {
+    val activity = fragment.activity!!
+    init {
+        initview()
+    }
 
 }

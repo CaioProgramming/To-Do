@@ -20,6 +20,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.asksira.bsimagepicker.BSImagePicker
 import com.asksira.bsimagepicker.BSImagePicker.OnSingleImageSelectedListener
 import com.asksira.bsimagepicker.Utils
@@ -31,40 +32,20 @@ import com.myself.todo.Beans.Album
 import com.myself.todo.Database.AlbumRepository
 import com.myself.todo.R
 import com.myself.todo.Utils.Utilities
+import com.myself.todo.databinding.ActivityCreateEventBinding
+import com.myself.todo.databinding.ActivityNewPicBinding
 import de.mateware.snacky.Snacky
 import java.io.IOException
 import java.util.*
 
 class NewPicActivity : AppCompatActivity(), OnSingleImageSelectedListener {
-    var fotopic: ImageView? = null
-    var desc: EditText? = null
-    var album: Album? = null
-    var photouri: Uri? = null
-    var albRepository: AlbumRepository? = null
-    var usuario: String? = null
-    var raiz: DatabaseReference? = null
+    var url: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_new_pic)
-        raiz = FirebaseDatabase.getInstance().getReference("album")
-        album = Album()
-        fotopic = findViewById<ImageView?>(R.id.pic)
-        desc = findViewById<EditText?>(R.id.picdesc)
-        desc?.setOnKeyListener(View.OnKeyListener { view, i, keyEvent ->
-            if (i == EditorInfo.IME_ACTION_SEARCH || i == EditorInfo.IME_ACTION_DONE || keyEvent.action == KeyEvent.ACTION_DOWN &&
-                    keyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
-                if (!keyEvent.isShiftPressed) {
-                    Log.v("AndroidEnterKeyActivity", "Enter Key Pressed!")
-                    when (view.id) {
-                        1 -> save()
-                    }
-                    return@OnKeyListener true
-                }
-            }
-            false // pass on to other listeners.
-        })
-        Picalert()
-        fotopic.setOnClickListener(View.OnClickListener { Picalert() })
+        val actbind: ActivityNewPicBinding = DataBindingUtil.setContentView(this, R.layout.activity_new_pic)
+
+        setContentView(actbind.root)
+
     }
 
     private fun Picalert() {

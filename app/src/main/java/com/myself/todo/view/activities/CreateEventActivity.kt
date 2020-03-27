@@ -3,17 +3,18 @@ package com.myself.todo.view.activities
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import android.view.KeyEvent
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.firebase.ui.auth.AuthUI
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.google.firebase.auth.FirebaseAuth
 import com.myself.todo.Beans.Events
-import com.myself.todo.Beans.Tarefas
 import com.myself.todo.R
 import com.myself.todo.Utils.Utilities
+import com.myself.todo.adapters.CreateEventPagerAdapter
 import com.myself.todo.databinding.ActivityCreateEventBinding
 import com.myself.todo.model.EventsDB
 import de.mateware.snacky.Snacky
@@ -23,23 +24,28 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class CreateEventActivity : AppCompatActivity() {
-    val tasklist = ArrayList<String>()
+class CreateEventActivity : AppCompatActivity(),TextView.OnEditorActionListener {
+    val event = Events()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val actbind: ActivityCreateEventBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        val actbind: ActivityCreateEventBinding = DataBindingUtil.setContentView(this, R.layout.activity_create_event)
+        event.tasks = ArrayList()
+        event.data = actualday()
+        viewpager.adapter = CreateEventPagerAdapter(this,cardview,event,this)
+        setSupportActionBar(toolbar)
         setContentView(actbind.root)
-
-
-
     }
 
-    private fun setup(){
-        taskEditText.setOnEditorActionListener { v, actionId, event ->
-            addChipToGroup(taskEditText.text.toString())
-            return@setOnEditorActionListener false
-        }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.create_event_menu,menu)
+        return super.onCreateOptionsMenu(menu)
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.save) salvar()
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun signIn() {
         val user = FirebaseAuth.getInstance().currentUser
         if (user == null) {
@@ -60,17 +66,6 @@ class CreateEventActivity : AppCompatActivity() {
         }
     }
 
-    private fun addChipToGroup(nome: String) {
-        val chip = Chip(this)
-        chip.text = nome
-        chip.isCloseIconVisible = true
-        chipGroup.addView(chip)
-        tasklist.add(nome)
-        chip.setOnCloseIconClickListener {
-            chipGroup.removeView(chip)
-            tasklist.remove(nome)
-        }
-    }
     private fun actualday(): String {
         val datenow = Calendar.getInstance().time
         @SuppressLint("SimpleDateFormat") val df = SimpleDateFormat("dd/MM/yyyy")
@@ -81,23 +76,22 @@ class CreateEventActivity : AppCompatActivity() {
     private fun salvar(){
         val user = FirebaseAuth.getInstance().currentUser
         if (user != null) {
-            val eventname = eventTitle.text.toString()
-            val eventdescription = eventDescription.text.toString()
-            val event = Events(eventname,eventdescription,user.uid,actualday(),"",false,getTarefas())
+            event.UserID = user.uid
+            if (event.evento.isNullOrBlank()){
+                Snacky.builder().setActivity(this).error().setText("Você precisa dar um nome a esse evento.").show()
+                viewpager.setCurrentItem(0,true)
+            }
             EventsDB(this).inserir(event)
         }else{
             Snacky.builder().setActivity(this).error().setText("Faça login para adicionar eventos.").setAction("OK") {
                 signIn()
-            }
+            }.show()
         }
     }
 
-    private fun getTarefas():ArrayList<Tarefas>{
-       val tasks = ArrayList<Tarefas>()
-        for (task in tasklist){
-            tasks.add(Tarefas(task,actualday(),false))
-        }
-        return tasks
 
+    override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+        salvar()
+        return false
     }
 }

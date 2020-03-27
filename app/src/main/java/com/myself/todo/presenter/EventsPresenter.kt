@@ -9,7 +9,7 @@ import com.myself.todo.Beans.Events
 import com.myself.todo.view.fragments.EventsFragment
 import com.myself.todo.model.EventsDB
 
-class EventsPresenter(val eventsFragment: EventsFragment):PresenterContract{
+class EventsPresenter(eventsFragment: EventsFragment): PresenterBase(eventsFragment) {
     private var showingfavorites = false
     var recyclerAdapter: RecyclerAdapter? = null
     private val eventsDB = EventsDB(this)
@@ -22,11 +22,11 @@ class EventsPresenter(val eventsFragment: EventsFragment):PresenterContract{
     fun updaterecycler(eventslist: ArrayList<Events>){
         if (recyclerAdapter != null) {
             recyclerAdapter?.let {
-                it.eventList = eventslist
+                it.eventList.addAll(eventslist)
                 it.notifyItemRangeChanged(0,eventslist.size)
             }
         }else{
-            recyclerAdapter = RecyclerAdapter(activity!!,eventslist)
+            recyclerAdapter = RecyclerAdapter(activity,eventslist)
             eventsBinding.recyclertasks.let {
                 it.adapter = recyclerAdapter
                 it.layoutManager = GridLayoutManager(activity,2,RecyclerView.VERTICAL,false)
@@ -40,7 +40,7 @@ class EventsPresenter(val eventsFragment: EventsFragment):PresenterContract{
         eventsDB.carregar()
         eventsBinding.favoritesbutton.setOnClickListener {
             if (!showingfavorites){
-                val filteredlist = recyclerAdapter!!.eventList.filter { events -> events.favorite == true  }
+                val filteredlist = recyclerAdapter!!.eventList.filter { events -> events.favorite }
                 recyclerAdapter!!.eventList = filteredlist as ArrayList<Events>
                 recyclerAdapter!!.notifyDataSetChanged()
             }else{

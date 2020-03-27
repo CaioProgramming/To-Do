@@ -10,26 +10,23 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:textStyle="bold"
-                    style="@style/TextAppearance.MaterialComponents.Headline4"
-                    android:textAlignment="center"
+                    android:id="@+id/title"
+                    android:layout_margin="15dp"
+                    style="@style/TextAppearance.MaterialComponents.Headline5"
                     android:text="Você possui 50 fotos salvas"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/fotosTabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.viewpager.widget.ViewPager
+        <androidx.recyclerview.widget.RecyclerView
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-            android:id="@+id/viewPagerfotos"
+            android:id="@+id/recyclerFotos"
             android:layout_width="match_parent"
             android:layout_height="match_parent"  />
 

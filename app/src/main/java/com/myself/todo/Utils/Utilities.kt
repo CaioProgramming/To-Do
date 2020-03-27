@@ -1,5 +1,6 @@
 package com.myself.todo.Utils
 
+import android.annotation.SuppressLint
 import com.myself.todo.R
 import java.text.DateFormat
 import java.text.ParseException
@@ -20,9 +21,6 @@ class Utilities {
 
     companion object {
         val RC_SIGN_IN = 1
-
-        val pagerimages = arrayOf(R.drawable.il_idea,R.drawable.il_tasks)
-        val pagercolors = arrayOf(R.color.colorPrimary,R.color.colorPrimaryDark)
         val pagers = arrayOf(Pagersettings(R.drawable.il_idea,R.color.colorPrimary,"Escreva o nome do seu evento",false),
                 Pagersettings(R.drawable.il_tasks,R.color.colorPrimaryDark,"Adicione tarefas ao seu evento",true),
                 Pagersettings(null,R.color.colorAccent,"Esta é seu evento... Clique em salvar finalizar.",false))
@@ -32,11 +30,19 @@ class Utilities {
             val df: DateFormat = SimpleDateFormat("yyy-MM-dd")
             try {
                 val result = df.parse(dia)
-                val format = SimpleDateFormat("dd MMM yyyy EE")
+                val format = SimpleDateFormat("d/m/y")
                 dia = format.format(result)
             } catch (e: ParseException) {
                 e.printStackTrace()
             }
+            println(dia)
+            return dia
+        }
+
+       fun actualday(): String {
+            val datenow = Calendar.getInstance().time
+            @SuppressLint("SimpleDateFormat") val df = SimpleDateFormat("dd/MM/yyyy")
+            val dia = df.format(datenow)
             println(dia)
             return dia
         }

@@ -3,6 +3,7 @@ package com.myself.todo.adapters
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -13,10 +14,11 @@ import com.myself.todo.Beans.Events
 import com.myself.todo.R
 import com.myself.todo.databinding.CardlayoutBinding
 import com.myself.todo.model.EventsDB
+import com.myself.todo.view.activities.CreateEventActivity
 
-class RecyclerAdapter(val activity: Activity, var eventList: ArrayList<Events?>) : RecyclerView.Adapter<RecyclerAdapter.EventsViewHolder>() {
+class RecyclerAdapter(val activity: Activity, var eventList: ArrayList<Events>) : RecyclerView.Adapter<RecyclerAdapter.EventsViewHolder>() {
     init {
-        eventList.add(null)
+        eventList.add(Events.createEvent())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventsViewHolder {
@@ -27,17 +29,17 @@ class RecyclerAdapter(val activity: Activity, var eventList: ArrayList<Events?>)
 
     override fun onBindViewHolder(holder: EventsViewHolder, position: Int) {
         val event = eventList[position]
-        holder.cardlayoutBinding.mainlayout.visibility = if (event == null){
+        holder.cardlayoutBinding.mainlayout.visibility = if (event.isAcreateEvent()){
             GONE
         }else{
             VISIBLE
         }
-        holder.cardlayoutBinding.addnewevent.visibility = if (event != null){
+        holder.cardlayoutBinding.addnewevent.visibility = if (event.isAcreateEvent()){
             GONE
         }else{
             VISIBLE
         }
-        if (event != null) {
+        if (event.isAcreateEvent()) {
             holder.cardlayoutBinding.titulo.text = event.evento
             holder.cardlayoutBinding.eventcard.setOnLongClickListener {
                 AlertDialog.Builder(activity)
@@ -52,9 +54,7 @@ class RecyclerAdapter(val activity: Activity, var eventList: ArrayList<Events?>)
                         .show()
                 return@setOnLongClickListener false
             }
-            event.tasks?.let {
                 holder.cardlayoutBinding.tasks.adapter = RecyclerTarefasAdapter(activity,event)
-            }
             if (event.favorite){
                 holder.cardlayoutBinding.eventcard.setCardBackgroundColor(activity.resources.getColor(R.color.red_500))
             }
@@ -69,7 +69,8 @@ class RecyclerAdapter(val activity: Activity, var eventList: ArrayList<Events?>)
 
 
     private fun addnewevent(){
-
+        val i = Intent(activity,CreateEventActivity::class.java)
+        activity.startActivity(i)
     }
 
 

@@ -1,5 +1,6 @@
 package com.myself.todo.model
 
+import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 
 interface ModelContract{

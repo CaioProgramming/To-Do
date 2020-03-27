@@ -1,7 +1,5 @@
 package com.myself.todo.model
-
 import android.app.Activity
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -9,11 +7,12 @@ import com.myself.todo.Beans.Events
 import com.myself.todo.Beans.Tarefas
 import com.myself.todo.presenter.EventsPresenter
 
-class EventsDB(activity: Activity) : EventBase(activity),ValueEventListener {
+class EventsDB(activity: Activity) : ModelBase(activity),ValueEventListener {
 
 
     constructor(eventsPresenter: EventsPresenter) : this(eventsPresenter.activity){
         this.eventsPresenter = eventsPresenter
+        this.path = "Events"
     }
 
 
@@ -45,12 +44,13 @@ class EventsDB(activity: Activity) : EventBase(activity),ValueEventListener {
                 event.tasks = ArrayList()
                 for (d in dataSnapshot.children){
                     val t: Tarefas? = d.getValue(Tarefas::class.java)
-                    t?.let { it1 -> event.tasks!!.add(it1) }
+                    t?.let { it1 -> event.tasks.add(it1) }
                 }
             }
         })
         }
     }
+
 
 
 
