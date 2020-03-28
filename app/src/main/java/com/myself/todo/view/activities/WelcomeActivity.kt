@@ -20,9 +20,10 @@ class WelcomeActivity : AppCompatActivity() {
     }
 
     fun startSlide() {
+        var viewpager = welcomePager
         val timerTask = object : TimerTask() {
             override fun run() {
-                welcomePager.currentItem = welcomePager.currentItem + 1
+                viewpager.currentItem = welcomePager.currentItem + 1
             }
         }
 
