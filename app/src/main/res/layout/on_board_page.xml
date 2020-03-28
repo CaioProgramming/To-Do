@@ -37,11 +37,12 @@
             android:textAlignment="center" />
 
         <Button
+            android:backgroundTint="?android:textColorPrimary"
             android:id="@+id/startAppbtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="50dp"
-            android:backgroundTint="?android:textColor"
+            android:visibility="gone"
             android:text="Continuar"
             android:textColor="?android:colorBackground"
             android:textStyle="bold" />

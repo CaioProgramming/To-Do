@@ -3,7 +3,6 @@ package com.myself.todo.view.alerts
 import android.app.Activity
 import android.view.LayoutInflater
 import androidx.databinding.DataBindingUtil
-import androidx.viewbinding.ViewBinding
 import androidx.viewpager.widget.ViewPager
 import com.myself.todo.R
 import com.myself.todo.adapters.FotosPopupPager
@@ -13,7 +12,6 @@ import com.myself.todo.model.beans.Album
 
 class FotoAlert(activity: Activity, val fotos: ArrayList<Album>, val position: Int) : AlertBase(activity) {
     private val popupPagerBinding: PopupPagerBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.popup_pager, null, false)
-    override var viewBinding: ViewBinding = popupPagerBinding
 
 
     override fun setupAlert() {

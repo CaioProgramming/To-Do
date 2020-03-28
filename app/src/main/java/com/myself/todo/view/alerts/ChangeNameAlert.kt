@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.databinding.DataBindingUtil
-import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -17,12 +16,11 @@ import com.myself.todo.databinding.ChangeNameAlertBinding
 
 class ChangeNameAlert(activity: Activity) : AlertBase(activity) {
     private val changeNameAlertBinding: ChangeNameAlertBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.change_name_alert, null, false)
-    override var viewBinding: ViewBinding = changeNameAlertBinding
     val user = FirebaseAuth.getInstance().currentUser
 
 
     override fun setupAlert() {
-        dialog.setContentView(this.viewBinding.root)
+        dialog.setContentView(changeNameAlertBinding.root)
         changeNameAlertBinding.title.text = Html.fromHtml("Eai <b>${user!!.displayName}, veio dar uma repaginada no nome?")
         dialog.setContentView(changeNameAlertBinding.root)
         changeNameAlertBinding.save.isEnabled = false
