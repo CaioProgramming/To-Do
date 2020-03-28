@@ -72,11 +72,7 @@ class RecyclerAdapter(val activity: Activity, var eventList: ArrayList<Events>) 
 
 
     override fun getItemCount(): Int {
-        return if (eventList.size == 0) {
-            1
-        } else {
-            eventList.size
-        }
+        return eventList.size
     }
 
     class EventsViewHolder(val cardlayoutBinding: CardlayoutBinding) : RecyclerView.ViewHolder(cardlayoutBinding.root)

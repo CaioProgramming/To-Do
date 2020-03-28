@@ -17,7 +17,6 @@ class FotosPresenter(activity: Activity, private val fotosBinding: FragmentFotos
     private var fotosDB: FotosDB? = null
     override fun initview() {
         fotosDB = FotosDB(activity)
-        fotoGroupAdapter = RecyclerFotoGroupAdapter(activity,albumheads)
         fotosDB!!.setOnFotosLoadedListener(this)
         carregar()
     }
@@ -28,7 +27,8 @@ class FotosPresenter(activity: Activity, private val fotosBinding: FragmentFotos
     }
 
     private fun filterlists(albumlist: ArrayList<Album>) {
-        val text = user?.let { Html.fromHtml("Olá <b>${user.displayName}<b>, \nVocê possui ${albumlist.size} fotos salvas.") }
+        val count = albumlist.size - 1
+        val text = user?.let { Html.fromHtml("Olá <b>${user.displayName}</b>, \nVocê possui $count fotos salvas.") }
         fotosBinding.title.text = text
         val albumfavorites = AlbumHead("Favoritos", albumlist.filter { album -> album.favorite } as ArrayList<Album>)
         val albumpics = AlbumHead("Suas fotos",albumlist)

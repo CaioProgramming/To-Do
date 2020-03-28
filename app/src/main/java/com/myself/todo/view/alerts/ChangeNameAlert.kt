@@ -22,6 +22,7 @@ class ChangeNameAlert(activity: Activity) : AlertBase(activity) {
 
 
     override fun setupAlert() {
+        dialog.setContentView(this.viewBinding.root)
         changeNameAlertBinding.title.text = Html.fromHtml("Eai <b>${user!!.displayName}, veio dar uma repaginada no nome?")
         dialog.setContentView(changeNameAlertBinding.root)
         changeNameAlertBinding.save.isEnabled = false

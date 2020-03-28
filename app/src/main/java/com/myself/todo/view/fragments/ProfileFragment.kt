@@ -19,7 +19,8 @@ class ProfileFragment : Fragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? { // Inflate the layout for this fragment
         val fragmentProfileBinding: FragmentProfileBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
-        ProfilePresenter(activity!!, fragmentProfileBinding)
+        val profilepresenter = ProfilePresenter(activity!!, fragmentProfileBinding)
+        profilepresenter.initview()
         return fragmentProfileBinding.root
     }
 

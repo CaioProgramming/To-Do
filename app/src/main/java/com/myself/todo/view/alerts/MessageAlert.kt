@@ -12,6 +12,8 @@ class MessageAlert(activity: Activity, val message: String) : AlertBase(activity
     private val messageAlertBinding: MessageAlertBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.message_alert, null, false)
     override var viewBinding: ViewBinding = messageAlertBinding
     override fun setupAlert() {
+        dialog.setContentView(this.viewBinding.root)
+
         messageAlertBinding.primarybtn.setOnClickListener { actionsListener.primaryAction() }
         messageAlertBinding.secondarybtn.setOnClickListener { actionsListener.secondaryAction() }
         messageAlertBinding.message.text = message

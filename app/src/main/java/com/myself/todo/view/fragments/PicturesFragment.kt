@@ -16,7 +16,8 @@ import com.myself.todo.presenter.FotosPresenter
 class PicturesFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val fotosBinding: FragmentFotosBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_fotos, container, false)
-        FotosPresenter(activity!!, fotosBinding)
+        val fotosPresenter = FotosPresenter(activity!!, fotosBinding)
+        fotosPresenter.initview()
         return fotosBinding.root
     }
 }

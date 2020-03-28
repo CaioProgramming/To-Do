@@ -1,5 +1,6 @@
 package com.myself.todo.model
 import android.app.Activity
+import android.util.Log
 import android.widget.Toast
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -40,6 +41,8 @@ class EventsDB(activity: Activity) : ModelBase(activity),ValueEventListener {
                 eventslist.add(it)
             }
         }
+        Log.i(javaClass.simpleName, "Carregou ${eventslist.size}")
+        print(eventslist)
         eventoLoadedListener.loadComplete(eventslist)
     }
 

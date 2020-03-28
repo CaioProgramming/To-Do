@@ -2,7 +2,6 @@ package com.myself.todo.view.activities
 
 import MainPagerAdapter
 import android.os.Bundle
-import android.text.Html
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.myself.todo.R
@@ -21,7 +20,7 @@ class MainActivity : AppCompatActivity(){
 
     private fun createtabs(){
         navigation.setupWithViewPager(mainPager)
-        navigation.getTabAt(3)?.text = Html.fromHtml("<b>Yo</b>u")
+        navigation.getTabAt(2)?.icon = getDrawable(R.drawable.box)
         navigation.getTabAt(0)?.icon = getDrawable(R.drawable.objective)
         navigation.getTabAt(1)?.icon = getDrawable(R.drawable.album)
     }

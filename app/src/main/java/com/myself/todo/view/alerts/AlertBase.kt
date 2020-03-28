@@ -37,7 +37,6 @@ abstract class AlertBase(val activity: Activity): DialogInterface.OnShowListener
 
 
     init {
-        dialog.setContentView(this.viewBinding.root)
         this.setupAlert()
         dialog.show()
     }

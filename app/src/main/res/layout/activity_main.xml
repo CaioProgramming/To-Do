@@ -11,6 +11,11 @@
         tools:context=".view.activities.MainActivity">
 
         <TextView
+            android:shadowColor="@color/colorAccent"
+            android:shadowDx="8.0"
+            android:shadowDy="10.0"
+            android:shadowRadius="1.0"
+            android:textStyle="bold"
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,6 +33,8 @@
                 android:layout_above="@id/navigation" />
 
             <com.google.android.material.tabs.TabLayout
+                android:layout_margin="10dp"
+                app:tabIndicator="@color/transparent"
                 app:tabSelectedTextColor="@color/colorPrimaryDark"
                 android:id="@+id/navigation"
                 android:layout_alignParentBottom="true"
