@@ -44,6 +44,7 @@ class FotoAlert(activity: Activity, val fotos: ArrayList<Album>, val position: I
             a.favorite = isChecked
             FotosDB(activity).alterar(a.id!!, a)
         }
+        popupPagerBinding.fotospager.setCurrentItem(position, true)
 
     }
 

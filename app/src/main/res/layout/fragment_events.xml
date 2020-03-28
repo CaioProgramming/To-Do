@@ -11,7 +11,6 @@
             <TextView
                 android:layout_margin="15dp"
                 android:id="@+id/title"
-                android:text="Olá Caio! \nVocê possui 10 tarefas!"
                 style="@style/TextAppearance.MaterialComponents.Headline5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

@@ -1,5 +1,6 @@
 package com.myself.todo.view.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,12 +16,21 @@ import com.myself.todo.presenter.FotosPresenter
  */
 class PicturesFragment : Fragment() {
     var fotosBinding:FragmentFotosBinding? = null
+    var fotosPresenter: FotosPresenter? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         fotosBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_fotos,container,false)
-        fotosBinding?.let { FotosPresenter(this) }
+
         return  fotosBinding!!.root
     }
 
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        fotosBinding?.let {
+            fotosPresenter = FotosPresenter(this)
+            fotosPresenter!!.initview()
+        }
+    }
 
 
 }

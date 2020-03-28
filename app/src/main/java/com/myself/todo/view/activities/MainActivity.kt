@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         val mainBinding: ActivityMainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main)
         setSupportActionBar(toolbar)
+        supportActionBar?.title = ""
         mainPager.adapter = MainPagerAdapter(supportFragmentManager)
         createtabs()
         setContentView(mainBinding.root)

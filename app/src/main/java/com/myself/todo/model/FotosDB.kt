@@ -39,7 +39,9 @@ class FotosDB(activity: Activity) : ModelBase(activity),ValueEventListener{
 
     override fun onDataChange(dataSnapshot: DataSnapshot) {
         val fotos: ArrayList<Album> = ArrayList()
-        fotos.clear()
+        val album = Album()
+        album.id = "newPicture"
+        fotos.add(album)
         for (d in dataSnapshot.children){
             val a: Album? = d.getValue(Album::class.java)
             a?.let { fotos.add(it) }

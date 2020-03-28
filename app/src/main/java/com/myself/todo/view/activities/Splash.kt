@@ -3,8 +3,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.view.LayoutInflater
-import android.view.animation.AnimationUtils
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AppCompatActivity
@@ -19,12 +17,10 @@ import com.myself.todo.databinding.ActivitySplashBinding
 import kotlinx.android.synthetic.main.activity_splash.*
 
 class Splash : AppCompatActivity() {
-    val  splashBinding: ActivitySplashBinding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_splash,null,false)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        val splashBinding: ActivitySplashBinding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
         setContentView(splashBinding.root)
-        val myanim2 = AnimationUtils.loadAnimation(this, R.anim.popin)
         signIn()
 
     }
@@ -32,7 +28,7 @@ class Splash : AppCompatActivity() {
     private fun signIn() {
         val user = FirebaseAuth.getInstance().currentUser
         if (user == null) {
-            val providers = listOf<AuthUI.IdpConfig>(
+            val providers = listOf(
                     AuthUI.IdpConfig.GoogleBuilder().build(),
                     AuthUI.IdpConfig.EmailBuilder().build())
             startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()

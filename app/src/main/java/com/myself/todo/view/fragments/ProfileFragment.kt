@@ -1,6 +1,7 @@
 package com.myself.todo.view.fragments
 
 
+import android.content.Context
 import android.os.Bundle
 
 import android.view.LayoutInflater
@@ -17,12 +18,20 @@ import com.myself.todo.presenter.ProfilePresenter
  */
 class ProfileFragment : Fragment(){
     var fragmentProfileBinding: FragmentProfileBinding? = null
+    private var profilePresenter: ProfilePresenter? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? { // Inflate the layout for this fragment
        fragmentProfileBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile,container,false)
-        ProfilePresenter(this)
         return fragmentProfileBinding?.root
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        fragmentProfileBinding?.let {
+            profilePresenter = ProfilePresenter(this)
+            profilePresenter!!.initview()
+        }
+
+    }
 
 }

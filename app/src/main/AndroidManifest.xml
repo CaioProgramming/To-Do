@@ -23,9 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".view.activities.MainActivity"
-            android:label="@string/title_activity_mylist" />
+        <activity android:name=".view.activities.MainActivity" />
         <activity android:name=".view.activities.NewPicActivity" />
         <activity android:name=".view.activities.ActivityProfileEdit" />
         <activity android:name=".view.activities.WelcomeActivity" />

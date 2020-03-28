@@ -6,7 +6,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="?android:colorBackground"
         tools:context=".view.fragments.ProfileFragment">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -42,12 +42,13 @@
                     <Button
                         android:elevation="0dp"
                         android:layout_margin="25dp"
-                        style="@style/Widget.MaterialComponents.Button"
                         android:layout_below="@id/username"
                         android:id="@+id/profileedit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/colorAccent"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
                         android:text="Editar Perfil" />
 
 
