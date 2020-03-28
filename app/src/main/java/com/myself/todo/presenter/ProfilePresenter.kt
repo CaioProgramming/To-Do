@@ -1,26 +1,25 @@
 package com.myself.todo.presenter
 
+import android.app.Activity
 import android.content.Intent
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.myself.todo.adapters.ProfileRecyclerAdapter
+import com.myself.todo.databinding.FragmentProfileBinding
 import com.myself.todo.view.activities.ActivityProfileEdit
-import com.myself.todo.view.fragments.ProfileFragment
 import de.mateware.snacky.Snacky
 import gun0912.tedbottompicker.TedBottomPicker
 
-class ProfilePresenter(profileFragment: ProfileFragment): PresenterBase(profileFragment) {
+class ProfilePresenter(activity: Activity, val profileBinding: FragmentProfileBinding) : PresenterBase(activity, profileBinding) {
     override fun initview() {
         setupuserinfo()
         loadItems()
     }
-    val user = FirebaseAuth.getInstance().currentUser
-    private val profileBinding = profileFragment.fragmentProfileBinding!!
 
     private fun setupuserinfo(){
         profileBinding.username.text = user?.displayName
@@ -38,7 +37,7 @@ class ProfilePresenter(profileFragment: ProfileFragment): PresenterBase(profileF
         profileBinding.useritemsrecycler.layoutManager = LinearLayoutManager(activity,VERTICAL,false)
     }
     private fun startPicker() {
-        TedBottomPicker.with(activity)
+        TedBottomPicker.with(activity as FragmentActivity?)
                 .show { uri ->
                     val profileChangeRequest = UserProfileChangeRequest.Builder().setPhotoUri(uri).build()
                     user?.updateProfile(profileChangeRequest)?.addOnCompleteListener { task ->

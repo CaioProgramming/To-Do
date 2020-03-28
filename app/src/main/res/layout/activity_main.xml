@@ -3,41 +3,24 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+
+    <RelativeLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".view.activities.MainActivity">
 
-        <com.google.android.material.appbar.AppBarLayout
+        <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
-            android:background="?android:colorBackground"
-            android:layout_height="wrap_content">
-            <com.google.android.material.appbar.CollapsingToolbarLayout
-                app:contentScrim="?android:colorBackground"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:textColor="?android:textColorPrimary"
-                    android:padding="15dp"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
-                    android:text="@string/app_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"/>
-
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-        </com.google.android.material.appbar.AppBarLayout>
-        <RelativeLayout
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/app_name"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+            android:textColor="?android:textColorPrimary" />
             <androidx.viewpager.widget.ViewPager
+                android:layout_below="@id/title"
                 android:layout_width="match_parent"
                 android:id="@+id/mainPager"
                 android:name="com.myself.todo.BlankFragment"
@@ -50,13 +33,13 @@
                 android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-        </RelativeLayout>
 
         <com.github.mmin18.widget.RealtimeBlurView
             android:alpha="0"
             android:id="@+id/rootblur"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </RelativeLayout>
+
 
 </layout>

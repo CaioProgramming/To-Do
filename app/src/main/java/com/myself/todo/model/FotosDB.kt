@@ -1,10 +1,10 @@
 package com.myself.todo.model
 import android.app.Activity
+import android.widget.Toast
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.myself.todo.model.beans.Album
-import com.myself.todo.presenter.FotosPresenter
 
 class FotosDB(activity: Activity) : ModelBase(activity),ValueEventListener{
     init {
@@ -13,10 +13,7 @@ class FotosDB(activity: Activity) : ModelBase(activity),ValueEventListener{
         errormessage = "Ocorreu um erro ao salvar sua foto \uD83E\uDD7A"
 
     }
-    var fotosPresenter: FotosPresenter? = null
-    constructor(fotosPresenter: FotosPresenter) : this(fotosPresenter.activity){
-        this.fotosPresenter = fotosPresenter
-    }
+
     override fun carregar() {
         raiz.addValueEventListener(this)
     }
@@ -24,7 +21,7 @@ class FotosDB(activity: Activity) : ModelBase(activity),ValueEventListener{
 
     var fotosLoadedCompleteListener = object : ModelListeners.FotosLoadedCompleteListener {
         override fun loadComplete(pictures: ArrayList<Album>) {
-            fotosPresenter?.filterlists(pictures)
+            Toast.makeText(activity, "Carregou ${pictures.size} fotos", Toast.LENGTH_LONG).show()
         }
     }
 
