@@ -4,8 +4,6 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardview"
         app:cardBackgroundColor="@color/colorPrimary"
-        app:cardCornerRadius="20dp"
-        android:layout_margin="4dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -13,6 +11,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <androidx.appcompat.widget.Toolbar
+                android:background="@color/transparent"
+                android:theme="@style/Theme.MaterialComponents.NoActionBar"
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"/>

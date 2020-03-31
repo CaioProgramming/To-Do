@@ -23,9 +23,9 @@ class Utilities {
     companion object {
         const val RC_SIGN_IN = 1
 
-        val pagers = arrayOf(Pagersettings(R.drawable.il_idea,R.color.colorPrimary,"Escreva o nome do seu evento",false),
-                Pagersettings(R.drawable.il_tasks,R.color.colorPrimaryDark,"Adicione tarefas ao seu evento",true),
-                Pagersettings(null,R.color.colorAccent,"Esta é seu evento... Clique em salvar finalizar.",false))
+        val pagers = arrayOf(Pagersettings(R.drawable.il_idea, R.color.colorPrimary, "Hora de criar o seu evento!", "Escreva o nome do seu evento...", false),
+                Pagersettings(R.drawable.il_tasks, R.color.colorPrimaryDark, "Adicione algumas tarefas ao seu evento", "Adicione tarefas ao seu evento", true),
+                Pagersettings(null, R.color.colorAccent, "Esta é seu evento... Clique em salvar finalizar.", "", false))
 
         val onBoardScreens = arrayOf(OnBoard("Bem-Vindo ao You", "O seu espaço, para guardar tudo que é mais importante!", R.drawable.ic_box),
                 OnBoard("Seus momentos!", "Guarde suas fotos mais importantes aqui, chega de se perder na galeria, aqui é apenas o que você não quer esquecer!", R.drawable.ic_camera_shadowed),
@@ -59,5 +59,5 @@ class Utilities {
 
     }
 
-    class Pagersettings(val image: Int?, val color:Int, val title:String,val allowchipgroup:Boolean)
+    class Pagersettings(val image: Int?, val color: Int, val title: String, val hint: String, val allowchipgroup: Boolean)
 }

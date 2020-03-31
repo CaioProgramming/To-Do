@@ -8,6 +8,8 @@ import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.viewpager.widget.ViewPager
+import com.eftimoff.viewpagertransformers.StackTransformer
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.myself.todo.R
@@ -25,23 +27,45 @@ import kotlin.collections.ArrayList
 
 class CreateEventActivity : AppCompatActivity(),TextView.OnEditorActionListener {
     private val event = Events()
+    var saveItem: MenuItem? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val actbind: ActivityCreateEventBinding = DataBindingUtil.setContentView(this, R.layout.activity_create_event)
         event.tasks = ArrayList()
         event.data = actualday()
-        viewpager.adapter = CreateEventPagerAdapter(this,cardview,event,this)
+        viewpager.adapter = CreateEventPagerAdapter(this, event, this)
+        viewpager.setPageTransformer(true, StackTransformer())
         setSupportActionBar(toolbar)
+        viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                val title = if (position != viewpager.childCount - 1) "Continuar" else "Salvar"
+                saveItem?.title = title
+            }
+
+        })
         setContentView(actbind.root)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.create_event_menu,menu)
+        saveItem = menu?.findItem(R.id.save)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.save) salvar()
+        if (item.itemId == R.id.save) {
+            if (viewpager.currentItem == viewpager.childCount - 1) {
+                salvar()
+            } else {
+                viewpager.currentItem = 2
+            }
+        }
         return super.onOptionsItemSelected(item)
     }
 
@@ -73,6 +97,13 @@ class CreateEventActivity : AppCompatActivity(),TextView.OnEditorActionListener 
             if (event.evento.isNullOrBlank()){
                 Snacky.builder().setActivity(this).error().setText("Você precisa dar um nome a esse evento.").show()
                 viewpager.setCurrentItem(0,true)
+                return
+            }
+            if (event.tasks.size == 0) {
+                Snacky.builder().setActivity(this).warning().setText("Tem certeza que deseja salvar sem nenhuma tarefa?").setAction("Sim") {
+                    EventsDB(this).inserir(event)
+                }.show()
+                return
             }
             EventsDB(this).inserir(event)
         }else{

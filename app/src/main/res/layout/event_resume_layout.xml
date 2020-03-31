@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <androidx.cardview.widget.CardView
+    <androidx.cardview.widget.CardView android:layout_margin="10dp"
         android:id="@+id/resumeCard"
-        android:layout_margin="15dp"
-        app:cardCornerRadius="15dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="1dp"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,13 +14,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
+                android:padding="4dp"
                 android:id="@+id/eventTitle"
                 android:textAlignment="center"
                 style="@style/TextAppearance.MaterialComponents.Headline5"
                 android:text="Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-            <TextView
+
+            <com.google.android.material.chip.ChipGroup
+                android:layout_gravity="center"
                 android:id="@+id/eventTasks"
                 android:textStyle="bold"
                 style="@style/TextAppearance.MaterialComponents.Subtitle1"

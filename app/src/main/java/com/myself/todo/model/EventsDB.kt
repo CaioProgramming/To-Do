@@ -30,14 +30,11 @@ class EventsDB(activity: Activity) : ModelBase(activity),ValueEventListener {
     }
     override fun onDataChange(dataSnapshot: DataSnapshot) {
         val eventslist = ArrayList<Events>()
-        val createevent = Events()
-        createevent.id = "createEvnt"
-        eventslist.add(createevent)
+
         for (d in dataSnapshot.children){
             val e: Events? = d.getValue(Events::class.java)
             e?.id = d.key
             e?.let {
-                getTarefas(it)
                 eventslist.add(it)
             }
         }
@@ -72,9 +69,8 @@ class EventsDB(activity: Activity) : ModelBase(activity),ValueEventListener {
     }
 
 
-
-
-    override fun carregar() {
+    fun carregar(eventosLoadedCompleteListener: ModelListeners.EventosLoadedCompleteListener) {
+        setLoadCompleteListener(eventosLoadedCompleteListener)
         raiz.orderByChild("userID").equalTo(user!!.uid).addValueEventListener(this)
     }
 }

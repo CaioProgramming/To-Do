@@ -20,26 +20,28 @@ class EventsPresenter(activity: Activity, val eventsBinding: FragmentEventsBindi
 
 
     private fun updaterecycler(eventslist: ArrayList<Events>) {
+        val text = Html.fromHtml("Olá <b>${user?.displayName}</b> \nVocê possui ${eventslist.size} tarefas.")
+        eventsBinding.title.text = text
+        val createevent = Events()
+        createevent.id = "createEvnt"
+        eventslist.add(createevent)
+        // Snacky.builder().setActivity(activity).info().setText(text).show()
         if (recyclerAdapter != null) {
-                recyclerAdapter!!.eventList.clear()
+            recyclerAdapter!!.eventList.clear()
             recyclerAdapter!!.eventList = eventslist
-            recyclerAdapter!!.notifyItemRangeChanged(0, eventslist.size)
+            recyclerAdapter!!.notifyDataSetChanged()
         }else{
             recyclerAdapter = RecyclerAdapter(activity,eventslist)
             val gridlayout = GridLayoutManager(activity, 2, VERTICAL, false)
             eventsBinding.recyclertasks.adapter = recyclerAdapter
             eventsBinding.recyclertasks.layoutManager = gridlayout
-            eventsBinding.recyclertasks.setHasFixedSize(true)
         }
-        val count = eventslist.size - 1
-        val text = Html.fromHtml("Olá <b>${user?.displayName}<b> \nVocê possui $count tarefas.")
-        eventsBinding.title.text = text
+
     }
 
     override fun initview() {
         eventsDB = EventsDB(activity)
-        eventsDB!!.setLoadCompleteListener(this)
-        eventsDB!!.carregar()
+        eventsDB!!.carregar(this)
         eventsBinding.favoritesbutton.setOnClickListener {
             if (!showingfavorites){
                 val filteredlist = recyclerAdapter!!.eventList.filter { events -> events.favorite }
@@ -48,7 +50,7 @@ class EventsPresenter(activity: Activity, val eventsBinding: FragmentEventsBindi
                 showingfavorites = true
                 changeButton()
             }else{
-                eventsDB?.carregar()
+                eventsDB?.carregar(this)
                 changeButton()
             }
 

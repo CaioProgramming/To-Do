@@ -38,10 +38,14 @@ class NewPicActivity : AppCompatActivity(),PermissionListener {
     }
 
     private fun startPicker() {
-        TedBottomPicker.with(this)
-                .show { uri -> url = uri!!.path
-                    loadpic()
-                }
+        val permmited = allpermmitted()
+        if (permmited) {
+            TedBottomPicker.with(this)
+                    .show { uri ->
+                        url = uri!!.path
+                        loadpic()
+                    }
+        }
 
     }
 
@@ -49,8 +53,16 @@ class NewPicActivity : AppCompatActivity(),PermissionListener {
         TedPermission.with(this)
                 .setPermissionListener(this)
                 .setDeniedMessage("Se você não aceitar essa permissão não poderá adicionar fotos...\n\nPor favor ligue as permissões em [Configurações] > [Permissões]")
-                .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+                .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .check()
+    }
+
+
+    private fun allpermmitted(): Boolean {
+        val write = TedPermission.isGranted(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        val read = TedPermission.isGranted(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+        val camera = TedPermission.isGranted(this, Manifest.permission.CAMERA)
+        return write && read && camera
     }
 
 
@@ -108,6 +120,6 @@ class NewPicActivity : AppCompatActivity(),PermissionListener {
     }
 
     override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
-        Snacky.builder().setActivity(this).error().setText("Se não permitir o acesso não da para salvar as fotos...")
+        Snacky.builder().setActivity(this).error().setText("Se não permitir o acesso não da para salvar as fotos...").show()
     }
 }

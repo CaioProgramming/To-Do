@@ -3,6 +3,7 @@ package com.myself.todo.view.alerts
 import android.app.Activity
 import android.app.Dialog
 import android.content.DialogInterface
+import android.view.View
 import android.widget.Toast
 import com.github.mmin18.widget.RealtimeBlurView
 import com.mikhaellopez.rxanimation.fadeIn
@@ -35,6 +36,11 @@ abstract class AlertBase(val activity: Activity): DialogInterface.OnShowListener
         }
     }
 
+
+    fun setView(view: View) {
+        dialog.setContentView(view)
+
+    }
 
     init {
         this.setupAlert()

@@ -11,10 +11,10 @@ class FotosDB(activity: Activity) : ModelBase(activity),ValueEventListener{
         path = "Fotos"
         succesmesage = "Foto salva com sucesso! \uD83E\uDD29"
         errormessage = "Ocorreu um erro ao salvar sua foto \uD83E\uDD7A"
-
     }
 
-    override fun carregar() {
+    fun carregar(fotoloadedListener: ModelListeners.FotosLoadedCompleteListener) {
+        setOnFotosLoadedListener(fotoloadedListener)
         raiz.addValueEventListener(this)
     }
 
@@ -26,22 +26,23 @@ class FotosDB(activity: Activity) : ModelBase(activity),ValueEventListener{
     }
 
     fun setOnFotosLoadedListener(fotoloadedListener: ModelListeners.FotosLoadedCompleteListener) {
-        this.fotosLoadedCompleteListener = fotoloadedListener
+        fotosLoadedCompleteListener = fotoloadedListener
     }
 
 
     override fun onCancelled(p0: DatabaseError) {
-        TODO("Not yet implemented")
+        taskError()
     }
 
     override fun onDataChange(dataSnapshot: DataSnapshot) {
         val fotos: ArrayList<Album> = ArrayList()
-        val album = Album()
-        album.id = "newPicture"
-        fotos.add(album)
         for (d in dataSnapshot.children){
             val a: Album? = d.getValue(Album::class.java)
-            a?.let { fotos.add(it) }
+
+            a?.let {
+                it.id = d.key
+                fotos.add(it)
+            }
         }
         fotosLoadedCompleteListener.loadComplete(fotos)
     }

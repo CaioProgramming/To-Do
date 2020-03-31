@@ -3,6 +3,8 @@ package com.myself.todo.adapters
 import android.app.Activity
 import android.text.Html
 import android.view.LayoutInflater
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
@@ -38,23 +40,24 @@ class ProfileRecyclerAdapter(val activity: Activity) : RecyclerView.Adapter<Prof
 
     private fun loadPictures(albumGroupLayoutBinding: AlbumGroupLayoutBinding){
         val fotosDB = FotosDB(activity)
-        fotosDB.setOnFotosLoadedListener(object : ModelListeners.FotosLoadedCompleteListener {
+        fotosDB.carregar(object : ModelListeners.FotosLoadedCompleteListener {
             override fun loadComplete(pictures: ArrayList<Album>) {
                 albumGroupLayoutBinding.title.text = Html.fromHtml("<b>${pictures.size}</b> fotos salvas")
                 albumGroupLayoutBinding.picturesrecycler.adapter = RecyclerFotoAdapter(activity,pictures)
                 albumGroupLayoutBinding.picturesrecycler.layoutManager = GridLayoutManager(activity,2, VERTICAL,false)
+                albumGroupLayoutBinding.nopictures.visibility = if (pictures.size == 0) GONE else VISIBLE
             }
         })
-        FotosDB(activity).carregar()
     }
 
     private fun loadEvents(albumGroupLayoutBinding: AlbumGroupLayoutBinding){
-        val eventsDB= EventsDB(activity)
-        eventsDB.setLoadCompleteListener(object : ModelListeners.EventosLoadedCompleteListener {
+        val eventsDB = EventsDB(activity)
+        eventsDB.carregar(object : ModelListeners.EventosLoadedCompleteListener {
             override fun loadComplete(eventos: ArrayList<Events>) {
-                albumGroupLayoutBinding.title.text = "<b>${eventos.size}<b/> Eventos"
+                albumGroupLayoutBinding.title.text = Html.fromHtml("<b>${eventos.size}</b> Eventos")
                 albumGroupLayoutBinding.picturesrecycler.adapter = RecyclerAdapter(activity,eventos)
                 albumGroupLayoutBinding.picturesrecycler.layoutManager = LinearLayoutManager(activity, HORIZONTAL,false)
+                albumGroupLayoutBinding.nopictures.visibility = if (eventos.size == 0) GONE else VISIBLE
 
             }
         })

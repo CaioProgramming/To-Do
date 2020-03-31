@@ -18,7 +18,21 @@ class Album {
         this.userID = userID
     }
 
+    fun isAcreatePicture(): Boolean {
+        return id.equals("newPicture")
+    }
+
     constructor()
+
+
+    companion object {
+        fun createAddPic(): Album {
+            val a = Album()
+            a.id = "newPicture"
+            a.dia = "Adicionar nova foto"
+            return a
+        }
+    }
 
 
 }

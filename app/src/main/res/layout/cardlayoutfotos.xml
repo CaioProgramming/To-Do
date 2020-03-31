@@ -5,10 +5,7 @@
     >
 
     <com.facebook.shimmer.ShimmerFrameLayout
-        app:shimmer_colored="true"
-        app:shimmer_shape="linear"
-        app:shimmer_clip_to_children="true"
-        app:shimmer_highlight_color="@color/colorPrimaryDark"
+
         android:id="@+id/mainshimmer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">

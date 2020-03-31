@@ -6,8 +6,8 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
@@ -20,7 +20,7 @@ import com.myself.todo.databinding.EventResumeLayoutBinding
 import com.myself.todo.model.beans.Events
 import com.myself.todo.model.beans.Tarefas
 
-class CreateEventPagerAdapter(val activity: Activity, val background: CardView, private val myevent: Events, val doneListener: TextView.OnEditorActionListener) : PagerAdapter() {
+class CreateEventPagerAdapter(val activity: Activity, private val myevent: Events, val doneListener: TextView.OnEditorActionListener) : PagerAdapter() {
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
         return view == `object`
     }
@@ -42,8 +42,9 @@ class CreateEventPagerAdapter(val activity: Activity, val background: CardView, 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val  createEventPagerBinding: CreateEventPagerBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.create_event_pager, container,false)
         val pagersetting = Utilities.pagers[position]
-        background.setCardBackgroundColor(pagersetting.color)
+        createEventPagerBinding.pagerView.setBackgroundColor(activity.resources.getColor(pagersetting.color))
         createEventPagerBinding.title.text = pagersetting.title
+        createEventPagerBinding.pagerEditText.hint = pagersetting.hint
         pagersetting.image?.let { Glide.with(activity).load(it).into(createEventPagerBinding.image)}
         when (position) {
             1 -> {
@@ -55,6 +56,7 @@ class CreateEventPagerAdapter(val activity: Activity, val background: CardView, 
             0 -> {
                 createEventPagerBinding.pagerEditText.setOnEditorActionListener { v, actionId, event ->
                     myevent.evento = createEventPagerBinding.pagerEditText.text.toString()
+
                     false
                 }
             }
@@ -64,7 +66,6 @@ class CreateEventPagerAdapter(val activity: Activity, val background: CardView, 
         }
         createEventPagerBinding.pagerEditText.visibility =  if (position == count - 1){ GONE }else{ VISIBLE }
         createEventPagerBinding.title.visibility =  if (position == count - 1){ GONE }else{ VISIBLE }
-        createEventPagerBinding.chipGroup.visibility =  if (position == count - 1){ GONE }else{ VISIBLE }
         createEventPagerBinding.eventResume.resumeCard.visibility =  if (position != count - 1){ GONE }else{ VISIBLE }
        if (createEventPagerBinding.eventResume.resumeCard.visibility == VISIBLE){
            createEventResume(createEventPagerBinding.eventResume)
@@ -77,13 +78,28 @@ class CreateEventPagerAdapter(val activity: Activity, val background: CardView, 
         return 3
     }
 
+    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
+        container.removeView(`object` as LinearLayout)
+    }
+
     private fun createEventResume(eventResumeLayoutBinding: EventResumeLayoutBinding){
         eventResumeLayoutBinding.eventTitle.text = myevent.evento
-        var tasks = ""
-        for (task in myevent.tasks){
-            tasks += "${task.tarefa}\n"
+        loadTasks(eventResumeLayoutBinding.eventTasks)
+
+    }
+
+    private fun loadTasks(chipGroup: ChipGroup) {
+        for (t in myevent.tasks) {
+            val chip = Chip(activity)
+            chip.text = t.tarefa
+            chipGroup.addView(chip)
+            chip.setOnCloseIconClickListener {
+                chipGroup.removeView(chip)
+                myevent.tasks.remove(t)
+            }
         }
-        eventResumeLayoutBinding.eventTasks.text = tasks
+
+
     }
 
 }

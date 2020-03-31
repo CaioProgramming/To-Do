@@ -3,6 +3,7 @@ package com.myself.todo.adapters
 import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.mikhaellopez.rxanimation.fadeIn
 import com.myself.todo.R
+import com.myself.todo.Utils.Utilities
 import com.myself.todo.databinding.CardlayoutfotosBinding
 import com.myself.todo.model.beans.Album
 import com.myself.todo.view.activities.NewPicActivity
@@ -29,7 +31,7 @@ class RecyclerFotoAdapter(val activity: Activity,val albumlist: ArrayList<Album>
         val cardlayoutfotosBinding = holder.cardlayoutbind
         val repeatanimation = AnimationUtils.loadAnimation(activity,R.anim.fade_in_repeat)
         cardlayoutfotosBinding.mainshimmer.startAnimation(repeatanimation)
-        if (album.id != "newPicture") {
+        if (!album.isAcreatePicture()) {
             Glide.with(activity).load(album.fotouri).addListener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                     cardlayoutfotosBinding.albpic.visibility = GONE
@@ -45,22 +47,16 @@ class RecyclerFotoAdapter(val activity: Activity,val albumlist: ArrayList<Album>
             }).into(cardlayoutfotosBinding.albpic)
             cardlayoutfotosBinding.albcard.setOnClickListener { FotoAlert(activity, albumlist, position) }
         }else{
-            Glide.with(activity).load(R.drawable.ic_add_black_24dp).addListener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                    cardlayoutfotosBinding.albpic.visibility = GONE
-                    return false
-                }
-
-                override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                    cardlayoutfotosBinding.mainshimmer.stopShimmer()
-                    cardlayoutfotosBinding.mainshimmer.clearAnimation()
-                    cardlayoutfotosBinding.mainshimmer.fadeIn()
-                    return false
-                }
-            }).into(cardlayoutfotosBinding.albpic)
+            Glide.with(activity).load(R.drawable.ic_camera_shadowed).into(cardlayoutfotosBinding.albpic)
             cardlayoutfotosBinding.albcard.setOnClickListener { addNewPic()}
         }
-
+        cardlayoutfotosBinding.albcard.fadeIn().subscribe()
+        cardlayoutfotosBinding.diapic.text = Utilities.convertDate(album.dia)
+        val handler = Handler()
+        handler.postDelayed({
+            cardlayoutfotosBinding.mainshimmer.hideShimmer()
+            cardlayoutfotosBinding.mainshimmer.clearAnimation()
+        }, 1500)
     }
 
     private fun addNewPic() {

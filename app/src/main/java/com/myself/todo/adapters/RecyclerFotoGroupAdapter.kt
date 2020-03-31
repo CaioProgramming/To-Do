@@ -1,6 +1,8 @@
 package com.myself.todo.adapters
 import android.app.Activity
 import android.view.LayoutInflater
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
@@ -15,11 +17,6 @@ class RecyclerFotoGroupAdapter(val activity: Activity, var albumlist: ArrayList<
 
 
 
-    override fun getItemCount(): Int {
-       return albumlist.size
-    }
-
-
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PicturesGroupViewHolder {
@@ -30,12 +27,19 @@ class RecyclerFotoGroupAdapter(val activity: Activity, var albumlist: ArrayList<
     override fun onBindViewHolder(holder: PicturesGroupViewHolder, position: Int) {
         val albumHead = albumlist[position]
         val albumGroupLayoutBinding = holder.albumGroupLayoutBinding
-        albumGroupLayoutBinding.albumhead = albumHead
+        albumGroupLayoutBinding.title.text = albumHead.title
         val fotosadapter = RecyclerFotoAdapter(activity,albumHead.pictures)
         val gridLayoutManager = GridLayoutManager(activity,2,RecyclerView.VERTICAL ,false)
         albumGroupLayoutBinding.picturesrecycler.adapter = fotosadapter
         albumGroupLayoutBinding.picturesrecycler.layoutManager = gridLayoutManager
+        albumGroupLayoutBinding.nopictures.visibility = if (albumHead.pictures.size == 0) VISIBLE else GONE
     }
+
+    override fun getItemCount(): Int {
+        return albumlist.size
+    }
+
+
 
     class PicturesGroupViewHolder(val albumGroupLayoutBinding: AlbumGroupLayoutBinding) : RecyclerView.ViewHolder(albumGroupLayoutBinding.root)
 

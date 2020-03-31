@@ -4,6 +4,7 @@ import android.app.Activity
 import android.text.Html
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
+import com.myself.todo.adapters.RecyclerFotoAdapter
 import com.myself.todo.adapters.RecyclerFotoGroupAdapter
 import com.myself.todo.databinding.FragmentFotosBinding
 import com.myself.todo.model.FotosDB
@@ -17,33 +18,26 @@ class FotosPresenter(activity: Activity, private val fotosBinding: FragmentFotos
     private var fotosDB: FotosDB? = null
     override fun initview() {
         fotosDB = FotosDB(activity)
-        fotosDB!!.setOnFotosLoadedListener(this)
-        carregar()
+        fotosDB!!.carregar(this)
     }
 
 
-    private fun carregar() {
-        fotosDB!!.carregar()
-    }
 
     private fun filterlists(albumlist: ArrayList<Album>) {
-        val count = albumlist.size - 1
-        val text = user?.let { Html.fromHtml("Olá <b>${user.displayName}</b>, \nVocê possui $count fotos salvas.") }
+        val text = user?.let { Html.fromHtml("Olá <b>${user.displayName}</b>, \nVocê possui ${albumlist.size} fotos salvas.") }
         fotosBinding.title.text = text
-        val albumfavorites = AlbumHead("Favoritos", albumlist.filter { album -> album.favorite } as ArrayList<Album>)
+        val album = Album.createAddPic()
+        albumlist.add(album)
+        val albumfavorites = AlbumHead("Seus favoritos", albumlist.filter { album -> album.favorite } as ArrayList<Album>)
         val albumpics = AlbumHead("Suas fotos",albumlist)
         val albumHeads = ArrayList<AlbumHead>()
         albumHeads.add(albumfavorites)
         albumHeads.add(albumpics)
-        if (fotoGroupAdapter != null) {
-            fotoGroupAdapter?.albumlist?.clear()
-            fotoGroupAdapter?.albumlist?.addAll(albumHeads)
-            fotoGroupAdapter?.notifyItemRangeChanged(0, albumheads.size)
-        } else {
-            fotoGroupAdapter = RecyclerFotoGroupAdapter(activity, albumheads)
-            fotosBinding.recyclerFotos.adapter = fotoGroupAdapter
-            fotosBinding.recyclerFotos.layoutManager = LinearLayoutManager(activity, VERTICAL, false)
-        }
+        var fotoGroupAdapter = RecyclerFotoAdapter(activity, albumlist)
+        val layoutManager = LinearLayoutManager(activity, VERTICAL, false)
+        fotosBinding.recyclerFotos.adapter = fotoGroupAdapter
+        fotosBinding.recyclerFotos.layoutManager = layoutManager
+
     }
 
     override fun loadComplete(pictures: ArrayList<Album>) {
