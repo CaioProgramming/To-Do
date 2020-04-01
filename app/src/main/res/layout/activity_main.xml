@@ -11,21 +11,18 @@
         tools:context=".view.activities.MainActivity">
 
         <TextView
-            android:shadowColor="@color/colorAccent"
-            android:shadowDx="8.0"
-            android:shadowDy="10.0"
-            android:shadowRadius="1.0"
-            android:textStyle="bold"
-            android:id="@+id/title"
+            android:textColor="?android:textColorPrimary"
+            android:textAlignment="center"
+            android:padding="10dp"
+            android:fontFamily="@font/jamstone"
+            android:textSize="20sp"
+            android:id="@+id/logo"
+            android:text="@string/app_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="@string/app_name"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-            android:textColor="?android:textColorPrimary" />
+             />
             <androidx.viewpager.widget.ViewPager
-                android:layout_below="@id/title"
+                android:layout_below="@id/logo"
                 android:layout_width="match_parent"
                 android:id="@+id/mainPager"
                 android:name="com.myself.todo.BlankFragment"

@@ -44,7 +44,7 @@ class CreateEventActivity : AppCompatActivity(),TextView.OnEditorActionListener 
             }
 
             override fun onPageSelected(position: Int) {
-                val title = if (position != viewpager.childCount - 1) "Continuar" else "Salvar"
+                val title = if (position != (viewpager.adapter as CreateEventPagerAdapter).count - 1) "Continuar" else "Salvar"
                 saveItem?.title = title
             }
 
@@ -60,10 +60,10 @@ class CreateEventActivity : AppCompatActivity(),TextView.OnEditorActionListener 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.save) {
-            if (viewpager.currentItem == viewpager.childCount - 1) {
+            if (viewpager.currentItem == (viewpager.adapter as CreateEventPagerAdapter).count - 1) {
                 salvar()
             } else {
-                viewpager.currentItem = 2
+                viewpager.currentItem = viewpager.currentItem + 1
             }
         }
         return super.onOptionsItemSelected(item)

@@ -28,9 +28,7 @@
             android:id="@+id/favoritesbutton"
             app:backgroundTint="@color/red_500"
             android:src="@drawable/ic_favorite_black_24dp"
-            app:rippleColor="@color/white"
             android:layout_width="wrap_content"
-            android:tint="@color/white"
             android:layout_height="wrap_content"/>
     </RelativeLayout>
 </layout>

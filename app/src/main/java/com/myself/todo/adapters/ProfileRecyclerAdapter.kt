@@ -58,7 +58,6 @@ class ProfileRecyclerAdapter(val activity: Activity) : RecyclerView.Adapter<Prof
                 albumGroupLayoutBinding.picturesrecycler.adapter = RecyclerAdapter(activity,eventos)
                 albumGroupLayoutBinding.picturesrecycler.layoutManager = LinearLayoutManager(activity, HORIZONTAL,false)
                 albumGroupLayoutBinding.nopictures.visibility = if (eventos.size == 0) GONE else VISIBLE
-
             }
         })
     }

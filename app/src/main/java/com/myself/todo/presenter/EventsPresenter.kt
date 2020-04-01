@@ -27,24 +27,30 @@ class EventsPresenter(activity: Activity, val eventsBinding: FragmentEventsBindi
         eventslist.add(createevent)
         // Snacky.builder().setActivity(activity).info().setText(text).show()
         if (recyclerAdapter != null) {
-            recyclerAdapter!!.eventList.clear()
             recyclerAdapter!!.eventList = eventslist
             recyclerAdapter!!.notifyDataSetChanged()
+            eventsBinding.favoritesbutton.isEnabled = true
         }else{
-            recyclerAdapter = RecyclerAdapter(activity,eventslist)
-            val gridlayout = GridLayoutManager(activity, 2, VERTICAL, false)
-            eventsBinding.recyclertasks.adapter = recyclerAdapter
-            eventsBinding.recyclertasks.layoutManager = gridlayout
+            initializeRecycler()
         }
 
     }
 
+    fun initializeRecycler(){
+        recyclerAdapter = RecyclerAdapter(activity,null)
+        val gridlayout = GridLayoutManager(activity, 2, VERTICAL, false)
+        eventsBinding.recyclertasks.adapter = recyclerAdapter
+        eventsBinding.recyclertasks.layoutManager = gridlayout
+
+    }
+
     override fun initview() {
+        initializeRecycler()
         eventsDB = EventsDB(activity)
         eventsDB!!.carregar(this)
         eventsBinding.favoritesbutton.setOnClickListener {
             if (!showingfavorites){
-                val filteredlist = recyclerAdapter!!.eventList.filter { events -> events.favorite }
+                val filteredlist = recyclerAdapter!!.eventList!!.filter { events -> events.favorite }
                 recyclerAdapter!!.eventList = filteredlist as ArrayList<Events>
                 recyclerAdapter!!.notifyDataSetChanged()
                 showingfavorites = true
@@ -53,7 +59,6 @@ class EventsPresenter(activity: Activity, val eventsBinding: FragmentEventsBindi
                 eventsDB?.carregar(this)
                 changeButton()
             }
-
         }
     }
 
