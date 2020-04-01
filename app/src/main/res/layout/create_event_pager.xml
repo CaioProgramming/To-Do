@@ -1,48 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/pagerView"
             android:fitsSystemWindows="true"
             android:gravity="center"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/title"
-                android:layout_margin="15dp"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:text="Dê um nome para o seu evento"
-                style="@style/TextAppearance.MaterialComponents.Headline5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
             <ImageView
+                android:scaleType="center"
                 android:id="@+id/image"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxHeight="200dp" />
-            <EditText
-                android:imeOptions="actionDone"
-                android:inputType="text"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:id="@+id/pagerEditText"
-                android:padding="15dp"
-                android:layout_margin="20dp"
-                android:hint="Escreva o nome do evento..."
-                android:background="@drawable/round"
+                android:layout_height="match_parent"
+                />
+
+            <LinearLayout
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <com.google.android.material.chip.ChipGroup
-                android:layout_margin="10dp"
-                android:id="@+id/chipGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <include
-                android:visibility="gone"
-                android:id="@+id/eventResume"
-                layout="@layout/event_resume_layout"/>
-        </LinearLayout>
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_margin="15dp"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:text="Dê um nome para o seu evento"
+                    style="@style/TextAppearance.MaterialComponents.Headline5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <EditText
+                    style="@style/TextAppearance.MaterialComponents.Headline6"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:id="@+id/pagerEditText"
+                    android:breakStrategy="high_quality"
+                    android:hint="Escreva o nome do evento..."
+                    android:backgroundTint="@color/transparent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <com.google.android.material.chip.ChipGroup
+                    android:layout_margin="10dp"
+                    android:id="@+id/chipGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <include
+                    android:visibility="gone"
+                    android:id="@+id/eventResume"
+                    layout="@layout/event_resume_layout"/>
+            </LinearLayout>
+
+        </RelativeLayout>
 
 </layout>

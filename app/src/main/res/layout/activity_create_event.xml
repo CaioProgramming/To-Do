@@ -8,29 +8,28 @@
         android:layout_height="match_parent">
 
 
-            <androidx.viewpager.widget.ViewPager
-                android:layout_centerInParent="true"
-                android:layout_below="@id/toolbar"
-                android:id="@+id/viewpager"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+        <androidx.viewpager.widget.ViewPager
+            android:layout_centerInParent="true"
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
 
 
+        <TextView
+            android:id="@+id/save"
+            android:layout_margin="10dp"
+            android:layout_alignParentEnd="true"
+            android:text="Continuar"
+            style="@style/Widget.AppCompat.ListView.Menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <com.github.mmin18.widget.RealtimeBlurView
             android:id="@+id/rootblur"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="0" />
-        <androidx.appcompat.widget.Toolbar
-            android:layout_alignParentTop="true"
-            android:elevation="0dp"
-            android:background="@color/transparent"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar"
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"/>
 
     </RelativeLayout>
 </layout>

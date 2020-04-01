@@ -35,7 +35,6 @@ class CreateEventActivity : AppCompatActivity(),TextView.OnEditorActionListener 
         event.data = actualday()
         viewpager.adapter = CreateEventPagerAdapter(this, event, this)
         viewpager.setPageTransformer(true, StackTransformer())
-        setSupportActionBar(toolbar)
         viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
             }
@@ -45,29 +44,19 @@ class CreateEventActivity : AppCompatActivity(),TextView.OnEditorActionListener 
 
             override fun onPageSelected(position: Int) {
                 val title = if (position != (viewpager.adapter as CreateEventPagerAdapter).count - 1) "Continuar" else "Salvar"
-                saveItem?.title = title
+                save.text = title
             }
 
         })
-        setContentView(actbind.root)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.create_event_menu,menu)
-        saveItem = menu?.findItem(R.id.save)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.save) {
+        save.setOnClickListener {
             if (viewpager.currentItem == (viewpager.adapter as CreateEventPagerAdapter).count - 1) {
                 salvar()
             } else {
                 viewpager.currentItem = viewpager.currentItem + 1
-            }
-        }
-        return super.onOptionsItemSelected(item)
+            } }
+        setContentView(actbind.root)
     }
+
 
     private fun signIn() {
         val user = FirebaseAuth.getInstance().currentUser

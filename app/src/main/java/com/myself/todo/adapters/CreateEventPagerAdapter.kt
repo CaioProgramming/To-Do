@@ -7,6 +7,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.PagerAdapter
@@ -42,7 +43,6 @@ class CreateEventPagerAdapter(val activity: Activity, private val myevent: Event
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val  createEventPagerBinding: CreateEventPagerBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.create_event_pager, container,false)
         val pagersetting = Utilities.pagers[position]
-        createEventPagerBinding.pagerView.setBackgroundColor(activity.resources.getColor(pagersetting.color))
         createEventPagerBinding.title.text = pagersetting.title
         createEventPagerBinding.pagerEditText.hint = pagersetting.hint
         pagersetting.image?.let { Glide.with(activity).load(it).into(createEventPagerBinding.image)}
@@ -65,7 +65,6 @@ class CreateEventPagerAdapter(val activity: Activity, private val myevent: Event
             }
         }
         createEventPagerBinding.pagerEditText.visibility =  if (position == count - 1){ GONE }else{ VISIBLE }
-        createEventPagerBinding.title.visibility =  if (position == count - 1){ GONE }else{ VISIBLE }
         createEventPagerBinding.eventResume.resumeCard.visibility =  if (position != count - 1){ GONE }else{ VISIBLE }
        if (createEventPagerBinding.eventResume.resumeCard.visibility == VISIBLE){
            createEventResume(createEventPagerBinding.eventResume)
@@ -79,7 +78,7 @@ class CreateEventPagerAdapter(val activity: Activity, private val myevent: Event
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-        container.removeView(`object` as LinearLayout)
+        container.removeView(`object` as RelativeLayout)
     }
 
     private fun createEventResume(eventResumeLayoutBinding: EventResumeLayoutBinding){

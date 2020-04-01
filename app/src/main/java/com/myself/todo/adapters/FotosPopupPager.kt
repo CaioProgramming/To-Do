@@ -17,7 +17,7 @@ import com.myself.todo.Utils.Utilities
 import com.myself.todo.databinding.PopupfotocardBinding
 import com.myself.todo.model.beans.Album
 
-class FotosPopupPager(val activity: Activity, val fotos: ArrayList<Album>) : PagerAdapter() {
+class FotosPopupPager(val activity: Activity, val fotos: ArrayList<Album>?) : PagerAdapter() {
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
         return view == `object`
     }
@@ -25,7 +25,7 @@ class FotosPopupPager(val activity: Activity, val fotos: ArrayList<Album>) : Pag
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val popupfotocardBinding: PopupfotocardBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.popupfotocard, container, false)
-        popupfotocardBinding.album = fotos[position]
+        popupfotocardBinding.album = fotos!![position]
         val alb = fotos[position]
         popupfotocardBinding.diapic.text = Utilities.convertDate(alb.dia)
         popupfotocardBinding.descricaopic.setOnClickListener { enableEdit(popupfotocardBinding.descricaopic) }
@@ -63,6 +63,6 @@ class FotosPopupPager(val activity: Activity, val fotos: ArrayList<Album>) : Pag
     }
 
     override fun getCount(): Int {
-        return fotos.size
+        return fotos!!.size
     }
 }
