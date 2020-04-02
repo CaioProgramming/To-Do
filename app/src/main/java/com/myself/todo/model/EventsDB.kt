@@ -4,16 +4,20 @@ import android.util.Log
 import android.widget.Toast
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.myself.todo.Utils.Utilities
+import com.myself.todo.Utils.Utilities.Companion.randomhappymoji
+import com.myself.todo.Utils.Utilities.Companion.randomsadmoji
 import com.myself.todo.model.beans.Events
-import com.myself.todo.model.beans.Tarefas
 
 class EventsDB(activity: Activity) : ModelBase(activity),ValueEventListener {
+    override var path = "Events"
+    override var raiz = FirebaseDatabase.getInstance().reference.child(user!!.uid).child(path)
 
     init {
-        this.path = "Events"
-        succesmesage = "Evento salvo com sucesso! \uD83D\uDE0C"
-        errormessage = "Ocorreu um erro salvando o seu evento... \uD83D\uDE2D"
+        succesmesage = "Evento salvo com sucesso! ${randomhappymoji()}"
+        errormessage = "Ocorreu um erro salvando o seu evento... ${randomsadmoji()}"
         confirmmessage = "Tem certeza que deseja remover os eventos?"
     }
 
@@ -50,23 +54,6 @@ class EventsDB(activity: Activity) : ModelBase(activity),ValueEventListener {
 
 
 
-    fun getTarefas(event: Events){
-        event.id?.let {
-            raiz.child(it).child("Tarefas").addValueEventListener(object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                event.tasks = ArrayList()
-                for (d in dataSnapshot.children){
-                    val t: Tarefas? = d.getValue(Tarefas::class.java)
-                    t?.let { it1 -> event.tasks.add(it1) }
-                }
-            }
-        })
-        }
-    }
 
 
     fun carregar(eventosLoadedCompleteListener: ModelListeners.EventosLoadedCompleteListener) {

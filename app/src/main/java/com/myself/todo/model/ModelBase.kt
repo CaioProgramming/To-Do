@@ -10,8 +10,6 @@ import com.myself.todo.view.alerts.MessageAlert
 import de.mateware.snacky.Snacky
 
 abstract class ModelBase(val activity: Activity) : ModelContract{
-    var path = ""
-    val raiz =  FirebaseDatabase.getInstance().reference.child(path)
     val user = FirebaseAuth.getInstance().currentUser
     var succesmesage = "Salvo com sucesso."
     var errormessage = "Erro ao salvar."

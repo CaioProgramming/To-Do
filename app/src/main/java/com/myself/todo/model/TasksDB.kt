@@ -3,15 +3,17 @@ package com.myself.todo.model
 import android.app.Activity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.myself.todo.model.beans.Events
 import com.myself.todo.model.beans.Tarefas
 import de.mateware.snacky.Snacky
 
 class TasksDB(activity: Activity, val event: Events) : ModelBase(activity), ValueEventListener {
+    override var path = "Events/${event.id}/tasks"
+    override var raiz = FirebaseDatabase.getInstance().reference.child(user!!.uid).child(path)
 
     init {
-        path = "Events/${event.id}"
         succesmesage = "Tarefa salva com sucesso! \uD83E\uDD29"
         errormessage = "Ocorreu um erro ao salvar sua tarefa \uD83E\uDD7A"
     }

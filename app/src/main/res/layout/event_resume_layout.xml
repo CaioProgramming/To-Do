@@ -1,37 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-    <androidx.cardview.widget.CardView android:layout_margin="10dp"
-        android:id="@+id/resumeCard"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="1dp"
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
-        <LinearLayout
-            android:padding="10dp"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.cardview.widget.CardView
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:id="@+id/resumeCard"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="1dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            <TextView
-                android:padding="4dp"
-                android:id="@+id/eventTitle"
-                android:textAlignment="center"
-                style="@style/TextAppearance.MaterialComponents.Headline5"
-                android:text="Title"
+            <LinearLayout
+                android:padding="10dp"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content">
+                <TextView
+                    android:textAlignment="center"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:padding="4dp"
+                    android:id="@+id/eventTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-            <com.google.android.material.chip.ChipGroup
-                android:layout_gravity="center"
-                android:id="@+id/eventTasks"
-                android:textStyle="bold"
-                style="@style/TextAppearance.MaterialComponents.Subtitle1"
-                android:text="Tasks"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-
-
-    </androidx.cardview.widget.CardView>
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/eventTasks"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:text="Tasks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </com.google.android.material.chip.ChipGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
 </layout>

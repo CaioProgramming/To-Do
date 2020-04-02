@@ -1,18 +1,21 @@
 package com.myself.todo.model
 import android.app.Activity
 import android.widget.Toast
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.myself.todo.Utils.Utilities
 import com.myself.todo.model.beans.Album
 
 class FotosDB(activity: Activity) : ModelBase(activity),ValueEventListener{
     init {
-        path = "Fotos"
-        succesmesage = "Foto salva com sucesso! "
+        succesmesage = "Foto salva com sucesso! ${Utilities.randomhappymoji()}"
         errormessage = "Ocorreu um erro ao salvar sua foto ${Utilities.randomsadmoji()}"
     }
+
+    override var path = "Fotos"
+
+    override var raiz =  FirebaseDatabase.getInstance().reference.child(user!!.uid).child(path)
+
+
 
     fun carregar(fotoloadedListener: ModelListeners.FotosLoadedCompleteListener) {
         setOnFotosLoadedListener(fotoloadedListener)

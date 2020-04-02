@@ -1,11 +1,13 @@
 package com.myself.todo.adapters
 
 import android.app.Activity
+import android.database.DataSetObserver
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -65,14 +67,16 @@ class CreateEventPagerAdapter(val activity: Activity, private val myevent: Event
             }
         }
         createEventPagerBinding.pagerEditText.visibility =  if (position == count - 1){ GONE }else{ VISIBLE }
-        createEventPagerBinding.eventResume.resumeCard.visibility =  if (position != count - 1){ GONE }else{ VISIBLE }
-       if (createEventPagerBinding.eventResume.resumeCard.visibility == VISIBLE){
-           createEventResume(createEventPagerBinding.eventResume)
-       }
-
+        createEventPagerBinding.seeEvent.visibility =  if (position != count - 1){ GONE }else{ VISIBLE }
+        createEventPagerBinding.seeEvent.setOnClickListener {
+            createEventResume(createEventPagerBinding.eventResume)
+        }
         container.addView(createEventPagerBinding.root)
         return createEventPagerBinding.root
     }
+
+
+
     override fun getCount(): Int {
         return 3
     }
@@ -84,6 +88,9 @@ class CreateEventPagerAdapter(val activity: Activity, private val myevent: Event
     private fun createEventResume(eventResumeLayoutBinding: EventResumeLayoutBinding){
         eventResumeLayoutBinding.eventTitle.text = myevent.evento
         loadTasks(eventResumeLayoutBinding.eventTasks)
+        val slidein = AnimationUtils.loadAnimation(activity,R.anim.slide_in)
+        eventResumeLayoutBinding.resumeCard.visibility = VISIBLE
+        eventResumeLayoutBinding.resumeCard.startAnimation(slidein)
 
     }
 

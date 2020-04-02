@@ -17,7 +17,7 @@ import com.myself.todo.Utils.Utilities
 import com.myself.todo.databinding.PopupfotocardBinding
 import com.myself.todo.model.beans.Album
 
-class FotosPopupPager(val activity: Activity, val fotos: ArrayList<Album>?) : PagerAdapter() {
+class FotosPopupPager(val activity: Activity, val fotos: ArrayList<Album>) : PagerAdapter() {
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
         return view == `object`
     }
@@ -63,6 +63,6 @@ class FotosPopupPager(val activity: Activity, val fotos: ArrayList<Album>?) : Pa
     }
 
     override fun getCount(): Int {
-        return fotos!!.size
+        return fotos.size
     }
 }
