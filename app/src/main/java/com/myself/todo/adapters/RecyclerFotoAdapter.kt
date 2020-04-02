@@ -17,11 +17,11 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.mikhaellopez.rxanimation.fadeIn
 import com.myself.todo.R
-import com.myself.todo.Utils.Utilities
 import com.myself.todo.databinding.CardlayoutfotosBinding
 import com.myself.todo.model.beans.Album
 import com.myself.todo.view.activities.NewPicActivity
 import com.myself.todo.view.alerts.FotoAlert
+import de.mateware.snacky.Snacky
 import java.util.*
 
 class RecyclerFotoAdapter(val activity: Activity,var albumlist: ArrayList<Album>?) : RecyclerView.Adapter<RecyclerFotoAdapter.PicturesViewHolder>() {
@@ -45,7 +45,13 @@ class RecyclerFotoAdapter(val activity: Activity,var albumlist: ArrayList<Album>
                         return false
                     }
                 }).into(cardlayoutfotosBinding.albpic)
-                cardlayoutfotosBinding.albcard.setOnClickListener { FotoAlert(activity, albumlist!!, position) }
+                cardlayoutfotosBinding.albcard.setOnClickListener {
+                    if (albumlist != null) {
+                        FotoAlert(activity, albumlist!!, position)
+                    } else {
+                        Snacky.builder().error().setText("Não consegui recuperar as fotos ")
+                    }
+                }
             }else{
                 Glide.with(activity).load(R.drawable.ic_add_black_24dp).into(cardlayoutfotosBinding.albpic)
                 cardlayoutfotosBinding.albcard.setOnClickListener { addNewPic()}

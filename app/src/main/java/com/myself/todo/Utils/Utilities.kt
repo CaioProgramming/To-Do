@@ -33,8 +33,7 @@ class Utilities {
                 OnBoard("Está pronto", "Isso é tudo que você precisa saber sobre o You, aproveite o quanto quiser sem se preocupar!", R.drawable.ic_startup)
         )
 
-        fun convertDate(dia: String?): String? { //2. Test - Convert Date to Calendar
-//3. Test - Convert Calendar to Date
+        fun convertDate(dia: String?): String? {
             var dia = dia
             val df: DateFormat = SimpleDateFormat("yyy-MM-dd")
             try {
@@ -48,13 +47,32 @@ class Utilities {
             return dia
         }
 
-       fun actualday(): String {
+        fun actualday(): String {
             val datenow = Calendar.getInstance().time
             @SuppressLint("SimpleDateFormat") val df = SimpleDateFormat("dd/MM/yyyy")
             val dia = df.format(datenow)
             println(dia)
             return dia
         }
+
+        val sadmojis = arrayOf("\uD83D\uDE25", "\uD83D\uDE14", "\uD83D\uDE1F", "\uD83D\uDE13", "\uD83D\uDE22", "\uD83D\uDE3F", "\uD83D\uDE2D", "\uD83D\uDE1E", "\uD83E\uDD7A")
+        val happymojis = arrayOf("\uD83E\uDD17", "\uD83D\uDE03", "☺️", "\uD83D\uDE42", "\uD83D\uDE0A", "\uD83D\uDE09", "\uD83D\uDE17", "\uD83D\uDE1E")
+
+
+        fun randomhappymoji(): String {
+            var random = Random()
+
+
+            return happymojis[random.nextInt(happymojis.size)]
+        }
+
+        fun randomsadmoji(): String {
+            var random = Random()
+
+
+            return sadmojis[random.nextInt(sadmojis.size)]
+        }
+
 
 
     }

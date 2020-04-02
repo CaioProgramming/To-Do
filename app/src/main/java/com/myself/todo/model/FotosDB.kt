@@ -4,13 +4,14 @@ import android.widget.Toast
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import com.myself.todo.Utils.Utilities
 import com.myself.todo.model.beans.Album
 
 class FotosDB(activity: Activity) : ModelBase(activity),ValueEventListener{
     init {
         path = "Fotos"
-        succesmesage = "Foto salva com sucesso! \uD83E\uDD29"
-        errormessage = "Ocorreu um erro ao salvar sua foto \uD83E\uDD7A"
+        succesmesage = "Foto salva com sucesso! "
+        errormessage = "Ocorreu um erro ao salvar sua foto ${Utilities.randomsadmoji()}"
     }
 
     fun carregar(fotoloadedListener: ModelListeners.FotosLoadedCompleteListener) {

@@ -3,13 +3,12 @@ package com.myself.todo.view.activities
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.KeyEvent
-import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.ViewPager
-import com.eftimoff.viewpagertransformers.StackTransformer
+import com.eftimoff.viewpagertransformers.DrawFromBackTransformer
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.myself.todo.R
@@ -34,7 +33,8 @@ class CreateEventActivity : AppCompatActivity(),TextView.OnEditorActionListener 
         event.tasks = ArrayList()
         event.data = actualday()
         viewpager.adapter = CreateEventPagerAdapter(this, event, this)
-        viewpager.setPageTransformer(true, StackTransformer())
+        viewpager.isEnabled = false
+        viewpager.setPageTransformer(true, DrawFromBackTransformer())
         viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
             }
@@ -43,8 +43,7 @@ class CreateEventActivity : AppCompatActivity(),TextView.OnEditorActionListener 
             }
 
             override fun onPageSelected(position: Int) {
-                val title = if (position != (viewpager.adapter as CreateEventPagerAdapter).count - 1) "Continuar" else "Salvar"
-                save.text = title
+                save.text = if (position != (viewpager.adapter as CreateEventPagerAdapter).count - 1) "Continuar" else "Salvar"
             }
 
         })

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.myself.todo.Utils.Utilities
 import com.myself.todo.view.alerts.AlertContract
 import com.myself.todo.view.alerts.MessageAlert
 import de.mateware.snacky.Snacky
@@ -15,6 +16,8 @@ abstract class ModelBase(val activity: Activity) : ModelContract{
     var succesmesage = "Salvo com sucesso."
     var errormessage = "Erro ao salvar."
     var confirmmessage = "Tem certeza que deseja remover?"
+    var updatemessage = "Atualizado com sucesso!"
+    var updateerrormessage = "Erro ao atualizar!"
     val deleteAllListener: ValueEventListener = object : ValueEventListener {
         override fun onCancelled(p0: DatabaseError) {
             errormessage = "Erro ao encontrar dados"
@@ -50,7 +53,12 @@ abstract class ModelBase(val activity: Activity) : ModelContract{
 
     override fun alterar(id: String, obj: Any) {
         raiz.child(id).setValue(obj).addOnCompleteListener {
-            Toast.makeText(activity,"Evento atualizado com sucesso",Toast.LENGTH_LONG).show()
+            if (it.isSuccessful) {
+                Snacky.builder().setActivity(activity).success().setText(updatemessage + Utilities.randomhappymoji())
+            } else {
+                Snacky.builder().setActivity(activity).error().setText(updateerrormessage + Utilities.randomhappymoji())
+
+            }
         }
     }
 
@@ -65,11 +73,11 @@ abstract class ModelBase(val activity: Activity) : ModelContract{
 
 
     fun taskError(){
-        Snacky.builder().setActivity(activity).success().setText(errormessage).show()
+        Snacky.builder().setActivity(activity).error().setText(errormessage + Utilities.randomsadmoji()).show()
 
     }
     fun taskComplete(){
-        Snacky.builder().setActivity(activity).success().setText(succesmesage).show()
+        Snacky.builder().setActivity(activity).success().setText(succesmesage + Utilities.randomhappymoji()).show()
     }
 
     val removeListener = DatabaseReference.CompletionListener { error, _ ->
