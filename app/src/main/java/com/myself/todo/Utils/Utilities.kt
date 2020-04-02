@@ -73,6 +73,8 @@ class Utilities {
             return sadmojis[random.nextInt(sadmojis.size)]
         }
 
+       val imagegif = "https://media.giphy.com/media/kaCR7oCmtOn7KpOQdQ/giphy.gif"
+
 
 
     }

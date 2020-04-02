@@ -54,6 +54,7 @@ class CreateEventActivity : AppCompatActivity(),TextView.OnEditorActionListener 
                 viewpager.currentItem = viewpager.currentItem + 1
             } }
         viewpager.isEnabled = false
+
         setContentView(actbind.root)
     }
 

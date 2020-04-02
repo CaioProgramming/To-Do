@@ -26,14 +26,14 @@ class NewPicActivity : AppCompatActivity(),PermissionListener {
         val actbind: ActivityNewPicBinding = DataBindingUtil.setContentView(this, R.layout.activity_new_pic)
         setupview()
         requestPermissions()
-        startPicker()
         setContentView(actbind.root)
     }
 
     private fun setupview(){
         save.setOnClickListener { save() }
-        picturecard.setOnClickListener { startPicker() }
+        albpic.setOnClickListener { startPicker() }
         diapic.text = Utilities.actualday()
+        loadgif()
 
     }
 
@@ -68,6 +68,9 @@ class NewPicActivity : AppCompatActivity(),PermissionListener {
 
     private fun loadpic(){
         Glide.with(this).load(url).into(albpic)
+    }
+    private fun loadgif(){
+        Glide.with(this).asGif().load(Utilities.imagegif).into(albpic)
     }
 
 

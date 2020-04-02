@@ -6,48 +6,40 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:background="@color/colorAccent"
+        android:backgroundTint="?android:textColorPrimary"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         >
 
 
-        <androidx.cardview.widget.CardView
-            android:layout_margin="10dp"
-            app:cardCornerRadius="10dp"
-            android:id="@+id/picturecard"
-            app:cardBackgroundColor="@color/white"
-            android:layout_width="match_parent"
-            android:layout_height="500dp">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
                 <ImageView
-                    android:src="@drawable/ic_gallery"
+                    android:background="?android:colorBackground"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
                     android:layout_above="@id/diapic"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/albpic"
                     android:scaleType="centerCrop" />
-                <TextView
-                    android:textStyle="bold"
-                    android:fontFamily="@font/damion_regular"
-                    android:padding="10dp"
-                    style="@style/TextAppearance.AppCompat.Title"
-                    android:layout_alignParentBottom="true"
-                    android:id="@+id/diapic"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="1/8/18"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    />
-            </RelativeLayout>
 
-        </androidx.cardview.widget.CardView>
 
+        <TextView
+            android:layout_above="@id/descricaopic"
+            android:textStyle="bold"
+            android:fontFamily="@font/damion_regular"
+            android:padding="10dp"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:id="@+id/diapic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="1/8/18"
+            android:textAlignment="center"
+            android:textColor="?android:colorBackground"
+            />
         <EditText
-            android:layout_below="@id/picturecard"
+            android:layout_above="@id/save"
             android:backgroundTint="@color/transparent"
             android:id="@+id/descricaopic"
             android:layout_width="match_parent"
@@ -56,14 +48,19 @@
             android:layout_margin="15dp"
             android:hint="Que tal uma leganda para a foto?"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="?android:colorBackground"
+            android:textColorHint="?android:colorButtonNormal"
             android:textSize="22dp" />
 
-        <Button
+        <TextView
+            android:textSize="18sp"
+            android:textAllCaps="true"
+            android:textAlignment="center"
+            android:padding="10dp"
             android:textStyle="bold"
             android:layout_alignParentBottom="true"
-            android:layout_margin="10dp"
             android:textColor="?android:colorBackground"
+            android:background="@color/colorAccent"
             android:backgroundTint="?android:textColorPrimary"
             android:text="Salvar"
             android:id="@+id/save"
