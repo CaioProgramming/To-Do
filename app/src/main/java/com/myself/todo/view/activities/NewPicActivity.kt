@@ -109,6 +109,9 @@ class NewPicActivity : AppCompatActivity(),PermissionListener {
                         FotosDB(this).inserir(album)
                     }.show()
         }
+        if (album.fotouri.isNullOrBlank()) {
+            Snacky.builder().setActivity(this).error().setText("Calma ai né, salvar o nada é meio impossível para nós ${Utilities.randomsadmoji()}")
+        }
         FotosDB(this).inserir(createAlbum())
     }
 

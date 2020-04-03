@@ -1,35 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <RelativeLayout
-        android:id="@+id/cardview"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
-        <androidx.viewpager.widget.ViewPager
-            android:layout_centerInParent="true"
-            android:id="@+id/viewpager"
+        <ImageView
+            android:id="@+id/background"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/eventName"
+                style="@style/TextAppearance.MaterialComponents.Headline5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:backgroundTint="@color/transparent"
+                android:hint="Dê um nome para o seu evento"
+                android:textAlignment="center"
+                android:textStyle="bold" />
 
-        <TextView
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/colorAccent"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tasksEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:backgroundTint="@color/transparent"
+                        android:hint="Adicione tarefas..."
+                        android:imeOptions="actionGo"
+                        android:importantForAutofill="no"
+                        android:inputType="textAutoComplete"
+                        android:padding="10dp"
+                        android:textAlignment="center" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="10dp" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/saveEvent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:backgroundTint="?android:textColorPrimary"
             android:foreground="?attr/selectableItemBackground"
-            android:id="@+id/save"
-            android:layout_margin="10dp"
-            android:layout_alignParentEnd="true"
-            android:text="Continuar"
-            style="@style/Widget.AppCompat.ListView.Menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:padding="10dp"
+            android:text="Salvar"
+            android:textColor="?android:colorBackground"
+            android:textStyle="bold" />
 
         <com.github.mmin18.widget.RealtimeBlurView
+            app:realtimeBlurRadius="25dp"
             android:id="@+id/rootblur"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="0" />
 
     </RelativeLayout>
+
+
 </layout>

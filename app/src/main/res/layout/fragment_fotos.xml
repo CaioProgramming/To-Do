@@ -16,10 +16,10 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/title"
-                    android:layout_margin="15dp"
                     style="@style/TextAppearance.MaterialComponents.Headline5"
                     android:text="Você possui 50 fotos salvas"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
+                    android:padding="5dp"
                     android:layout_height="wrap_content"/>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 

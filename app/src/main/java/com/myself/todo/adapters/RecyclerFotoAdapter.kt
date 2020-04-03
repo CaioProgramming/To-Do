@@ -17,6 +17,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.mikhaellopez.rxanimation.fadeIn
 import com.myself.todo.R
+import com.myself.todo.Utils.Utilities.Companion.randomsadmoji
 import com.myself.todo.databinding.CardlayoutfotosBinding
 import com.myself.todo.model.beans.Album
 import com.myself.todo.view.activities.NewPicActivity
@@ -47,11 +48,16 @@ class RecyclerFotoAdapter(val activity: Activity,var albumlist: ArrayList<Album>
                 }).into(cardlayoutfotosBinding.albpic)
                 cardlayoutfotosBinding.albcard.setOnClickListener {
                     if (albumlist != null) {
-                        FotoAlert(activity, albumlist!!, position)
+                        FotoAlert(activity, albumlist!!, position).setupAlert()
                     } else {
-                        Snacky.builder().error().setText("Não consegui recuperar as fotos ")
+                        Snacky.builder().error().setText("Não consegui recuperar as fotos ${randomsadmoji()}")
                     }
                 }
+                if (album.favorite) {
+                    cardlayoutfotosBinding.albcard.isChecked = true
+                }
+
+
             }else{
                 Glide.with(activity).load(R.drawable.ic_add_black_24dp).into(cardlayoutfotosBinding.albpic)
                 cardlayoutfotosBinding.albcard.setOnClickListener { addNewPic()}
@@ -66,6 +72,7 @@ class RecyclerFotoAdapter(val activity: Activity,var albumlist: ArrayList<Album>
             val repeatanimation = AnimationUtils.loadAnimation(activity,R.anim.fade_in_repeat)
             holder.cardlayoutbind.mainshimmer.startAnimation(repeatanimation)
         }
+        holder.cardlayoutbind.mainshimmer.fadeIn()
     }
 
     private fun addNewPic() {

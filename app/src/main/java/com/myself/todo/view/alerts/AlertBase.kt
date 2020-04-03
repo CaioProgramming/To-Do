@@ -6,9 +6,9 @@ import android.content.DialogInterface
 import android.view.View
 import android.widget.Toast
 import com.github.mmin18.widget.RealtimeBlurView
-import com.mikhaellopez.rxanimation.fadeIn
-import com.mikhaellopez.rxanimation.fadeOut
 import com.myself.todo.R
+import com.myself.todo.Utils.Utilities.Companion.fadeIn
+import com.myself.todo.Utils.Utilities.Companion.fadeOut
 
 abstract class AlertBase(val activity: Activity): DialogInterface.OnShowListener,DialogInterface.OnDismissListener,AlertContract{
     override var theme: Int = R.style.Dialog_No_Border
@@ -38,14 +38,13 @@ abstract class AlertBase(val activity: Activity): DialogInterface.OnShowListener
 
 
     fun setView(view: View) {
+        dialog.setOnShowListener(this)
+        dialog.setOnDismissListener(this)
         dialog.setContentView(view)
 
     }
 
-    init {
-        this.setupAlert()
-        dialog.show()
-    }
+
 
     fun dimiss() {
         dialog.dismiss()
@@ -54,13 +53,13 @@ abstract class AlertBase(val activity: Activity): DialogInterface.OnShowListener
 
     override fun onShow(dialog: DialogInterface?) {
         alertListener.doSomethingBeforeShow()
-        blurView.fadeIn()
+        fadeIn(blurView)
     }
 
 
     override fun onDismiss(dialog: DialogInterface?) {
         alertListener.doSomethingBeforeDismiss()
-        blurView.fadeOut()
+        fadeOut(blurView)
     }
 
 

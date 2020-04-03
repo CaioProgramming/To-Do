@@ -44,8 +44,18 @@ class ProfileRecyclerAdapter(val activity: Activity) : RecyclerView.Adapter<Prof
             override fun loadComplete(pictures: ArrayList<Album>) {
                 albumGroupLayoutBinding.title.text = Html.fromHtml("<b>${pictures.size}</b> fotos salvas")
                 albumGroupLayoutBinding.picturesrecycler.adapter = RecyclerFotoAdapter(activity,pictures)
-                albumGroupLayoutBinding.picturesrecycler.layoutManager = GridLayoutManager(activity,2, VERTICAL,false)
-                albumGroupLayoutBinding.nopictures.visibility = if (pictures.size == 0) GONE else VISIBLE
+                val layoutManager = GridLayoutManager(activity, 2, VERTICAL, false)
+                val onSpanSizeLookup: GridLayoutManager.SpanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                    override fun getSpanSize(position: Int): Int {
+                        return when (position) {
+                            0, 1, 2, itemCount -> 1
+                            else -> 2
+                        }
+                    }
+                }
+                layoutManager.spanSizeLookup = onSpanSizeLookup
+                albumGroupLayoutBinding.picturesrecycler.layoutManager = layoutManager
+                albumGroupLayoutBinding.nopictures.visibility = if (pictures.size != 0) GONE else VISIBLE
             }
         })
     }
@@ -55,9 +65,10 @@ class ProfileRecyclerAdapter(val activity: Activity) : RecyclerView.Adapter<Prof
         eventsDB.carregar(object : ModelListeners.EventosLoadedCompleteListener {
             override fun loadComplete(eventos: ArrayList<Events>) {
                 albumGroupLayoutBinding.title.text = Html.fromHtml("<b>${eventos.size}</b> Eventos")
+                albumGroupLayoutBinding.nopictures.text = Html.fromHtml("Você ainda não tem <b>nenhum </b> evento")
                 albumGroupLayoutBinding.picturesrecycler.adapter = RecyclerAdapter(activity,eventos)
                 albumGroupLayoutBinding.picturesrecycler.layoutManager = LinearLayoutManager(activity, HORIZONTAL,false)
-                albumGroupLayoutBinding.nopictures.visibility = if (eventos.size == 0) GONE else VISIBLE
+                albumGroupLayoutBinding.nopictures.visibility = if (eventos.size != 0) GONE else VISIBLE
             }
         })
     }

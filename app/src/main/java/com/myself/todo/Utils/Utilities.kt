@@ -1,8 +1,12 @@
 package com.myself.todo.Utils
 
 import android.annotation.SuppressLint
+import android.view.View
+import androidx.core.view.ViewCompat
 import com.myself.todo.R
 import com.myself.todo.model.beans.OnBoard
+import io.reactivex.Completable
+import io.reactivex.subjects.CompletableSubject
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -21,11 +25,40 @@ class Utilities {
 
 
     companion object {
+
+        fun fadeOut(view: View): Completable {
+            val animationSubject = CompletableSubject.create()
+            return animationSubject.doOnSubscribe {
+                ViewCompat.animate(view)
+                        .setDuration(800)
+                        .alpha(0f)
+                        .withEndAction {
+                            animationSubject.onComplete()
+                        }
+            }
+
+
+        }
+
+        fun fadeIn(view: View): Completable {
+            val animationSubject = CompletableSubject.create()
+            return animationSubject.doOnSubscribe {
+                ViewCompat.animate(view)
+                        .setDuration(800)
+                        .alpha(1f)
+                        .withEndAction {
+                            animationSubject.onComplete()
+                        }
+            }
+
+
+        }
+
         const val RC_SIGN_IN = 1
 
-        val pagers = arrayOf(Pagersettings(R.drawable.ic_wave, R.color.colorPrimary, "Hora de criar o seu evento!", "Escreva o nome do seu evento...", false),
-                Pagersettings(R.drawable.ic_fluid, R.color.colorPrimaryDark, "Adicione algumas tarefas ao seu evento", "Adicione tarefas ao seu evento", true),
-                Pagersettings(R.drawable.ic_valle, R.color.colorAccent, "Seu evento já está pronto para ser salvo... É só clicar ai embaixo que você vai ver como ficou}", "", false))
+        val backgrounds = arrayOf(R.drawable.ic_wave,
+                R.drawable.ic_fluid,
+                R.drawable.ic_valle)
 
         val onBoardScreens = arrayOf(OnBoard("Bem-Vindo ao You", "O seu espaço, para guardar tudo que é mais importante!", R.drawable.ic_box),
                 OnBoard("Seus momentos!", "Guarde suas fotos mais importantes aqui, chega de se perder na galeria, aqui é apenas o que você não quer esquecer!", R.drawable.ic_camera_shadowed),
@@ -73,11 +106,17 @@ class Utilities {
             return sadmojis[random.nextInt(sadmojis.size)]
         }
 
+        fun randombackground(): Int {
+            var random = Random()
+
+
+            return backgrounds[random.nextInt(backgrounds.size)]
+        }
+
        val imagegif = "https://media.giphy.com/media/kaCR7oCmtOn7KpOQdQ/giphy.gif"
 
 
 
     }
 
-    class Pagersettings(val image: Int?, val color: Int, val title: String, val hint: String, val allowchipgroup: Boolean)
 }

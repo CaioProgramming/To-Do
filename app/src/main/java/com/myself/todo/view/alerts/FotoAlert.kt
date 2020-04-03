@@ -14,9 +14,8 @@ class FotoAlert(activity: Activity, val fotos: ArrayList<Album>, val position: I
     override fun setupAlert() {
         val popupPagerBinding: PopupPagerBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.popup_pager, null, false)
         setView(popupPagerBinding.root)
-        if (fotos != null) {
-            popupPagerBinding.fotospager.adapter = FotosPopupPager(activity, fotos)
-            popupPagerBinding.fotospager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        popupPagerBinding.fotospager.adapter = FotosPopupPager(activity, fotos)
+        popupPagerBinding.fotospager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrollStateChanged(state: Int) {
                     print("page scrolled")
                 }
@@ -31,21 +30,18 @@ class FotoAlert(activity: Activity, val fotos: ArrayList<Album>, val position: I
                 }
 
             })
-            popupPagerBinding.dlgexcluir.setOnClickListener {
+        popupPagerBinding.dlgexcluir.setOnClickListener {
                 val a = fotos[popupPagerBinding.fotospager.currentItem]
                 FotosDB(activity).remover(a.id!!)
                 dialog.dismiss()
             }
-            popupPagerBinding.dlgfavcheck.setOnCheckedChangeListener { buttonView, isChecked ->
+        popupPagerBinding.dlgfavcheck.setOnCheckedChangeListener { buttonView, isChecked ->
                 val a = fotos[popupPagerBinding.fotospager.currentItem]
                 a.favorite = isChecked
                 FotosDB(activity).alterar(a.id!!, a)
             }
-            popupPagerBinding.fotospager.setCurrentItem(position, true)
-        }else{
-            dialog.dismiss()
-        }
-
+        popupPagerBinding.fotospager.setCurrentItem(position, true)
+        dialog.show()
     }
 
 

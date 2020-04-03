@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
 import androidx.recyclerview.widget.RecyclerView
+import com.mikhaellopez.rxanimation.fadeIn
 import com.myself.todo.R
 import com.myself.todo.databinding.CardlayoutBinding
 import com.myself.todo.model.EventsDB
@@ -71,7 +72,7 @@ class RecyclerAdapter(val activity: Activity, var eventList: ArrayList<Events>?)
             val repeat = AnimationUtils.loadAnimation(activity,R.anim.fade_in_repeat)
             holder.cardlayoutBinding.cardShimmer.startAnimation(repeat)
         }
-
+        holder.cardlayoutBinding.cardShimmer.fadeIn()
     }
 
     private fun loadTasks(events: Events, recyclerView: RecyclerView) {
