@@ -4,8 +4,7 @@
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:layout_margin="1dp"
-        app:shimmer_base_color="?android:textColorHint"
-        app:shimmer_colored="true"
+
         android:id="@+id/cardShimmer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,10 +14,11 @@
             android:id="@+id/eventcard"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            app:cardElevation="0dp"
+            android:layout_margin="1dp"
             app:strokeColor="?android:textColorHint"
-            app:strokeWidth="1dp">
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground">
 
             <LinearLayout
                 android:id="@+id/mainlayout"

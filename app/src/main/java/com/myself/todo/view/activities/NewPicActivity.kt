@@ -9,6 +9,7 @@ import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
+import com.mikhaellopez.rxanimation.fadeIn
 import com.myself.todo.R
 import com.myself.todo.Utils.Utilities
 import com.myself.todo.databinding.ActivityNewPicBinding
@@ -71,6 +72,7 @@ class NewPicActivity : AppCompatActivity(),PermissionListener {
     }
     private fun loadgif(){
         Glide.with(this).asGif().load(Utilities.imagegif).into(albpic)
+        albpic.fadeIn().andThen(diapic.fadeIn()).andThen(descricaopic.fadeIn()).andThen(save.fadeIn()).subscribe()
     }
 
 
@@ -102,17 +104,20 @@ class NewPicActivity : AppCompatActivity(),PermissionListener {
             return
         }
         val album = createAlbum()
-        if (album.description.isNullOrBlank()){
-            Snacky.builder().setActivity(this).warning()
-                    .setText("Você está prestes a salvar uma foto sem legenda, deseja salvar assim mesmo?")
-                    .setAction("Salvar") {
-                        FotosDB(this).inserir(album)
-                    }.show()
-        }
+
         if (album.fotouri.isNullOrBlank()) {
             Snacky.builder().setActivity(this).error().setText("Calma ai né, salvar o nada é meio impossível para nós ${Utilities.randomsadmoji()}")
+        } else {
+            if (album.description.isNullOrBlank()) {
+                Snacky.builder().setActivity(this).warning()
+                        .setText("Você está prestes a salvar uma foto sem legenda, deseja salvar assim mesmo?")
+                        .setAction("Salvar") {
+                            FotosDB(this).inserir(album)
+                        }.show()
+            } else {
+                FotosDB(this).inserir(createAlbum())
+            }
         }
-        FotosDB(this).inserir(createAlbum())
     }
 
 

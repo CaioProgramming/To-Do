@@ -3,6 +3,7 @@ package com.myself.todo.view.activities
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -41,8 +42,11 @@ class CreateEventActivity : AppCompatActivity(),TextView.OnEditorActionListener 
             updatebackground()
         }
         tasksEditText.setOnEditorActionListener { v, actionId, event ->
-            addChipToGroup(v.text.toString())
-            false
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                addChipToGroup(v.text.toString())
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
         }
         background.setImageDrawable(getDrawable(currentback))
         setContentView(actbind.root)
@@ -61,7 +65,7 @@ class CreateEventActivity : AppCompatActivity(),TextView.OnEditorActionListener 
                 val removewhere = myevent.tasks.indexOfLast { tarefas -> tarefas.tarefa!!.contains(nome) }
                 myevent.tasks.remove(myevent.tasks[removewhere])
             }
-            tasksEditText.clearComposingText()
+            tasksEditText.setText("")
         }
 
     }

@@ -1,18 +1,18 @@
 package com.myself.todo.view.alerts
 
 import android.app.Activity
-import android.app.Dialog
 import android.content.DialogInterface
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.widget.Toast
 import com.github.mmin18.widget.RealtimeBlurView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.myself.todo.R
+import com.myself.todo.Utils.Utilities.Companion.fadeIn
+import com.myself.todo.Utils.Utilities.Companion.fadeOut
 
-abstract class AlertBase(val activity: Activity): DialogInterface.OnShowListener,DialogInterface.OnDismissListener,AlertContract{
+abstract class BottomAlertBase(val activity: Activity) : DialogInterface.OnShowListener, DialogInterface.OnDismissListener, AlertContract {
     override var theme: Int = R.style.Dialog_No_Border
-    val dialog = Dialog(activity, this.theme)
+    val dialog = BottomSheetDialog(activity, theme)
     private val blurView: RealtimeBlurView = activity.findViewById(R.id.rootblur)
 
     var alertListener: AlertContract.AlertListener = object : AlertContract.AlertListener {
@@ -45,9 +45,6 @@ abstract class AlertBase(val activity: Activity): DialogInterface.OnShowListener
     }
 
 
-    fun configureAlert() {}
-
-
     fun dimiss() {
         dialog.dismiss()
     }
@@ -55,17 +52,18 @@ abstract class AlertBase(val activity: Activity): DialogInterface.OnShowListener
     fun show() {
         dialog.show()
     }
+
+
     override fun onShow(dialog: DialogInterface?) {
         alertListener.doSomethingBeforeShow()
-        blurView.visibility = VISIBLE
+        fadeIn(blurView)
     }
 
 
     override fun onDismiss(dialog: DialogInterface?) {
         alertListener.doSomethingBeforeDismiss()
-        blurView.visibility = GONE
+        fadeOut(blurView)
     }
-
 
 
 }

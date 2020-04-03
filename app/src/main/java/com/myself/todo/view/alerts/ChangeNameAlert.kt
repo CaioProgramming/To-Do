@@ -15,34 +15,39 @@ import com.myself.todo.databinding.ChangeNameAlertBinding
 
 
 class ChangeNameAlert(activity: Activity) : AlertBase(activity) {
-    private val changeNameAlertBinding: ChangeNameAlertBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.change_name_alert, null, false)
+    private var changeNameAlertBinding: ChangeNameAlertBinding? = null
     val user = FirebaseAuth.getInstance().currentUser
 
 
     override fun setupAlert() {
-        dialog.setContentView(changeNameAlertBinding.root)
-        changeNameAlertBinding.title.text = Html.fromHtml("Eai <b>${user!!.displayName}, veio dar uma repaginada no nome?")
-        dialog.setContentView(changeNameAlertBinding.root)
-        changeNameAlertBinding.save.isEnabled = false
-        changeNameAlertBinding.newname.setOnKeyListener { v, keyCode, event ->
-            changeNameAlertBinding.newname.isEnabled = !changeNameAlertBinding.newname.text.isNullOrBlank()
+        changeNameAlertBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.change_name_alert, null, false)
+        dialog.setContentView(changeNameAlertBinding!!.root)
+        changeNameAlertBinding?.let { configureview() }
+    }
+
+    override fun configureview() {
+        changeNameAlertBinding!!.title.text = Html.fromHtml("Eai <b>${user!!.displayName}, veio dar uma repaginada no nome?")
+        changeNameAlertBinding!!.save.isEnabled = false
+        changeNameAlertBinding!!.newname.setOnKeyListener { v, keyCode, event ->
+            changeNameAlertBinding!!.newname.isEnabled = changeNameAlertBinding!!.newname.text.isNullOrBlank()
             return@setOnKeyListener false
         }
-        changeNameAlertBinding.newname.setOnEditorActionListener { v, actionId, event ->
+        changeNameAlertBinding!!.newname.setOnEditorActionListener { v, actionId, event ->
             updateUserName(v.text.toString())
             return@setOnEditorActionListener false
 
         }
-        changeNameAlertBinding.save.setOnClickListener {
-            updateUserName(changeNameAlertBinding.newname.text.toString())
+        changeNameAlertBinding!!.save.setOnClickListener {
+            updateUserName(changeNameAlertBinding!!.newname.text.toString())
         }
+        show()
     }
 
     private fun success() {
-        changeNameAlertBinding.title.text = "Nome alterado com sucesso!"
-        changeNameAlertBinding.newname.visibility = GONE
-        changeNameAlertBinding.save.visibility = GONE
-        Glide.with(activity).load(R.drawable.ic_undraw_success).into(changeNameAlertBinding.icon)
+        changeNameAlertBinding!!.title.text = "Nome alterado com sucesso!"
+        changeNameAlertBinding!!.newname.visibility = GONE
+        changeNameAlertBinding!!.save.visibility = GONE
+        Glide.with(activity).load(R.drawable.ic_undraw_success).into(changeNameAlertBinding!!.icon)
         val handler = Handler()
         handler.postDelayed({
             dialog.dismiss()
@@ -51,11 +56,11 @@ class ChangeNameAlert(activity: Activity) : AlertBase(activity) {
     }
 
     private fun error(message: String) {
-        changeNameAlertBinding.title.text = message
-        changeNameAlertBinding.newname.requestFocus()
-        changeNameAlertBinding.newname.visibility = VISIBLE
-        changeNameAlertBinding.save.visibility = VISIBLE
-        Glide.with(activity).load(R.drawable.ic_undraw_warning).into(changeNameAlertBinding.icon)
+        changeNameAlertBinding!!.title.text = message
+        changeNameAlertBinding!!.newname.requestFocus()
+        changeNameAlertBinding!!.newname.visibility = VISIBLE
+        changeNameAlertBinding!!.save.visibility = VISIBLE
+        Glide.with(activity).load(R.drawable.ic_undraw_warning).into(changeNameAlertBinding!!.icon)
 
     }
 

@@ -4,8 +4,10 @@ import android.app.Activity
 import android.text.Html
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import com.myself.todo.adapters.RecyclerFotoAdapter
+import com.myself.todo.adapters.RecyclerFotoGroupAdapter
 import com.myself.todo.databinding.FragmentFotosBinding
 import com.myself.todo.model.FotosDB
 import com.myself.todo.model.ModelListeners
@@ -31,7 +33,9 @@ class FotosPresenter(activity: Activity, private val fotosBinding: FragmentFotos
         val albumfavorites = AlbumHead("Seus favoritos", albumlist.filter { album -> album.favorite } as ArrayList<Album>)
         val albumpics = AlbumHead("Suas fotos",albumlist)
         val albumHeads = ArrayList<AlbumHead>()
-        albumHeads.add(albumfavorites)
+        if (albumfavorites.pictures.size > 0) {
+            albumHeads.add(albumfavorites)
+        }
         albumHeads.add(albumpics)
         fotoAdapter = RecyclerFotoAdapter(activity, albumlist)
         val layoutManager = GridLayoutManager(activity, 2, VERTICAL, false)
@@ -44,8 +48,8 @@ class FotosPresenter(activity: Activity, private val fotosBinding: FragmentFotos
             }
         }
         layoutManager.spanSizeLookup = onSpanSizeLookup
-        fotosBinding.recyclerFotos.adapter = fotoAdapter
-        fotosBinding.recyclerFotos.layoutManager = layoutManager
+        fotosBinding.recyclerFotos.adapter = RecyclerFotoGroupAdapter(activity, albumHeads)
+        fotosBinding.recyclerFotos.layoutManager = LinearLayoutManager(activity, VERTICAL, false)
     }
 
     override fun loadComplete(pictures: ArrayList<Album>) {

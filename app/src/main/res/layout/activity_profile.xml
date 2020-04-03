@@ -13,12 +13,7 @@
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/viewShimmer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:shimmer_auto_start="true"
-        app:shimmer_base_color="?android:textColorHint"
-        app:shimmer_clip_to_children="true"
-        app:shimmer_colored="true"
-        app:shimmer_highlight_color="@color/colorAccent">
+        android:layout_height="match_parent">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -187,20 +182,12 @@
                                 android:text="Opções" />
 
                             <LinearLayout
+                                android:id="@+id/objetivesbtn"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
                                 android:padding="10dp">
 
-                                <com.dx.dxloadingbutton.lib.LoadingButton
-                                    android:id="@+id/objetivesbtn"
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
-                                    android:layout_gravity="center"
-                                    app:lb_btnColor="@color/transparent"
-                                    app:lb_btnRippleColor="@color/colorAccent"
-                                    app:lb_resetAfterFailed="true"
-                                    app:lb_textColor="?android:textColorPrimary" />
 
                                 <TextView
                                     style="@style/TextAppearance.MaterialComponents.Body1"
@@ -223,16 +210,9 @@
                                 android:orientation="horizontal"
                                 android:padding="10dp">
 
-                                <com.dx.dxloadingbutton.lib.LoadingButton
-                                    android:id="@+id/fotosbtn"
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
-                                    android:layout_gravity="center"
-                                    app:lb_btnColor="@color/transparent"
-                                    app:lb_resetAfterFailed="true"
-                                    app:lb_textColor="?android:textColorPrimary" />
 
                                 <TextView
+                                    android:id="@+id/fotosbtn"
                                     style="@style/TextAppearance.MaterialComponents.Body1"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -247,20 +227,13 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/wipeoutbtn"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/line"
                                 android:orientation="horizontal"
                                 android:padding="10dp">
 
-                                <com.dx.dxloadingbutton.lib.LoadingButton
-                                    android:id="@+id/wipeoutbtn"
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
-                                    android:layout_gravity="center"
-                                    app:lb_btnColor="@color/transparent"
-                                    app:lb_btnRippleColor="@color/red_300"
-                                    app:lb_textColor="@color/red_500" />
 
                                 <TextView
                                     style="@style/TextAppearance.MaterialComponents.Body1"

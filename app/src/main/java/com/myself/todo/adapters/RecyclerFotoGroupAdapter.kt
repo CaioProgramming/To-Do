@@ -1,5 +1,7 @@
 package com.myself.todo.adapters
 import android.app.Activity
+import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -26,12 +28,22 @@ class RecyclerFotoGroupAdapter(val activity: Activity, var albumlist: ArrayList<
 
     override fun onBindViewHolder(holder: PicturesGroupViewHolder, position: Int) {
         val albumHead = albumlist[position]
+        Log.i("Foto Group", "Loading head ${albumHead.title} with ${albumHead.pictures.size}")
         val albumGroupLayoutBinding = holder.albumGroupLayoutBinding
-        albumGroupLayoutBinding.title.text = albumHead.title
+        albumGroupLayoutBinding.title.text = Html.fromHtml("<b>${albumHead.pictures.size}</b> ${albumHead.title}")
         val fotosadapter = RecyclerFotoAdapter(activity,albumHead.pictures)
-        val gridLayoutManager = GridLayoutManager(activity,2,RecyclerView.VERTICAL ,false)
+        val layoutManager = GridLayoutManager(activity, 2, RecyclerView.VERTICAL, false)
+        val onSpanSizeLookup: GridLayoutManager.SpanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return when (position) {
+                    0, 1, 2, albumHead.pictures.lastIndex -> 1
+                    else -> 2
+                }
+            }
+        }
+        layoutManager.spanSizeLookup = onSpanSizeLookup
         albumGroupLayoutBinding.picturesrecycler.adapter = fotosadapter
-        albumGroupLayoutBinding.picturesrecycler.layoutManager = gridLayoutManager
+        albumGroupLayoutBinding.picturesrecycler.layoutManager = layoutManager
         albumGroupLayoutBinding.nopictures.visibility = if (albumHead.pictures.size == 0) VISIBLE else GONE
     }
 

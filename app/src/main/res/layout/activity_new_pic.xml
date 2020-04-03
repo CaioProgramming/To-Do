@@ -5,13 +5,12 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:background="@color/colorAccent"
-        android:backgroundTint="?android:textColorPrimary">
+        android:layout_gravity="center">
 
 
-                <ImageView
-                    android:background="?android:colorBackground"
+        <ImageView
+            android:background="@color/colorAccent"
+            android:backgroundTint="?android:textColorPrimary"
                     android:layout_marginTop="18dp"
                     android:layout_marginStart="15dp"
                     android:layout_marginEnd="15dp"
@@ -34,9 +33,9 @@
             android:layout_gravity="center"
             android:text="1/8/18"
             android:textAlignment="center"
-            android:textColor="?android:colorBackground"
             />
-        <EditText
+
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_above="@id/save"
             android:backgroundTint="@color/transparent"
             android:id="@+id/descricaopic"
@@ -45,12 +44,9 @@
             android:layout_gravity="center"
             android:layout_margin="15dp"
             android:hint="Que tal uma leganda para a foto?"
-            android:textAlignment="center"
-            android:textColor="?android:colorBackground"
-            android:textColorHint="?android:colorButtonNormal"
-            android:textSize="22dp" />
+            android:textAlignment="center" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:backgroundTint="?android:colorBackground"
             android:textAllCaps="true"
             android:textAlignment="center"

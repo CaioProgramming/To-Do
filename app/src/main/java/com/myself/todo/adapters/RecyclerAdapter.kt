@@ -2,102 +2,111 @@ package com.myself.todo.adapters
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Handler
 import android.view.LayoutInflater
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
 import androidx.recyclerview.widget.RecyclerView
 import com.mikhaellopez.rxanimation.fadeIn
 import com.myself.todo.R
-import com.myself.todo.databinding.CardlayoutBinding
+import com.myself.todo.databinding.EventCardHorizontalLayoutBinding
+import com.myself.todo.databinding.EventCardLayoutBinding
 import com.myself.todo.model.EventsDB
-import com.myself.todo.model.ModelListeners
-import com.myself.todo.model.TasksDB
 import com.myself.todo.model.beans.Events
-import com.myself.todo.model.beans.Tarefas
-import com.myself.todo.view.activities.CreateEventActivity
+import com.myself.todo.view.alerts.NewEventAlert
 
-class RecyclerAdapter(val activity: Activity, var eventList: ArrayList<Events>?) : RecyclerView.Adapter<RecyclerAdapter.EventsViewHolder>() {
+class RecyclerAdapter(val activity: Activity, var eventList: ArrayList<Events>?, val horizontal: Boolean) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventsViewHolder {
-        val cardlayoutBinding: CardlayoutBinding = DataBindingUtil.inflate(LayoutInflater.from(activity),R.layout.cardlayout,parent,false)
-        return EventsViewHolder(cardlayoutBinding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        if (!horizontal) {
+            val cardlayoutBinding: EventCardLayoutBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.event_card_layout, parent, false)
+            return EventsViewHolder(cardlayoutBinding)
+        } else {
+            val cardlayoutBinding: EventCardHorizontalLayoutBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.event_card_layout_horizontal, parent, false)
+            return EventsHorizontalViewHolder(cardlayoutBinding)
+        }
     }
 
-    override fun onBindViewHolder(holder: EventsViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (horizontal) configurehorizontal(holder, position) else configurevertical(holder, position)
+    }
+
+
+    private fun configurevertical(holder: RecyclerView.ViewHolder, position: Int) {
+        val verticalholder = holder as EventsViewHolder
         if (eventList != null && eventList!!.size > 0) {
             val event = eventList!![position]
-            holder.cardlayoutBinding.mainlayout.visibility = if (event.isAcreateEvent()){
-                GONE
-            }else{
-                VISIBLE
+            verticalholder.cardlayoutBinding.event = event
+            verticalholder.cardlayoutBinding.eventcard.setOnLongClickListener {
+                AlertDialog.Builder(activity)
+                        .setTitle("Tem certeza")
+                        .setMessage("Deseja remover essa atividade?")
+                        .setPositiveButton("Remover") { dialog, which -> EventsDB(activity).remover(event.id!!) }
+                        .create()
+                        .show()
+                return@setOnLongClickListener false
             }
-            holder.cardlayoutBinding.addnewevent.visibility = if (!event.isAcreateEvent()) {
-                GONE
-            }else{
-                VISIBLE
+            if (event.favorite) {
+                holder.cardlayoutBinding.eventcard.isChecked = true
             }
-            if (!event.isAcreateEvent()) {
-                holder.cardlayoutBinding.titulo.text = event.evento
-                holder.cardlayoutBinding.eventcard.setOnLongClickListener {
-                    AlertDialog.Builder(activity)
-                            .setTitle("Tem certeza")
-                            .setMessage("Deseja remover essa atividade?")
-                            .setPositiveButton("Remover") { dialog, which -> EventsDB(activity).remover(event.id!!) }
-                            .create()
-                            .show()
-                    return@setOnLongClickListener false
-                }
-                loadTasks(event, holder.cardlayoutBinding.tasks)
-                if (event.favorite){
-                    holder.cardlayoutBinding.eventcard.setCardBackgroundColor(activity.resources.getColor(R.color.red_300))
-                }
-
-            }else{
-                holder.cardlayoutBinding.eventcard.setOnClickListener {
-                    addnewevent()
-                }
+            verticalholder.cardlayoutBinding.eventcard.setOnClickListener {
+                addnewevent()
             }
-
             val handler = Handler()
             handler.postDelayed({ holder.cardlayoutBinding.cardShimmer.hideShimmer() }, 3000)
-        }else{
-            val repeat = AnimationUtils.loadAnimation(activity,R.anim.fade_in_repeat)
-            holder.cardlayoutBinding.cardShimmer.startAnimation(repeat)
+        } else {
+            val repeat = AnimationUtils.loadAnimation(activity, R.anim.fade_in_repeat)
+            verticalholder.cardlayoutBinding.cardShimmer.startAnimation(repeat)
         }
-        holder.cardlayoutBinding.cardShimmer.fadeIn()
+        verticalholder.cardlayoutBinding.cardShimmer.fadeIn()
+
     }
 
-    private fun loadTasks(events: Events, recyclerView: RecyclerView) {
-        TasksDB(activity, events).carregar(object : ModelListeners.TasksLoadedListener {
-            override fun loadComplete(tarefas: ArrayList<Tarefas>) {
-                val taskAdapter = RecyclerTarefasAdapter(activity, events, tarefas)
-                recyclerView.adapter = taskAdapter
-                recyclerView.layoutManager = LinearLayoutManager(activity, VERTICAL, false)
+    private fun configurehorizontal(holder: RecyclerView.ViewHolder, position: Int) {
+        val verticalholder = holder as EventsHorizontalViewHolder
+        if (eventList != null && eventList!!.size > 0) {
+            val event = eventList!![position]
+            verticalholder.cardlayoutBinding.event = event
+            verticalholder.cardlayoutBinding.eventcard.setOnLongClickListener {
+                AlertDialog.Builder(activity)
+                        .setTitle("Tem certeza")
+                        .setMessage("Deseja remover essa atividade?")
+                        .setPositiveButton("Remover") { dialog, which -> EventsDB(activity).remover(event.id!!) }
+                        .create()
+                        .show()
+                return@setOnLongClickListener false
             }
-        })
+            if (event.favorite) {
+                holder.cardlayoutBinding.eventcard.isChecked = true
+            }
+            verticalholder.cardlayoutBinding.eventcard.setOnClickListener {
+                addnewevent()
+            }
+            val handler = Handler()
+            handler.postDelayed({ holder.cardlayoutBinding.cardShimmer.hideShimmer() }, 3000)
+        } else {
+            val repeat = AnimationUtils.loadAnimation(activity, R.anim.fade_in_repeat)
+            verticalholder.cardlayoutBinding.cardShimmer.startAnimation(repeat)
+        }
+        verticalholder.cardlayoutBinding.cardShimmer.fadeIn()
 
     }
 
-    private fun addnewevent(){
-        val i = Intent(activity,CreateEventActivity::class.java)
-        activity.startActivity(i)
-    }
 
+    private fun addnewevent() {
+        val newevent = NewEventAlert(activity)
+        newevent.setupAlert()
+    }
 
 
     override fun getItemCount(): Int {
-        if (eventList != null) return eventList!!.size else return 4
+        return if (eventList != null) eventList!!.size else 4
     }
 
-    class EventsViewHolder(val cardlayoutBinding: CardlayoutBinding) : RecyclerView.ViewHolder(cardlayoutBinding.root)
+    class EventsViewHolder(val cardlayoutBinding: EventCardLayoutBinding) : RecyclerView.ViewHolder(cardlayoutBinding.root)
+    class EventsHorizontalViewHolder(val cardlayoutBinding: EventCardHorizontalLayoutBinding) : RecyclerView.ViewHolder(cardlayoutBinding.root)
 
 
 
