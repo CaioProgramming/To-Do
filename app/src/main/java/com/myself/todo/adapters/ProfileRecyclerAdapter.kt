@@ -66,7 +66,7 @@ class ProfileRecyclerAdapter(val activity: Activity) : RecyclerView.Adapter<Prof
             override fun loadComplete(eventos: ArrayList<Events>) {
                 albumGroupLayoutBinding.title.text = Html.fromHtml("<b>${eventos.size}</b> Eventos")
                 albumGroupLayoutBinding.nopictures.text = Html.fromHtml("Você ainda não tem <b>nenhum </b> evento")
-                albumGroupLayoutBinding.picturesrecycler.adapter = RecyclerAdapter(activity,eventos)
+                albumGroupLayoutBinding.picturesrecycler.adapter = RecyclerAdapter(activity, eventos, true)
                 albumGroupLayoutBinding.picturesrecycler.layoutManager = LinearLayoutManager(activity, HORIZONTAL,false)
                 albumGroupLayoutBinding.nopictures.visibility = if (eventos.size != 0) GONE else VISIBLE
             }

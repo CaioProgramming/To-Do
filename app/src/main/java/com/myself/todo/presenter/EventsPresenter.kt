@@ -37,7 +37,7 @@ class EventsPresenter(activity: Activity, val eventsBinding: FragmentEventsBindi
     }
 
     fun initializeRecycler(){
-        recyclerAdapter = RecyclerAdapter(activity,null)
+        recyclerAdapter = RecyclerAdapter(activity, null, false)
         val gridlayout = GridLayoutManager(activity, 2, VERTICAL, false)
         eventsBinding.recyclertasks.adapter = recyclerAdapter
         eventsBinding.recyclertasks.layoutManager = gridlayout

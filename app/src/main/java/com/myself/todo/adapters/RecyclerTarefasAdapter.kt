@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.myself.todo.R
 import com.myself.todo.databinding.TasksLayoutBinding
-import com.myself.todo.model.EventsDB
 import com.myself.todo.model.beans.Events
 import com.myself.todo.model.beans.Tarefas
 import kotlinx.android.synthetic.main.tasks_layout.view.*
@@ -26,7 +25,7 @@ class RecyclerTarefasAdapter(val activity: Activity, val events: Events, val tas
             holder.tasksLayoutBinding.taskname.taskname.text = task.tarefa
             holder.tasksLayoutBinding.date.text = task.data
             holder.tasksLayoutBinding.taskCheck.setOnCheckedChangeListener { buttonView, isChecked ->
-              complete(position,isChecked)
+
             }
             if (task.completed){
                  paintflag(holder.tasksLayoutBinding.taskname)
@@ -37,13 +36,6 @@ class RecyclerTarefasAdapter(val activity: Activity, val events: Events, val tas
     private fun paintflag(tv:TextView){
         tv.paintFlags = tv.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
     }
-
-    private fun complete(position: Int,boolean: Boolean){
-        val task = events.tasks[position]
-        events.tasks[position] = task
-        EventsDB(activity).alterar(events.id!!,events)
-    }
-
 
 
     override fun getItemCount(): Int {

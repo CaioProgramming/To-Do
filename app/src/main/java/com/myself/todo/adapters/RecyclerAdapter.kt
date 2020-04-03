@@ -24,7 +24,7 @@ class RecyclerAdapter(val activity: Activity, var eventList: ArrayList<Events>?,
             val cardlayoutBinding: EventCardLayoutBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.event_card_layout, parent, false)
             return EventsViewHolder(cardlayoutBinding)
         } else {
-            val cardlayoutBinding: EventCardHorizontalLayoutBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.event_card_layout_horizontal, parent, false)
+            val cardlayoutBinding: EventCardHorizontalLayoutBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.event_card_horizontal_layout, parent, false)
             return EventsHorizontalViewHolder(cardlayoutBinding)
         }
     }
