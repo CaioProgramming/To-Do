@@ -81,7 +81,6 @@ class CreateEventActivity : AppCompatActivity(),TextView.OnEditorActionListener 
         myevent.evento = eventName.text.toString()
         val user = FirebaseAuth.getInstance().currentUser
         if (user != null) {
-            myevent.userID = user.uid
             if (myevent.evento.isNullOrBlank()) {
                 Snacky.builder().setActivity(this).error().setText("Você precisa dar um nome a esse evento.").show()
                 eventName.requestFocus()

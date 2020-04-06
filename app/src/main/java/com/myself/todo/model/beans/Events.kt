@@ -2,14 +2,13 @@ package com.myself.todo.model.beans
 
 
 class Events {
-    var icon: String? = null
     var evento: String? = null
-    var anotacao: String? = null
-    var userID: String? = null
+    var icon: String? = null
     var data_dia: String? = null
     var data_hora: String? = null
+    var anotacao: String? = null
     var id: String? = null
-    var favorite: Boolean = false
+    var complete: Boolean = false
 
 
 
@@ -18,21 +17,18 @@ class Events {
     }
 
     constructor()
-    constructor(evento: String, anotacao: String?, UserID: String, data_dia: String, data_hora: String, id: String?, favorite: Boolean) {
+    constructor(evento: String?, icon: String?, data_dia: String?, data_hora: String?, anotacao: String?) {
         this.evento = evento
-        this.anotacao = anotacao
-        this.userID = UserID
+        this.icon = icon
         this.data_dia = data_dia
         this.data_hora = data_hora
-        this.id = id
-        this.favorite = favorite
+        this.anotacao = anotacao
     }
 
     companion object{
         fun createEvent():Events{
-            val e = Events()
+            val e = Events("Adicionar novo evento", "\uD83D\uDCDD", "", "", "")
             e.id = "createEvnt"
-            e.icon = "\uD83D\uDCDD"
             return e
         }
     }

@@ -5,20 +5,20 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.graphics.Typeface
 import android.view.LayoutInflater
-import android.widget.DatePicker
-import android.widget.TimePicker
 import androidx.databinding.DataBindingUtil
-import com.google.firebase.auth.FirebaseAuth
 import com.myself.todo.R
 import com.myself.todo.databinding.NewEventPopupBinding
 import com.myself.todo.model.EventsDB
 import com.myself.todo.model.beans.Events
 import de.mateware.snacky.Snacky
+import java.util.*
 
-class NewEventAlert(activity: Activity) : BottomAlertBase(activity) {
-    var newEventPopupBinding: NewEventPopupBinding? = null
+class NewEventAlert(activity: Activity) : AlertBase(activity) {
+    private var newEventPopupBinding: NewEventPopupBinding? = null
     override fun setupAlert() {
         newEventPopupBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.new_event_popup, null, false)
+        changeToBottom()
+        setTheme(R.style.Bottom_Dialog_No_Border)
         setView(newEventPopupBinding!!.root)
         newEventPopupBinding?.let { configureview() }
 
@@ -32,30 +32,28 @@ class NewEventAlert(activity: Activity) : BottomAlertBase(activity) {
         newEventPopupBinding!!.timepicker.setOnClickListener { createTimePicker() }
         newEventPopupBinding!!.saveEvent.setOnClickListener { save() }
         show()
-
     }
 
     private fun createDatePicker() {
-        val datePicker = DatePickerDialog(activity, object : DatePickerDialog.OnDateSetListener {
-            override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-                val day = "$dayOfMonth/$month/$year"
-                newEventPopupBinding!!.eventDay.text = day
-                newEventPopupBinding!!.eventDay.setTypeface(newEventPopupBinding!!.eventDay.typeface, Typeface.BOLD)
-            }
-
-        }, 0, 0, 0)
-        datePicker.show()
+        val datenow = Calendar.getInstance().time
+        val calendar = GregorianCalendar()
+        calendar.time = datenow
+        DatePickerDialog(activity, DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+            val day = "$dayOfMonth/$month/$year"
+            newEventPopupBinding!!.eventDay.text = day
+            newEventPopupBinding!!.eventDay.setTypeface(newEventPopupBinding!!.eventDay.typeface, Typeface.BOLD)
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
     }
 
     private fun createTimePicker() {
-        val timePickerDialog = TimePickerDialog(activity, object : TimePickerDialog.OnTimeSetListener {
-            override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-                val hour = "$hourOfDay:$minute"
-                newEventPopupBinding!!.eventTime.text = hour
-                newEventPopupBinding!!.eventTime.setTypeface(newEventPopupBinding!!.eventDay.typeface, Typeface.BOLD)
-            }
-
-        }, 0, 0, true).show()
+        val datenow = Calendar.getInstance().time
+        val calendar = GregorianCalendar()
+        calendar.time = datenow
+        TimePickerDialog(activity, TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+            val hour = "$hourOfDay:$minute"
+            newEventPopupBinding!!.eventTime.text = hour
+            newEventPopupBinding!!.eventTime.setTypeface(newEventPopupBinding!!.eventDay.typeface, Typeface.BOLD)
+        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show()
     }
 
     private fun save() {
@@ -74,11 +72,11 @@ class NewEventAlert(activity: Activity) : BottomAlertBase(activity) {
 
 
     private fun createEvent(): Events {
-        val user = FirebaseAuth.getInstance().currentUser
         val eventname = newEventPopupBinding!!.eventName.text.toString()
         val eventnote = newEventPopupBinding!!.eventNotes.text.toString()
         val eventday = newEventPopupBinding!!.eventDay.text.toString()
         val eventtime = newEventPopupBinding!!.eventTime.text.toString()
-        return Events(eventname, eventnote, user!!.uid, eventday, eventtime, null, false)
+        val eventicon = newEventPopupBinding!!.eventEmoji.text.toString()
+        return Events(eventname, eventicon, eventday, eventtime, eventnote)
     }
 }

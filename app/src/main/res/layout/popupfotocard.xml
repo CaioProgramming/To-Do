@@ -36,11 +36,15 @@
                     android:layout_above="@id/diapic"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="35dp"
                     android:id="@+id/albpic"
                     android:scaleType="centerCrop" />
                 <TextView
                     android:textStyle="bold"
-                    android:fontFamily="@font/damion_regular"
+                    android:fontFamily="@font/gochi_hand"
                     android:padding="10dp"
                     style="@style/TextAppearance.AppCompat.Title"
                     android:layout_alignParentBottom="true"

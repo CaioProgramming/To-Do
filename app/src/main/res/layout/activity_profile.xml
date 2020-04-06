@@ -11,6 +11,10 @@
     </data>
 
     <com.facebook.shimmer.ShimmerFrameLayout
+        app:shimmer_base_color="?android:textColorHint"
+        app:shimmer_clip_to_children="true"
+        app:shimmer_colored="true"
+        app:shimmer_highlight_color="@color/colorPrimaryDark"
         android:id="@+id/viewShimmer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -59,12 +63,6 @@
                                 android:orientation="horizontal"
                                 android:padding="10dp">
 
-                                <ProgressBar
-                                    android:id="@+id/nameload"
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
-                                    android:layout_gravity="center"
-                                    android:visibility="invisible" />
 
                                 <ImageView
                                     android:layout_width="wrap_content"
@@ -103,11 +101,6 @@
                                 android:orientation="horizontal"
                                 android:padding="10dp">
 
-                                <ProgressBar
-                                    android:layout_width="32dp"
-                                    android:layout_height="32dp"
-                                    android:layout_gravity="center"
-                                    android:visibility="invisible" />
 
                                 <ImageView
                                     android:layout_width="wrap_content"
@@ -278,7 +271,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:text="Olá, Caio"
                             android:textColor="?android:textColorPrimary" />
 
                         <de.hdodenhof.circleimageview.CircleImageView

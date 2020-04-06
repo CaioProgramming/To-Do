@@ -21,7 +21,8 @@ class ChangeNameAlert(activity: Activity) : AlertBase(activity) {
 
     override fun setupAlert() {
         changeNameAlertBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.change_name_alert, null, false)
-        dialog.setContentView(changeNameAlertBinding!!.root)
+        setTheme(R.style.AppTheme)
+        setView(changeNameAlertBinding!!.root)
         changeNameAlertBinding?.let { configureview() }
     }
 
@@ -81,6 +82,5 @@ class ChangeNameAlert(activity: Activity) : AlertBase(activity) {
         }
     }
 
-    override var theme: Int = R.style.AppTheme
 
 }

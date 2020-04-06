@@ -4,6 +4,7 @@ import com.google.firebase.database.DatabaseReference
 
 interface ModelContract{
     var raiz: DatabaseReference
+    var reference: DatabaseReference
     var path: String
     fun inserir(obj: Any)
     fun remover(id:String)

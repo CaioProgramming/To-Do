@@ -3,6 +3,7 @@ package com.myself.todo.view.activities
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.text.Html
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
@@ -36,10 +37,11 @@ class ActivityProfileEdit : AppCompatActivity(), AlertContract.AlertListener {
             val changeNameAlert = ChangeNameAlert(this)
             changeNameAlert.alertListener = this
         }
-        setupUser()
+        user?.let { setupUser() }
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.setNavigationOnClickListener { goBack() }
+        supportActionBar?.title = ""
         profile_pic.setOnClickListener { startPicker() }
         val handler = Handler()
         handler.postDelayed({
@@ -54,6 +56,7 @@ class ActivityProfileEdit : AppCompatActivity(), AlertContract.AlertListener {
 
     private fun setupUser() {
         Glide.with(this).load(user?.photoUrl).error(R.drawable.camera).into(profile_pic)
+        username.text = Html.fromHtml(" Olá <b>${user!!.displayName}</b>")
 
     }
 

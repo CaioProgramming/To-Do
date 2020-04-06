@@ -4,21 +4,18 @@ import android.util.Log
 import android.widget.Toast
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.myself.todo.Utils.Utilities
 import com.myself.todo.Utils.Utilities.Companion.randomhappymoji
 import com.myself.todo.Utils.Utilities.Companion.randomsadmoji
 import com.myself.todo.model.beans.Events
 
 class EventsDB(activity: Activity) : ModelBase(activity),ValueEventListener {
     override var path = "Events"
-    override var raiz = FirebaseDatabase.getInstance().reference.child(user!!.uid).child(path)
-
+    override var reference = raiz.child(path)
     init {
         succesmesage = "Evento salvo com sucesso! ${randomhappymoji()}"
         errormessage = "Ocorreu um erro salvando o seu evento... ${randomsadmoji()}"
-        confirmmessage = "Tem certeza que deseja remover os eventos?"
+        confirmmessage = "Tem certeza que deseja remover seus eventos?"
     }
 
 
@@ -58,6 +55,6 @@ class EventsDB(activity: Activity) : ModelBase(activity),ValueEventListener {
 
     fun carregar(eventosLoadedCompleteListener: ModelListeners.EventosLoadedCompleteListener) {
         setLoadCompleteListener(eventosLoadedCompleteListener)
-        raiz.orderByChild("userID").equalTo(user!!.uid).addValueEventListener(this)
+        reference.addValueEventListener(this)
     }
 }

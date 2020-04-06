@@ -15,7 +15,6 @@ import com.myself.todo.model.beans.Album
 import com.myself.todo.model.beans.AlbumHead
 
 class FotosPresenter(activity: Activity, private val fotosBinding: FragmentFotosBinding) : PresenterBase(activity, fotosBinding), ModelListeners.FotosLoadedCompleteListener {
-    private val albumheads: ArrayList<AlbumHead> = ArrayList()
     private var fotoAdapter: RecyclerFotoAdapter? = null
     private var fotosDB: FotosDB? = null
     override fun initview() {

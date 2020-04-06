@@ -11,7 +11,7 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
+            android:padding="10dp"
             android:text="Alterar nome" />
 
         <ImageView
@@ -25,7 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@drawable/round"
             android:hint="Escreva seu novo nome..."
             android:imeOptions="actionDone"
             android:padding="15dp"

@@ -65,6 +65,7 @@ dependencies {
     implementation 'gun0912.ted:tedpermission-rx2:2.2.3'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     implementation 'com.github.bassaer:materialdesigncolors:1.0.0'
+    implementation 'com.github.arman-sar:SwipeLayout:1.0.10'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

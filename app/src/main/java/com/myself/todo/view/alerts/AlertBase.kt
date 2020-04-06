@@ -8,12 +8,25 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import com.github.mmin18.widget.RealtimeBlurView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.myself.todo.R
 
 abstract class AlertBase(val activity: Activity): DialogInterface.OnShowListener,DialogInterface.OnDismissListener,AlertContract{
-    override var theme: Int = R.style.Dialog_No_Border
-    val dialog = Dialog(activity, this.theme)
+    var dialog = Dialog(activity)
     private val blurView: RealtimeBlurView = activity.findViewById(R.id.rootblur)
+
+    fun setTheme(theme: Int?) {
+        dialog = if (dialog.javaClass == Dialog::class.java) {
+            if (theme != null) Dialog(activity, theme) else Dialog(activity)
+        } else {
+            if (theme != null) BottomSheetDialog(activity, theme) else BottomSheetDialog(activity)
+        }
+    }
+
+    fun changeToBottom() {
+        dialog = BottomSheetDialog(activity)
+    }
+
 
     var alertListener: AlertContract.AlertListener = object : AlertContract.AlertListener {
         override fun doSomethingBeforeShow() {
@@ -41,11 +54,11 @@ abstract class AlertBase(val activity: Activity): DialogInterface.OnShowListener
         dialog.setOnShowListener(this)
         dialog.setOnDismissListener(this)
         dialog.setContentView(view)
+        configureview()
 
     }
 
 
-    fun configureAlert() {}
 
 
     fun dimiss() {

@@ -44,6 +44,9 @@ class ProfileRecyclerAdapter(val activity: Activity) : RecyclerView.Adapter<Prof
             override fun loadComplete(pictures: ArrayList<Album>) {
                 albumGroupLayoutBinding.title.text = Html.fromHtml("<b>${pictures.size}</b> fotos salvas")
                 albumGroupLayoutBinding.picturesrecycler.adapter = RecyclerFotoAdapter(activity,pictures)
+                /*val layoutManager = FlexboxLayoutManager(activity)
+                layoutManager.flexDirection = FlexDirection.COLUMN
+                layoutManager.justifyContent = JustifyContent.FLEX_END*/
                 val layoutManager = GridLayoutManager(activity, 2, VERTICAL, false)
                 val onSpanSizeLookup: GridLayoutManager.SpanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                     override fun getSpanSize(position: Int): Int {

@@ -13,9 +13,9 @@ import com.myself.todo.model.beans.Album
 class FotoAlert(activity: Activity, val fotos: ArrayList<Album>, val position: Int) : AlertBase(activity) {
     var popupPagerBinding: PopupPagerBinding? = null
     override fun setupAlert() {
+        setTheme(R.style.Dialog_No_Border)
         popupPagerBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.popup_pager, null, false)
         setView(popupPagerBinding!!.root)
-
         dialog.show()
     }
 

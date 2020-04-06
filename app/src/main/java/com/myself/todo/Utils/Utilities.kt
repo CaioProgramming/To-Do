@@ -88,26 +88,26 @@ class Utilities {
             return dia
         }
 
-        val sadmojis = arrayOf("\uD83D\uDE25", "\uD83D\uDE14", "\uD83D\uDE1F", "\uD83D\uDE13", "\uD83D\uDE22", "\uD83D\uDE3F", "\uD83D\uDE2D", "\uD83D\uDE1E", "\uD83E\uDD7A")
-        val happymojis = arrayOf("\uD83E\uDD17", "\uD83D\uDE03", "☺️", "\uD83D\uDE42", "\uD83D\uDE0A", "\uD83D\uDE09", "\uD83D\uDE17", "\uD83D\uDE1E")
+        val sadmojis = arrayOf("😓", "😔", "😕", "😥", "🤒", "🤕", "😭", "😦", "😧")
+        val happymojis = arrayOf("😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "🥰", "😗", "😙", "😚", "☺", "\uD83D\uDE42", "\uD83E\uDD17", "\uD83E\uDD29", "🥳")
 
 
         fun randomhappymoji(): String {
-            var random = Random()
+            val random = Random()
 
 
             return happymojis[random.nextInt(happymojis.size)]
         }
 
         fun randomsadmoji(): String {
-            var random = Random()
+            val random = Random()
 
 
             return sadmojis[random.nextInt(sadmojis.size)]
         }
 
         fun randombackground(): Int {
-            var random = Random()
+            val random = Random()
 
 
             return backgrounds[random.nextInt(backgrounds.size)]
