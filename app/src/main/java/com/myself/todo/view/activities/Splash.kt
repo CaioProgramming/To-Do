@@ -51,11 +51,7 @@ class Splash : AppCompatActivity() {
         finish()
     }
 
-    private fun startWelcome() {
-        val i = Intent(this, WelcomeActivity::class.java)
-        startActivity(i)
-        finish()
-    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -64,7 +60,7 @@ class Splash : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 Glide.with(this).load(R.drawable.ic_box_open_shape).into(splash)
                 val handler = Handler()
-                handler.postDelayed({ startWelcome() }, 2000)
+                handler.postDelayed({ startApp() }, 2000)
             } else {
                 if (response != null) {
                     Toast.makeText(this,"Ocorreu um erro ao fazer login, tentando novamente...",LENGTH_LONG).show()

@@ -18,6 +18,16 @@ abstract class ModelBase(val activity: Activity) : ModelContract{
     var updateerrormessage = "Erro ao atualizar!"
     override var raiz = FirebaseDatabase.getInstance().reference.child(user!!.uid)
 
+    override fun inserir(obj: Any) {
+        reference.push().setValue(obj).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                taskCompletelistener.taskSucess()
+            } else {
+                taskCompletelistener.taskError()
+
+            }
+        }
+    }
     override fun remover(id: String) {
         if (id.isNotBlank()) {
             reference.child(id).removeValue(removeListener)
@@ -29,6 +39,7 @@ abstract class ModelBase(val activity: Activity) : ModelContract{
                         raiz.removeValue().addOnCompleteListener {
                             dialog.dismiss()
                             if (it.isSuccessful) {
+                                succesmesage = "Muito bom acabou com tudo ${Utilities.randomhappymoji()}"
                                 taskComplete()
                             } else {
                                 taskError()
@@ -53,14 +64,16 @@ abstract class ModelBase(val activity: Activity) : ModelContract{
         }
     }
 
-    override fun inserir(obj: Any) {
-        reference.push().setValue(obj).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-            taskComplete()
-        }else{
-            taskError()
+
+    var taskCompletelistener = object : ModelListeners.TaskListener {
+        override fun taskSucess() {
+            Snacky.builder().setActivity(activity).success().setText(succesmesage + Utilities.randomhappymoji()).show()
         }
+
+        override fun taskError() {
+            Snacky.builder().setActivity(activity).error().setText(errormessage + Utilities.randomsadmoji()).show()
         }
+
     }
 
 

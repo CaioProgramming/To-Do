@@ -141,7 +141,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="fffcf6" />
-                                                <entry key="paddingPercent" value="50" />
+                                                <entry key="paddingPercent" value="35" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -153,8 +153,8 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="fontFamily" value="Microsoft YaHei UI" />
-                                                <entry key="text" value="You" />
+                                                <entry key="fontFamily" value="Jamstone" />
+                                                <entry key="text" value="Y" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -164,7 +164,8 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="assetType" value="IMAGE" />
+                                      <entry key="assetType" value="TEXT" />
+                                      <entry key="backgroundColor" value="00bee2" />
                                       <entry key="iconShape" value="CIRCLE" />
                                       <entry key="imageAsset" value="X:\programas\UI\youbrand.png" />
                                     </map>

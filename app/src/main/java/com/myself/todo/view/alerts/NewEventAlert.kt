@@ -31,6 +31,7 @@ class NewEventAlert(activity: Activity) : AlertBase(activity) {
         newEventPopupBinding!!.datepicker.setOnClickListener { createDatePicker() }
         newEventPopupBinding!!.timepicker.setOnClickListener { createTimePicker() }
         newEventPopupBinding!!.saveEvent.setOnClickListener { save() }
+        newEventPopupBinding!!.eventEmoji.requestFocus()
         show()
     }
 
@@ -63,6 +64,7 @@ class NewEventAlert(activity: Activity) : AlertBase(activity) {
             if (event.icon.isNullOrBlank() || event.data_dia.isNullOrBlank() || event.data_hora.isNullOrBlank()) {
                 Snacky.builder().setActivity(activity).warning().setText("Salvando sem ícone")
             }
+
             eventsDB.inserir(event)
         } else {
             newEventPopupBinding!!.eventName.error = "Ei você precisa colocar todos os detalhes do evento!"

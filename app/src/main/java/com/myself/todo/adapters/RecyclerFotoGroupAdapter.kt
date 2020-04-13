@@ -32,7 +32,7 @@ class RecyclerFotoGroupAdapter(val activity: Activity, var albumlist: ArrayList<
         val albumHead = albumlist[position]
         Log.i("Foto Group", "Loading head ${albumHead.title} with ${albumHead.pictures.size}")
         val albumGroupLayoutBinding = holder.albumGroupLayoutBinding
-        albumGroupLayoutBinding.title.text = Html.fromHtml(" ${albumHead.title} <b>${albumHead.pictures.size}</b>")
+        albumGroupLayoutBinding.title.text = Html.fromHtml(" ${albumHead.title} <b>${albumHead.pictures.size - 1}</b>")
         val fotosadapter = RecyclerFotoAdapter(activity,albumHead.pictures)
         /*val layoutManager = FlexboxLayoutManager(activity)
         layoutManager.flexDirection = FlexDirection.COLUMN

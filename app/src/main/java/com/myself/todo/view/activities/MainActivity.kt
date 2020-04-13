@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
+import com.google.android.material.tabs.TabLayoutMediator
 import com.myself.todo.R
 import com.myself.todo.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,16 +24,20 @@ class MainActivity : AppCompatActivity(){
                 R.array.com_google_android_gms_fonts_certs)
         val config = FontRequestEmojiCompatConfig(this, fontRequest)
         EmojiCompat.init(config)
-        mainPager.adapter = MainPagerAdapter(supportFragmentManager)
+        mainPager.adapter = MainPagerAdapter(this)
         createtabs()
         setContentView(mainBinding.root)
     }
 
     private fun createtabs(){
-        navigation.setupWithViewPager(mainPager)
-        navigation.getTabAt(2)?.icon = getDrawable(R.drawable.box)
-        navigation.getTabAt(0)?.icon = getDrawable(R.drawable.objective)
-        navigation.getTabAt(1)?.icon = getDrawable(R.drawable.album)
+        TabLayoutMediator(navigation, mainPager) { tab, position ->
+            when (position) {
+                0 -> tab.icon = getDrawable(R.drawable.objective)
+                1 -> tab.icon = getDrawable(R.drawable.album)
+                2 -> tab.icon = getDrawable(R.drawable.box)
+            }
+        }.attach()
+
     }
 
 

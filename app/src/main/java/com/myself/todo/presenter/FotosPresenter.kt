@@ -36,12 +36,12 @@ class FotosPresenter(activity: Activity, private val fotosBinding: FragmentFotos
             albumHeads.add(albumfavorites)
         }
         albumHeads.add(albumpics)
-        fotoAdapter = RecyclerFotoAdapter(activity, albumlist)
+        //fotoAdapter = RecyclerFotoAdapter(activity, albumlist)
         val layoutManager = GridLayoutManager(activity, 2, VERTICAL, false)
         val onSpanSizeLookup: SpanSizeLookup = object : SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return when (position) {
-                    0, 1, 2, fotoAdapter?.itemCount -> 1
+                    0 -> 1
                     else -> 2
                 }
             }

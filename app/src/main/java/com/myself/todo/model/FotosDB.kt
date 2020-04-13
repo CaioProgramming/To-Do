@@ -32,7 +32,7 @@ class FotosDB(activity: Activity) : ModelBase(activity),ValueEventListener{
         }
     }
 
-    fun setOnFotosLoadedListener(fotoloadedListener: ModelListeners.FotosLoadedCompleteListener) {
+    private fun setOnFotosLoadedListener(fotoloadedListener: ModelListeners.FotosLoadedCompleteListener) {
         fotosLoadedCompleteListener = fotoloadedListener
     }
 
@@ -45,7 +45,6 @@ class FotosDB(activity: Activity) : ModelBase(activity),ValueEventListener{
         val fotos: ArrayList<Album> = ArrayList()
         for (d in dataSnapshot.children){
             val a: Album? = d.getValue(Album::class.java)
-
             a?.let {
                 it.id = d.key
                 fotos.add(it)

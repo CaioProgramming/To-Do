@@ -51,8 +51,8 @@ class ProfileRecyclerAdapter(val activity: Activity) : RecyclerView.Adapter<Prof
                 val onSpanSizeLookup: GridLayoutManager.SpanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                     override fun getSpanSize(position: Int): Int {
                         return when (position) {
-                            0, 1, 2, itemCount -> 1
-                            else -> 2
+                            0, 1, 2, itemCount -> 2
+                            else -> 1
                         }
                     }
                 }
